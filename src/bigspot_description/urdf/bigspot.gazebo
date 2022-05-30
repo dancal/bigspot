@@ -1,0 +1,146 @@
+<?xml version="1.0" ?>
+<robot name="bigspot" xmlns:xacro="http://www.ros.org/wiki/xacro" >
+
+<xacro:property name="body_color" value="Gazebo/silver" />
+<!--
+<gazebo>
+  <plugin name="control" filename="libgazebo_ros_control.so"/>
+</gazebo>
+<gazebo reference="base_link">
+  <material>${body_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <selfCollide>true</selfCollide>
+  <gravity>true</gravity>
+</gazebo>
+-->
+<!-- ROS control plugin -->
+<gazebo>
+  <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    <robotNamespace>bigspot_controller</robotNamespace>
+  </plugin>
+</gazebo>
+
+<!-- IMU sensor -->
+<gazebo reference="base_link">
+  <gravity>true</gravity>
+  <material>${body_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <selfCollide>true</selfCollide>
+  <sensor name="imu_sensor" type="imu">
+    <always_on>true</always_on>
+    <update_rate>60</update_rate>
+    <visualize>true</visualize>
+    <topic>__default_topic__</topic>
+    <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+      <topicName>bigspot_imu/base_link_orientation</topicName>
+      <bodyName>imu_link</bodyName>
+      <updateRateHZ>15.0</updateRateHZ>
+      <gaussianNoise>0.0</gaussianNoise>
+      <xyzOffset>0 0 0</xyzOffset>
+      <rpyOffset>0 0 0</rpyOffset>
+      <frameName>base_link</frameName>
+      <initialOrientationAsReference>false</initialOrientationAsReference>
+    </plugin>
+    <pose>0 0 0 0 0 0</pose>
+  </sensor>
+</gazebo>
+
+<!-- Joint state publisher plugin -->
+<gazebo>
+  <plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
+      <robotNamespace>bigspot_gazebo</robotNamespace>
+      <jointName>FRS_Joint, FRL_Joint, FRF_Joint,
+                 FLS_Joint, FLL_Joint, FLF_Joint,
+                 RRS_Joint, RRL_Joint, RRF_Joint,
+                 RLS_Joint, RLL_Joint, RLF_Joint</jointName>
+      <updateRate>100</updateRate>
+  </plugin>
+</gazebo>
+
+<gazebo reference="FLS_1">
+  <material>${body_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <selfCollide>true</selfCollide>
+</gazebo>
+
+<gazebo reference="FRS_1">
+  <material>${body_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <selfCollide>true</selfCollide>
+</gazebo>
+
+<gazebo reference="RRS_1">
+  <material>${body_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <selfCollide>true</selfCollide>
+</gazebo>
+
+<gazebo reference="RLS_1">
+  <material>${body_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <selfCollide>true</selfCollide>
+</gazebo>
+
+<gazebo reference="RLF_1">
+  <material>${body_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <selfCollide>true</selfCollide>
+</gazebo>
+
+<gazebo reference="RRF_1">
+  <material>${body_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <selfCollide>true</selfCollide>
+</gazebo>
+
+<gazebo reference="FRF_1">
+  <material>${body_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <selfCollide>true</selfCollide>
+</gazebo>
+
+<gazebo reference="FLF_1">
+  <material>${body_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <selfCollide>true</selfCollide>
+</gazebo>
+
+<gazebo reference="FRL_1">
+  <material>${body_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <selfCollide>true</selfCollide>
+</gazebo>
+
+<gazebo reference="FLL_1">
+  <material>${body_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <selfCollide>true</selfCollide>
+</gazebo>
+
+<gazebo reference="RLL_1">
+  <material>${body_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <selfCollide>true</selfCollide>
+</gazebo>
+
+<gazebo reference="RRL_1">
+  <material>${body_color}</material>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <selfCollide>true</selfCollide>
+</gazebo>
+
+</robot>

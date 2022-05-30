@@ -1,0 +1,19 @@
+<launch>
+
+  <!--
+  <rosparam file="$(find bigspot_description)/launch/controller.yaml" command="load"/>
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="bigspot_controller" 
+        args="FRS_Joint FRL_Joint FRF_Joint
+              FLS_Joint FLL_Joint FLF_Joint
+              RRS_Joint RRL_Joint RRF_Joint
+              RLS_Joint RLL_Joint RLF_Joint"/>
+              
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+    <remap from="/joint_states" to="/bigspot/joint_states"/>
+  </node>
+  -->
+
+  <!-- Robot servo controller -->
+  <node pkg="bigspot_controller" type="robot_controller_gazebo_only.py" name="ROBOT_CONTROLLER" output="screen"/>
+
+</launch>

@@ -1,0 +1,5 @@
+<launch>
+
+    <node pkg="notspot_mpu6050" type="MPU6050_python.py" name="mpu6050" output="screen"/>
+
+</launch>
