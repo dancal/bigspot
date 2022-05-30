@@ -23,7 +23,7 @@
 
 <!-- IMU sensor -->
 <gazebo reference="base_link">
-  <gravity>true</gravity>
+  <gravity>false</gravity>
   <material>${body_color}</material>
   <mu1>0.2</mu1>
   <mu2>0.2</mu2>

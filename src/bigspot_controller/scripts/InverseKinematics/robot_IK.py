@@ -24,20 +24,35 @@ class InverseKinematics(object):
         """
 
         leg_positions = (np.block([[leg_positions],[np.array([1,1,1,1])]])).T
+        
         # Transformation matrix, base_link_world => base_link
         T_blwbl = homog_transform(dx,dy,dz,roll,pitch,yaw)
 
         # Transformation matrix, base_link_world => FR1
-        T_blwFR1 = np.dot(T_blwbl, homog_transform(0.5*self.bodyLength, 0.5*self.bodyWidth,0,pi/2,-pi/2,0))     # OK
+        #T_blwFR1 = np.dot(T_blwbl, homog_transform(+0.5*self.bodyLength,-0.5*self.bodyWidth,0,pi/2,-pi/2,0))
+        # Transformation matrix, base_link_world => FL1
+        #T_blwFL1 = np.dot(T_blwbl, homog_transform(+0.5*self.bodyLength,+0.5*self.bodyWidth,0,pi/2,-pi/2,0))
+        # Transformation matrix, base_link_world => RR1
+        #T_blwRR1 = np.dot(T_blwbl, homog_transform(-0.5*self.bodyLength,-0.5*self.bodyWidth,0,pi/2,-pi/2,0))
+        # Transformation matrix, base_link_world => RL1
+        #T_blwRL1 = np.dot(T_blwbl, homog_transform(-0.5*self.bodyLength,+0.5*self.bodyWidth,0,pi/2,-pi/2,0))
+        # Local coordinates
+        #pos_FR = np.dot(homog_transform_inverse(T_blwFR1),leg_positions[0])
+        #pos_FL = np.dot(homog_transform_inverse(T_blwFL1),leg_positions[1])
+        #pos_RR = np.dot(homog_transform_inverse(T_blwRR1),leg_positions[2])
+        #pos_RL = np.dot(homog_transform_inverse(T_blwRL1),leg_positions[3])
+
+        # Transformation matrix, base_link_world => FR1
+        T_blwFR1 = np.dot(T_blwbl, homog_transform(+0.5*self.bodyLength,-0.5*self.bodyWidth,0,pi/2,-pi/2,0))
 
         # Transformation matrix, base_link_world => FL1
-        T_blwFL1 = np.dot(T_blwbl, homog_transform(-0.5*self.bodyLength, -0.5*self.bodyWidth,0,pi/2,-pi/2,0))
+        T_blwFL1 = np.dot(T_blwbl, homog_transform(+0.5*self.bodyLength,+0.5*self.bodyWidth,0,pi/2,-pi/2,0))
 
         # Transformation matrix, base_link_world => RR1
-        T_blwRR1 = np.dot(T_blwbl, homog_transform(0.5*self.bodyLength, 0.5*self.bodyWidth,0,pi/2,-pi/2,0))   # OK
+        T_blwRR1 = np.dot(T_blwbl, homog_transform(-0.5*self.bodyLength,-0.5*self.bodyWidth,0,pi/2,-pi/2,0))
 
         # Transformation matrix, base_link_world => RL1
-        T_blwRL1 = np.dot(T_blwbl, homog_transform(-0.5*self.bodyLength, -0.5*self.bodyWidth,0,pi/2,-pi/2,0))
+        T_blwRL1 = np.dot(T_blwbl, homog_transform(-0.5*self.bodyLength,+0.5*self.bodyWidth,0,pi/2,-pi/2,0))
 
         # Local coordinates
         pos_FR = np.dot(homog_transform_inverse(T_blwFR1),leg_positions[0])
@@ -45,6 +60,7 @@ class InverseKinematics(object):
         pos_RR = np.dot(homog_transform_inverse(T_blwRR1),leg_positions[2])
         pos_RL = np.dot(homog_transform_inverse(T_blwRL1),leg_positions[3])
 
+        #print(np.array([pos_FR[:3],pos_FL[:3],pos_RR[:3],pos_RL[:3]]))
         return(np.array([pos_FR[:3],pos_FL[:3],pos_RR[:3],pos_RL[:3]]))
 
     def inverse_kinematics(self,leg_positions,dx,dy,dz,roll,pitch,yaw):
