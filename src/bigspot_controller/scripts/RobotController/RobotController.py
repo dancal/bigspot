@@ -136,12 +136,17 @@ class Robot(object):
     #[-0.078  -0.1674 -0.081 ]
     #[ 0.078  -0.1674  0.159 ]
     #[-0.078  -0.1674  0.159 ]
-
     @property
     def default_stance(self):
         #                 FR,                              ,FL,                              ,RR                               ,RL
-        return np.array([[self.delta_x + self.x_shift_front,self.delta_x + self.x_shift_front,-self.delta_x + self.x_shift_back,-self.delta_x + self.x_shift_back],
-                         [-self.delta_y                    ,self.delta_y                     ,-self.delta_y                    , self.delta_y                    ],
+        return np.array([[self.delta_x + self.x_shift_front,self.delta_x + self.x_shift_front,self.delta_x + self.x_shift_back,self.delta_x + self.x_shift_back],
+                         [-self.delta_y                    ,self.delta_y                     ,self.delta_y                    , self.delta_y                    ],
+                         [0                                ,0                                ,0                                ,0                                ]])
+    @property
+    def default_stance_2(self):
+        #                 FR,                              ,FL,                              ,RR                               ,RL
+        return np.array([[self.delta_x + self.x_shift_front,self.delta_x + self.x_shift_front,self.delta_x + self.x_shift_back ,self.delta_x + self.x_shift_back],
+                         [self.delta_y                    ,self.delta_y                      ,self.delta_y                     ,self.delta_y                    ],
                          [0                                ,0                                ,0                                ,0                                ]])
     @property
     def default_stance_org(self):

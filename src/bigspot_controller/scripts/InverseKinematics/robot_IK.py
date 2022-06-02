@@ -23,7 +23,7 @@ class InverseKinematics(object):
         Compute the positions of the end points in the shoulder frames.
         """
 
-        leg_positions = (np.block([[leg_positions],[np.array([1,1,1,1])]])).T
+        leg_positions = (np.block([[leg_positions],[np.array([0,0,1,0])]])).T
         
         # Transformation matrix, base_link_world => base_link
         T_blwbl = homog_transform(dx,dy,dz,roll,pitch,yaw)
@@ -36,6 +36,7 @@ class InverseKinematics(object):
         #T_blwRR1 = np.dot(T_blwbl, homog_transform(-0.5*self.bodyLength,-0.5*self.bodyWidth,0,pi/2,-pi/2,0))
         # Transformation matrix, base_link_world => RL1
         #T_blwRL1 = np.dot(T_blwbl, homog_transform(-0.5*self.bodyLength,+0.5*self.bodyWidth,0,pi/2,-pi/2,0))
+
         # Local coordinates
         #pos_FR = np.dot(homog_transform_inverse(T_blwFR1),leg_positions[0])
         #pos_FL = np.dot(homog_transform_inverse(T_blwFL1),leg_positions[1])
@@ -43,16 +44,16 @@ class InverseKinematics(object):
         #pos_RL = np.dot(homog_transform_inverse(T_blwRL1),leg_positions[3])
 
         # Transformation matrix, base_link_world => FR1
-        T_blwFR1 = np.dot(T_blwbl, homog_transform(+0.5*self.bodyLength,-0.5*self.bodyWidth,0,pi/2,-pi/2,0))
+        T_blwFR1 = np.dot(T_blwbl, homog_transform(-0.5*self.bodyLength,-0.5*self.bodyWidth,0,pi/2,-pi/2,0))
 
         # Transformation matrix, base_link_world => FL1
-        T_blwFL1 = np.dot(T_blwbl, homog_transform(+0.5*self.bodyLength,+0.5*self.bodyWidth,0,pi/2,-pi/2,0))
+        T_blwFL1 = np.dot(T_blwbl, homog_transform(+0.5*self.bodyLength,-0.5*self.bodyWidth,0,pi/2,-pi/2,0))
 
         # Transformation matrix, base_link_world => RR1
         T_blwRR1 = np.dot(T_blwbl, homog_transform(-0.5*self.bodyLength,-0.5*self.bodyWidth,0,pi/2,-pi/2,0))
 
         # Transformation matrix, base_link_world => RL1
-        T_blwRL1 = np.dot(T_blwbl, homog_transform(-0.5*self.bodyLength,+0.5*self.bodyWidth,0,pi/2,-pi/2,0))
+        T_blwRL1 = np.dot(T_blwbl, homog_transform(+0.5*self.bodyLength,-0.5*self.bodyWidth,0,pi/2,-pi/2,0))
 
         # Local coordinates
         pos_FR = np.dot(homog_transform_inverse(T_blwFR1),leg_positions[0])
