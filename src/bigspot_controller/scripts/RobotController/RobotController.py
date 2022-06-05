@@ -24,7 +24,7 @@ class Robot(object):
         self.delta_y            = self.body[1] * 0.25 + self.legs[1]
         self.x_shift_front      = 0.09
         self.x_shift_back       = -0.06
-        self.default_height     = 0.18
+        self.default_height     = 0.11
 
         self.publisher_lcd_state    = rospy.Publisher("bigspot_lcd/state", String, queue_size = 1)
 
