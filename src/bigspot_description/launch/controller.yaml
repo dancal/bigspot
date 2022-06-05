@@ -1,55 +1,55 @@
 bigspot_controller:
   # Publish all joint states -----------------------------------
-  joint_state_controller:
+  joint_state:
     type: joint_state_controller/JointStateController
     publish_rate: 50
 
   # Position Controllers --------------------------------------
-  FLS_Joint_position_controller:
+  FLS_Joint:
     type: effort_controllers/JointPositionController
     joint: FLS_Joint
     pid: {p: 100.0, i: 0.01, d: 10.0}
-  FRS_Joint_position_controller:
+  FRS_Joint:
     type: effort_controllers/JointPositionController
     joint: FRS_Joint
     pid: {p: 100.0, i: 0.01, d: 10.0}
-  RRS_Joint_position_controller:
+  RRS_Joint:
     type: effort_controllers/JointPositionController
     joint: RRS_Joint
     pid: {p: 100.0, i: 0.01, d: 10.0}
-  RLS_Joint_position_controller:
+  RLS_Joint:
     type: effort_controllers/JointPositionController
     joint: RLS_Joint
     pid: {p: 100.0, i: 0.01, d: 10.0}
-  RLF_Joint_position_controller:
+  RLF_Joint:
     type: effort_controllers/JointPositionController
     joint: RLF_Joint
     pid: {p: 100.0, i: 0.01, d: 10.0}
-  RRF_Joint_position_controller:
+  RRF_Joint:
     type: effort_controllers/JointPositionController
     joint: RRF_Joint
     pid: {p: 100.0, i: 0.01, d: 10.0}
-  FRF_Joint_position_controller:
+  FRF_Joint:
     type: effort_controllers/JointPositionController
     joint: FRF_Joint
     pid: {p: 100.0, i: 0.01, d: 10.0}
-  FLF_Joint_position_controller:
+  FLF_Joint:
     type: effort_controllers/JointPositionController
     joint: FLF_Joint
     pid: {p: 100.0, i: 0.01, d: 10.0}
-  FRL_Joint_position_controller:
+  FRL_Joint:
     type: effort_controllers/JointPositionController
     joint: FRL_Joint
     pid: {p: 100.0, i: 0.01, d: 10.0}
-  FLL_Joint_position_controller:
+  FLL_Joint:
     type: effort_controllers/JointPositionController
     joint: FLL_Joint
     pid: {p: 100.0, i: 0.01, d: 10.0}
-  RLL_Joint_position_controller:
+  RLL_Joint:
     type: effort_controllers/JointPositionController
     joint: RLL_Joint
     pid: {p: 100.0, i: 0.01, d: 10.0}
-  RRL_Joint_position_controller:
+  RRL_Joint:
     type: effort_controllers/JointPositionController
     joint: RRL_Joint
     pid: {p: 100.0, i: 0.01, d: 10.0}

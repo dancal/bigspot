@@ -17,8 +17,8 @@ rospy.init_node("Robot_Controller")
 body = [0.399853, 0.135999]
 #legs = [0.0, 0.07, 0.15, 0.03] 
 #legs = [0.0, 0.11, 0.15, 0.03] 
+#legs = [0.0, 0.078, 0.183, 0.197] # 0.360
 legs = [0.0, 0.078, 0.183, 0.197] # 0.360
-#legs = [0.21594267, 0.0, 0.0, 0.0] # 0.360
 notspot_robot = RobotController.Robot(body, legs, USE_IMU)
 inverseKinematics = robot_IK.InverseKinematics(body, legs)
 
@@ -68,10 +68,10 @@ while not rospy.is_shutdown():
         joint_angles = inverseKinematics.inverse_kinematics(leg_positions, dx, dy, dz, roll, pitch, yaw)
         for i in range(len(joint_angles)):
             #                 FR,                              ,FL,                              ,RR                               ,RL
-            #if i == 4:
-            #    joint_angles[i] = joint_angles[i] * -1
-            #if i == 5:
-            #    joint_angles[i] = joint_angles[i] * -1
+#            if i == 1:
+#                joint_angles[i] = joint_angles[i] * -1
+#            if i == 2:
+#                joint_angles[i] = joint_angles[i] * -1
 #
             #if i == 5:
             #    joint_angles[i] = joint_angles[i] * -1

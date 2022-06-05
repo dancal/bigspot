@@ -20,11 +20,11 @@ class Robot(object):
         self.body = body
         self.legs = legs
 
-        self.delta_x            = self.body[0] * 0.5
-        self.delta_y            = self.body[1] * 0.5 + self.legs[1]
-        self.x_shift_front      = 0.06
-        self.x_shift_back       = -0.18
-        self.default_height     = 0.15
+        self.delta_x            = self.body[0] * 0.25
+        self.delta_y            = self.body[1] * 0.25 + self.legs[1]
+        self.x_shift_front      = 0.09
+        self.x_shift_back       = -0.06
+        self.default_height     = 0.18
 
         self.publisher_lcd_state    = rospy.Publisher("bigspot_lcd/state", String, queue_size = 1)
 
@@ -132,25 +132,14 @@ class Robot(object):
     def run(self):
         return self.currentController.run(self.state, self.command)
 
-    #[ 0.078  -0.1674 -0.081 ]
-    #[-0.078  -0.1674 -0.081 ]
-    #[ 0.078  -0.1674  0.159 ]
-    #[-0.078  -0.1674  0.159 ]
     @property
     def default_stance(self):
-        #                 FR,                              ,FL,                              ,RR                               ,RL
-        return np.array([[self.delta_x + self.x_shift_front,self.delta_x + self.x_shift_front,self.delta_x + self.x_shift_back,self.delta_x + self.x_shift_back],
-                         [-self.delta_y                    ,self.delta_y                     ,self.delta_y                    , self.delta_y                    ],
+        return np.array([[self.delta_x + self.x_shift_front,self.delta_x + self.x_shift_front,-self.delta_x + self.x_shift_back,-self.delta_x + self.x_shift_back],
+                         [-self.delta_y                     ,self.delta_y                     ,-self.delta_y                   , self.delta_y                    ],
                          [0                                ,0                                ,0                                ,0                                ]])
-    @property
-    def default_stance_2(self):
-        #                 FR,                              ,FL,                              ,RR                               ,RL
-        return np.array([[self.delta_x + self.x_shift_front,self.delta_x + self.x_shift_front,self.delta_x + self.x_shift_back ,self.delta_x + self.x_shift_back],
-                         [self.delta_y                    ,self.delta_y                      ,self.delta_y                     ,self.delta_y                    ],
-                         [0                                ,0                                ,0                                ,0                                ]])
+
     @property
     def default_stance_org(self):
-        #                 FR,                              ,FL,                              ,RR                               ,RL
         return np.array([[self.delta_x + self.x_shift_front,self.delta_x + self.x_shift_front,-self.delta_x + self.x_shift_back,-self.delta_x + self.x_shift_back],
-                         [-self.delta_y                    ,self.delta_y                     ,-self.delta_y                    , self.delta_y                    ],
+                         [-self.delta_y                    ,self.delta_y                      ,-self.delta_y                    , self.delta_y                    ],
                          [0                                ,0                                ,0                                ,0                                ]])
