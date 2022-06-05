@@ -65,10 +65,12 @@ class InverseKinematics(object):
             G = F - self.l1
             H = sqrt(G**2 + z**2)
 
-            #theta1 = atan2(y,x) + atan2(F,self.l2 * (-1)**i)
-            theta1 = atan2(y,x) + atan2(F,self.l2)
+            #theta1 = ((atan2(y,x) - atan2(F,self.l2)) * ((-1**i)/2)) * 0.1
+            #theta1 = (atan2(y,x) + atan2(F,self.l2))
+            #theta1 = (atan2(y,x) - atan2(F,self.l2 * (-1**i))) * 0.1
+            theta1 = (atan2(y,x) + atan2(F,self.l2 * (-1)**i))
 
-            D = (H**2 - self.l3**2 - self.l4**2)/(2*self.l3*self.l4)*-2
+            D = ((H**2 - self.l3**2 - self.l4**2) / (2*self.l3*self.l4))*-2.0
             theta4 = (atan2((sqrt(1-D**2)),D)*(-1)**i)
 
             theta3 = atan2(z,G) - atan2(self.l4*sin(theta4), self.l3 + self.l4*cos(theta4))
