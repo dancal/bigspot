@@ -3,7 +3,7 @@
 
 import numpy as np
 from math import sqrt, atan2, sin, cos, pi
-from RoboticsUtilities.Transformations import homog_transform_inverseR,homog_transform_inverseL, homog_transform
+from RoboticsUtilities.Transformations import homog_transform_inverse,homog_transform
 
 class InverseKinematics(object):
     def __init__(self, bodyDimensions, legDimensions):
@@ -29,22 +29,26 @@ class InverseKinematics(object):
         T_blwbl = homog_transform(dx,dy,dz,roll,pitch,yaw)
 
         # Transformation matrix, base_link_world => FR1
-        T_blwFR1 = np.dot(T_blwbl, homog_transform(+0.5*self.bodyLength,+0.5*self.bodyWidth,0,pi/2,-pi/2,0))
+        T_blwFR1 = np.dot(T_blwbl, homog_transform(+0.5*self.bodyLength,
+                          -0.5*self.bodyWidth,0,pi/2,-pi/2,0))
 
         # Transformation matrix, base_link_world => FL1
-        T_blwFL1 = np.dot(T_blwbl, homog_transform(+0.5*self.bodyLength,-0.5*self.bodyWidth,0,pi/2,-pi/2,0))
+        T_blwFL1 = np.dot(T_blwbl, homog_transform(+0.5*self.bodyLength,
+                          +0.5*self.bodyWidth,0,pi/2,-pi/2,0))
 
         # Transformation matrix, base_link_world => RR1
-        T_blwRR1 = np.dot(T_blwbl, homog_transform(-0.5*self.bodyLength,+0.5*self.bodyWidth,0,pi/2,-pi/2,0))
+        T_blwRR1 = np.dot(T_blwbl, homog_transform(-0.5*self.bodyLength,
+                          -0.5*self.bodyWidth,0,pi/2,-pi/2,0))
 
         # Transformation matrix, base_link_world => RL1
-        T_blwRL1 = np.dot(T_blwbl, homog_transform(-0.5*self.bodyLength,-0.5*self.bodyWidth,0,pi/2,-pi/2,0))
+        T_blwRL1 = np.dot(T_blwbl, homog_transform(-0.5*self.bodyLength,
+                          +0.5*self.bodyWidth,0,pi/2,-pi/2,0))
 
         # Local coordinates
-        pos_FR = np.dot(homog_transform_inverseR(T_blwFR1),leg_positions[0])
-        pos_FL = np.dot(homog_transform_inverseL(T_blwFL1),leg_positions[1])
-        pos_RR = np.dot(homog_transform_inverseR(T_blwRR1),leg_positions[2])
-        pos_RL = np.dot(homog_transform_inverseL(T_blwRL1),leg_positions[3])
+        pos_FR = np.dot(homog_transform_inverse(T_blwFR1),leg_positions[0])
+        pos_FL = np.dot(homog_transform_inverse(T_blwFL1),leg_positions[1])
+        pos_RR = np.dot(homog_transform_inverse(T_blwRR1),leg_positions[2])
+        pos_RL = np.dot(homog_transform_inverse(T_blwRL1),leg_positions[3])
 
         return(np.array([pos_FR[:3],pos_FL[:3],pos_RR[:3],pos_RL[:3]]))
 
@@ -52,10 +56,15 @@ class InverseKinematics(object):
         """
         Compute the inverse kinematics for all the legs.
         """
-        positions = self.get_local_positions(leg_positions,dx,dy,dz, roll,pitch,yaw)
+        positions = self.get_local_positions(leg_positions,dx,dy,dz,
+                                                            roll,pitch,yaw)
         angles = []
 
         for i in range(4):
+
+            expr    = 1
+            if i == 0 or i == 2:
+                expr = -1
 
             x = positions[i][0]
             y = positions[i][1]
@@ -65,19 +74,24 @@ class InverseKinematics(object):
             G = F - self.l1
             H = sqrt(G**2 + z**2)
 
-            #theta1 = ((atan2(y,x) - atan2(F,self.l2)) * ((-1**i)/2)) * 0.1
-            #theta1 = (atan2(y,x) + atan2(F,self.l2))
-            #theta1 = (atan2(y,x) - atan2(F,self.l2 * (-1**i))) * 0.1
-            theta1 = (atan2(y,x) + atan2(F,self.l2 * (-1)**i))
+            theta1 = atan2(y,x) + atan2(F,self.l2 * (-1)**i)
+ 
+            D = ((H**2 - self.l3**2 - self.l4**2)/(2*self.l3*self.l4))
+            if D >= 1.0:
+                D = 1.0
+            if D <= -1.0:
+                D = -1.0
 
-            D = ((H**2 - self.l3**2 - self.l4**2) / (2*self.l3*self.l4))*-2.0
-            theta4 = (atan2((sqrt(1-D**2)),D)*(-1)**i)
+            try:
+                theta4 = -atan2((sqrt(1-D**2)),D)
+            except Exception as e:
+                print('D=', D, 'e = ', e)
 
             theta3 = atan2(z,G) - atan2(self.l4*sin(theta4), self.l3 + self.l4*cos(theta4))
 
             angles.append(theta1)
-            angles.append(theta3)
-            angles.append(theta4)
+            angles.append(theta3*expr)
+            angles.append(theta4*(-1)**i)
        
         # Return joint angles in radians - FR, FL, RR, RL
         return angles

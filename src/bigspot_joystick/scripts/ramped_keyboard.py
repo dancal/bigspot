@@ -43,7 +43,7 @@ class PS3Controller(object):
         self.rate = rospy.Rate(rate)
 
         self.speed_index = 0
-        self.available_speeds = [1.0, 1.1, 1.2, 1.3, 1.4, 1.5]
+        self.available_speeds = [3.0, 1.1, 1.2, 1.3, 1.4, 1.5]
 
     def listen(self):
         

@@ -65,7 +65,7 @@ def homog_transform(dx,dy,dz,alpha,beta,gamma):
     return np.dot(homog_transxyz(dx,dy,dz),rot4x4)
 
 
-def homog_transform_inverseL(matrix):
+def homog_transform_inverse(matrix):
     """
     Return the inverse of a homogeneous transformation matrix.
 
@@ -79,22 +79,5 @@ def homog_transform_inverseL(matrix):
     """
     inverse = matrix
     inverse[:3,:3] = inverse[:3,:3].T # R^T
-    inverse[:3,3] = -np.dot(inverse[:3,:3],inverse[:3,3]) # -R^T * d
-    return inverse
-
-def homog_transform_inverseR(matrix):
-    """
-    Return the inverse of a homogeneous transformation matrix.
-
-                 ------------------------- 
-                 |           |           |  
-    inverse   =  |    R^T    |  -R^T * d | 
-                 |___________|___________| 
-                 | 0   0   0 |     1     | 
-                 -------------------------  
-
-    """
-    inverse = matrix
-    inverse[:3,:3] = -inverse[:3,:3].T # R^T
     inverse[:3,3] = -np.dot(inverse[:3,:3],inverse[:3,3]) # -R^T * d
     return inverse
