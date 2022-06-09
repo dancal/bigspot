@@ -315,7 +315,7 @@
   <parent link="RLL_1"/>
   <child link="RLF_1"/>
   <axis xyz="0.013454 0.999909 0.001153"/>
-  <limit upper="1.22173" lower="-1.22173" effort="3.5" velocity="3"/>
+  <limit upper="1.22173" lower="-1.22173" effort="3.0" velocity="3"/>
 </joint>
 
 <joint name="RRF_Joint" type="revolute">
@@ -323,7 +323,7 @@
   <parent link="RRL_1"/>
   <child link="RRF_1"/>
   <axis xyz="0.001225 -0.99999 0.004366"/>
-  <limit upper="1.22173" lower="-1.22173" effort="3.5" velocity="3"/>
+  <limit upper="1.22173" lower="-1.22173" effort="3.0" velocity="3"/>
 </joint>
 
 <joint name="FRF_Joint" type="revolute">
@@ -331,7 +331,7 @@
   <parent link="FRL_1"/>
   <child link="FRF_1"/>
   <axis xyz="-0.002804 -0.999995 0.001625"/>
-  <limit upper="1.22173" lower="-1.22173" effort="3.5" velocity="3"/>
+  <limit upper="1.22173" lower="-1.22173" effort="3.0" velocity="3"/>
 </joint>
 
 <joint name="FLF_Joint" type="revolute">
@@ -339,7 +339,7 @@
   <parent link="FLL_1"/>
   <child link="FLF_1"/>
   <axis xyz="0.002803 0.999992 -0.002813"/>
-  <limit upper="1.22173" lower="-1.22173" effort="3.5" velocity="3"/>
+  <limit upper="1.22173" lower="-1.22173" effort="3.0" velocity="3"/>
 </joint>
 
 <joint name="FRL_Joint" type="revolute">
@@ -347,7 +347,7 @@
   <parent link="RFS_1"/>
   <child link="FRL_1"/>
   <axis xyz="0.002804 0.999995 -0.001625"/>
-  <limit upper="1.22173" lower="-1.22173" effort="3.5" velocity="3"/>
+  <limit upper="1.22173" lower="-1.22173" effort="3.0" velocity="3"/>
 </joint>
 
 <joint name="FLL_Joint" type="revolute">
@@ -355,7 +355,7 @@
   <parent link="FLS_1"/>
   <child link="FLL_1"/>
   <axis xyz="-0.002803 -0.999992 0.002813"/>
-  <limit upper="1.22173" lower="-1.22173" effort="3.5" velocity="3"/>
+  <limit upper="1.22173" lower="-1.22173" effort="3.0" velocity="3"/>
 </joint>
 
 <joint name="RLL_Joint" type="revolute">
@@ -363,7 +363,7 @@
   <parent link="RLS_1"/>
   <child link="RLL_1"/>
   <axis xyz="-0.001768 -0.999997 0.001824"/>
-  <limit upper="1.22173" lower="-1.22173" effort="3.5" velocity="3"/>
+  <limit upper="1.22173" lower="-1.22173" effort="3.0" velocity="3"/>
 </joint>
 
 <joint name="RRL_Joint" type="revolute">
@@ -371,7 +371,173 @@
   <parent link="RRS_1"/>
   <child link="RRL_1"/>
   <axis xyz="0.001768 0.999998 -0.000636"/>
-  <limit upper="1.22173" lower="-1.22173" effort="3.5" velocity="3"/>
+  <limit upper="1.22173" lower="-1.22173" effort="3.0" velocity="3"/>
 </joint>
+
+<!-- RR4 -->
+<link name="RR4">
+  <inertial>
+    <origin
+      xyz="0.00 0 0"
+      rpy="0 0 0" />
+   <mass
+      value="0.0391" />
+    <inertia
+      ixx="3.7713E-012"
+      ixy="0"
+      ixz="0"
+      iyy="3.5422E-12"
+      iyz="0"
+      izz="5.443E-012" />
+  </inertial>
+  <collision>
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <geometry>
+      <sphere radius="0.0072"/>
+    </geometry>
+  </collision>
+</link>
+
+<!-- RR4 -->
+<link name="RL4">
+  <inertial>
+    <origin
+      xyz="0.00 0 0"
+      rpy="0 0 0" />
+   <mass
+      value="0.0391" />
+    <inertia
+      ixx="3.7713E-012"
+      ixy="0"
+      ixz="0"
+      iyy="3.5422E-12"
+      iyz="0"
+      izz="5.443E-012" />
+  </inertial>
+  <collision>
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <geometry>
+      <sphere radius="0.0072"/>
+    </geometry>
+  </collision>
+</link>
+<!-- RR4 -->
+<link name="FR4">
+  <inertial>
+    <origin
+      xyz="0.00 0 0"
+      rpy="0 0 0" />
+   <mass
+      value="0.0391" />
+    <inertia
+      ixx="3.7713E-012"
+      ixy="0"
+      ixz="0"
+      iyy="3.5422E-12"
+      iyz="0"
+      izz="5.443E-012" />
+  </inertial>
+  <collision>
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <geometry>
+      <sphere radius="0.0072"/>
+    </geometry>
+  </collision>
+</link>
+<!-- RR4 -->
+<link name="FL4">
+  <inertial>
+    <origin
+      xyz="0.00 0 0"
+      rpy="0 0 0" />
+   <mass
+      value="0.0391" />
+    <inertia
+      ixx="3.7713E-012"
+      ixy="0"
+      ixz="0"
+      iyy="3.5422E-12"
+      iyz="0"
+      izz="5.443E-012" />
+  </inertial>
+  <collision>
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <geometry>
+      <sphere radius="0.0072"/>
+    </geometry>
+  </collision>
+</link>
+
+<joint name="RR4_Joint" type="fixed">
+  <origin xyz="0.094333 0 0" rpy="0 0 0" />
+  <parent link="RRF_1" />
+  <child link="RR4" />
+  <axis xyz="0 0 0" />
+</joint>
+
+<!-- RR4 friction -->
+<gazebo reference="RR4">
+  <mu1>1.0</mu1>
+  <mu2>1.0</mu2>
+  <minDepth>0.0002</minDepth>
+  <kp  value="1000000.0"/>
+  <kd  value="100.0"/>
+</gazebo>
+
+<joint name="RL4_Joint" type="fixed">
+  <origin xyz="0.094333 0 0" rpy="0 0 0" />
+  <parent link="RLF_1" />
+  <child link="RL4" />
+  <axis xyz="0 0 0" />
+</joint>
+
+<!-- RR4 friction -->
+<gazebo reference="RL4">
+  <mu1>1.0</mu1>
+  <mu2>1.0</mu2>
+  <minDepth>0.0002</minDepth>
+  <kp  value="1000000.0"/>
+  <kd  value="100.0"/>
+</gazebo>
+
+<joint name="FR4_Joint" type="fixed">
+  <origin xyz="0.094333 0 0" rpy="0 0 0" />
+  <parent link="FRF_1" />
+  <child link="FR4" />
+  <axis xyz="0 0 0" />
+</joint>
+
+<!-- RR4 friction -->
+<gazebo reference="FR4">
+  <mu1>1.0</mu1>
+  <mu2>1.0</mu2>
+  <minDepth>0.0002</minDepth>
+  <kp  value="1000000.0"/>
+  <kd  value="100.0"/>
+</gazebo>
+
+<joint name="FL4_Joint" type="fixed">
+  <origin xyz="0.094333 0 0" rpy="0 0 0" />
+  <parent link="FLF_1" />
+  <child link="FL4" />
+  <axis xyz="0 0 0" />
+</joint>
+
+<!-- RR4 friction -->
+<gazebo reference="FL4">
+  <mu1>1.0</mu1>
+  <mu2>1.0</mu2>
+  <minDepth>0.0002</minDepth>
+  <kp  value="1000000.0"/>
+  <kd  value="100.0"/>
+</gazebo>
 
 </robot>

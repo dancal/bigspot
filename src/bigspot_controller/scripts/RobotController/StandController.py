@@ -7,7 +7,7 @@ import numpy as np
 class StandController(object):
     def __init__(self, default_stance):
         self.def_stance = default_stance
-        self.max_reach = 0.065
+        self.max_reach = 0.12
 
         self.FR_X = 0.
         self.FR_Y = 0.

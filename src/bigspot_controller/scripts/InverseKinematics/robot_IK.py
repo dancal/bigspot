@@ -74,7 +74,7 @@ class InverseKinematics(object):
             G = F - self.l1
             H = sqrt(G**2 + z**2)
 
-            theta1 = atan2(y,x) + atan2(F,self.l2 * (-1)**i)
+            theta1 = atan2(y,x) + atan2(F,self.l2)
  
             D = ((H**2 - self.l3**2 - self.l4**2)/(2*self.l3*self.l4))
             if D >= 1.0:
@@ -90,8 +90,10 @@ class InverseKinematics(object):
             theta3 = atan2(z,G) - atan2(self.l4*sin(theta4), self.l3 + self.l4*cos(theta4))
 
             angles.append(theta1)
-            angles.append(theta3*expr)
-            angles.append(theta4*(-1)**i)
-       
+            #angles.append(theta3*expr)
+            #angles.append(theta4*(-1)**i)
+            angles.append(theta3)
+            angles.append(theta4)
+
         # Return joint angles in radians - FR, FL, RR, RL
         return angles

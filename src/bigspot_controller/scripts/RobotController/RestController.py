@@ -12,8 +12,8 @@ class RestController(object):
 
         # TODO: tune kp, ki and kd
         #                                     kp     ki    kd
-        #self.pid_controller = PID_controller(1.75, 3.29, 0.0)
-        self.pid_controller = PID_controller(0.45, 1.29, 0.0)
+        self.pid_controller = PID_controller(1.75, 3.29, 0.0)
+        #self.pid_controller = PID_controller(0.45, 1.29, 0.0)
         #self.pid_controller = PID_controller(0.1, 0.1, 0.0)
         self.use_imu        = False
         self.use_button     = True

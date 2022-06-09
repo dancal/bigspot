@@ -13,11 +13,10 @@
 <!-- IMU sensor -->
 <gazebo reference="base_link">
   <material>${body_color}</material>
-  <mu1>0.1</mu1>
-  <mu2>0.1</mu2>
+  <gravity>true</gravity>
   <sensor name="imu_sensor" type="imu">
     <always_on>true</always_on>
-    <update_rate>60</update_rate>
+    <update_rate>100</update_rate>
     <visualize>true</visualize>
     <topic>__default_topic__</topic>
     <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
@@ -32,8 +31,6 @@
     </plugin>
     <pose>0 0 0 0 0 0</pose>
   </sensor>
-  <gravity>1</gravity>
-  <turnGravityOff>false</turnGravityOff>
 </gazebo>
 
 <!-- Joint state publisher plugin -->
@@ -44,7 +41,7 @@
                  FLS_Joint, FLL_Joint, FLF_Joint,
                  RRS_Joint, RRL_Joint, RRF_Joint,
                  RLS_Joint, RLL_Joint, RLF_Joint</jointName>
-      <updateRate>60</updateRate>
+      <updateRate>100</updateRate>
   </plugin>
 </gazebo>
 
