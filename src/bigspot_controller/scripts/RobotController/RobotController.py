@@ -20,8 +20,8 @@ class Robot(object):
         self.delta_x = self.body[0] * 0.5
         self.delta_y = self.body[1] * 0.5 + self.legs[1]
         self.x_shift_front = -0.06
-        self.x_shift_back = 0.026
-        self.default_height = 0.18
+        self.x_shift_back = 0.028
+        self.default_height = 0.24
 
         self.trotGaitController     = TrotGaitController(self.default_stance, stance_time = 0.18, swing_time = 0.3, time_step = 0.02,use_imu = imu)
         self.crawlGaitController    = CrawlGaitController(self.default_stance, stance_time = 0.55, swing_time = 0.45, time_step = 0.02)
