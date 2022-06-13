@@ -17,8 +17,8 @@ rospy.init_node("Robot_Controller")
 #body = [0.399853, 0.135999]
 #legs = [0.0, 0.078, 0.183, 0.197]
 
-body = [0.3908, 0.08]
-legs = [0.0, 0.04, 0.100, 0.062] 
+body = [0.4, 0.13]
+legs = [0.0, 0.04, 0.183, 0.197] 
 
 notspot_robot = RobotController.Robot(body, legs, USE_IMU)
 inverseKinematics = robot_IK.InverseKinematics(body, legs)

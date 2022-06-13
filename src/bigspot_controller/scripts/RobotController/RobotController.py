@@ -5,7 +5,7 @@ import numpy as np
 import tf
 
 from . StateCommand import State, Command, BehaviorState
-from . ReadyController import ReadyController
+#from . ReadyController import ReadyController
 from . RestController import RestController
 from . TrotGaitController import TrotGaitController
 from . CrawlGaitController import CrawlGaitController
@@ -19,18 +19,18 @@ class Robot(object):
 
         self.delta_x = self.body[0] * 0.5
         self.delta_y = self.body[1] * 0.5 + self.legs[1]
-        self.x_shift_front = -0.006
-        self.x_shift_back = -0.038
-        self.default_height = 0.158
+        self.x_shift_front = -0.06
+        self.x_shift_back = 0.026
+        self.default_height = 0.18
 
-        self.trotGaitController     = TrotGaitController(self.default_stance, stance_time = 0.18, swing_time = 0.25, time_step = 0.02,use_imu = imu)
+        self.trotGaitController     = TrotGaitController(self.default_stance, stance_time = 0.18, swing_time = 0.3, time_step = 0.02,use_imu = imu)
         self.crawlGaitController    = CrawlGaitController(self.default_stance, stance_time = 0.55, swing_time = 0.45, time_step = 0.02)
         self.standController        = StandController(self.default_stance)
 
         self.restController         = RestController(self.default_stance)
-        self.readyController        = ReadyController(self.default_stance, self.default_height)
+        #self.readyController        = ReadyController(self.default_stance, self.default_height)
 
-        self.currentController      = self.readyController
+        self.currentController      = self.restController
         self.state                  = State(self.default_height)
         self.state.foot_locations   = self.default_stance
         self.command                = Command(self.default_height)
@@ -105,8 +105,8 @@ class Robot(object):
     def default_stance(self):
         # FR, FL, RR, RL
         return np.array([[self.delta_x + self.x_shift_front,self.delta_x + self.x_shift_front,-self.delta_x + self.x_shift_back,-self.delta_x + self.x_shift_back],
-                         [-self.delta_y                    ,-self.delta_y                     ,-self.delta_y                   ,-self.delta_y                    ],
-                         [-1                                ,-1                                  ,-1                                 ,-1                                  ]])
+                         [-self.delta_y                    ,self.delta_y                     ,-self.delta_y                    , self.delta_y                    ],
+                         [0                                ,0                                ,0                                ,0                                ]])
 
     @property
     def default_stance_org(self):

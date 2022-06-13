@@ -66,6 +66,10 @@ class InverseKinematics(object):
             if i == 0 or i == 2:
                 expr = -1
 
+            FL      = 1
+            if i == 0 or i == 1:
+                FL = -1.2
+
             x = positions[i][0]
             y = positions[i][1]
             z = positions[i][2]
@@ -74,26 +78,27 @@ class InverseKinematics(object):
             G = F - self.l1
             H = sqrt(G**2 + z**2)
 
-            theta1 = atan2(y,x) + atan2(F,self.l2)
+            theta1 = atan2(y,x) + atan2(F,self.l2 * (-1)**i)
  
-            D = ((H**2 - self.l3**2 - self.l4**2)/(2*self.l3*self.l4))
+            D = ((H**2 - self.l3**2 + self.l4**2)/(2*self.l3*self.l4))
             if D >= 1.0:
                 D = 1.0
             if D <= -1.0:
                 D = -1.0
 
             try:
-                theta4 = -atan2((sqrt(1-D**2)),D)
+                theta4 = atan2((sqrt(1-D**2)),D)
             except Exception as e:
                 print('D=', D, 'e = ', e)
 
+            #theta3 = atan2(z,G) - atan2(self.l4*sin(theta4), self.l3 + self.l4*cos(theta4))
             theta3 = atan2(z,G) - atan2(self.l4*sin(theta4), self.l3 + self.l4*cos(theta4))
 
             angles.append(theta1)
-            #angles.append(theta3*expr)
-            #angles.append(theta4*(-1)**i)
-            angles.append(theta3)
-            angles.append(theta4)
+            angles.append(theta3*FL)
+            angles.append(theta4*expr)
+            #angles.append(theta3)
+            #angles.append(theta4)
 
         # Return joint angles in radians - FR, FL, RR, RL
         return angles
