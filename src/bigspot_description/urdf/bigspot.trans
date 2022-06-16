@@ -8,7 +8,7 @@
   </joint>
   <actuator name="FRS_Joint_actr">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    <mechanicalReduction>1</mechanicalReduction>
+    <mechanicalReduction>5</mechanicalReduction>
   </actuator>
 </transmission>
 
@@ -19,7 +19,7 @@
   </joint>
   <actuator name="FRL_Joint_actr">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    <mechanicalReduction>1</mechanicalReduction>
+    <mechanicalReduction>5</mechanicalReduction>
   </actuator>
 </transmission>
 
@@ -30,7 +30,7 @@
   </joint>
   <actuator name="FRF_Joint_actr">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    <mechanicalReduction>1</mechanicalReduction>
+    <mechanicalReduction>5</mechanicalReduction>
   </actuator>
 </transmission>
 
@@ -41,7 +41,7 @@
   </joint>
   <actuator name="FLS_Joint_actr">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    <mechanicalReduction>1</mechanicalReduction>
+    <mechanicalReduction>5</mechanicalReduction>
   </actuator>
 </transmission>
 
@@ -52,7 +52,7 @@
   </joint>
   <actuator name="FLL_Joint_actr">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    <mechanicalReduction>1</mechanicalReduction>
+    <mechanicalReduction>5</mechanicalReduction>
   </actuator>
 </transmission>
 
@@ -63,7 +63,7 @@
   </joint>
   <actuator name="FLF_Joint_actr">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    <mechanicalReduction>1</mechanicalReduction>
+    <mechanicalReduction>5</mechanicalReduction>
   </actuator>
 </transmission>
 
@@ -74,7 +74,7 @@
   </joint>
   <actuator name="RRS_Joint_actr">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    <mechanicalReduction>1</mechanicalReduction>
+    <mechanicalReduction>5</mechanicalReduction>
   </actuator>
 </transmission>
 
@@ -85,7 +85,7 @@
   </joint>
   <actuator name="RRL_Joint_actr">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    <mechanicalReduction>1</mechanicalReduction>
+    <mechanicalReduction>5</mechanicalReduction>
   </actuator>
 </transmission>
 
@@ -96,7 +96,7 @@
   </joint>
   <actuator name="RRF_Joint_actr">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    <mechanicalReduction>1</mechanicalReduction>
+    <mechanicalReduction>5</mechanicalReduction>
   </actuator>
 </transmission>
 
@@ -107,7 +107,7 @@
   </joint>
   <actuator name="RLS_Joint_actr">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    <mechanicalReduction>1</mechanicalReduction>
+    <mechanicalReduction>5</mechanicalReduction>
   </actuator>
 </transmission>
 
@@ -118,7 +118,7 @@
   </joint>
   <actuator name="RLL_Joint_actr">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    <mechanicalReduction>1</mechanicalReduction>
+    <mechanicalReduction>5</mechanicalReduction>
   </actuator>
 </transmission>
 
@@ -129,7 +129,7 @@
   </joint>
   <actuator name="RLF_Joint_actr">
     <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-    <mechanicalReduction>1</mechanicalReduction>
+    <mechanicalReduction>5</mechanicalReduction>
   </actuator>
 </transmission>
 

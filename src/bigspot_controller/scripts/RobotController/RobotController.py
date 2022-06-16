@@ -14,16 +14,16 @@ from . StandController import StandController
 
 class Robot(object):
     def __init__(self, body, legs, imu):
-        self.body = body
-        self.legs = legs
+        self.body           = body
+        self.legs           = legs
 
-        self.delta_x = self.body[0] * 0.5
-        self.delta_y = self.body[1] * 0.5 + self.legs[1]
-        self.x_shift_front = -0.06
-        self.x_shift_back = 0.028
-        self.default_height = 0.24
+        self.delta_x        = self.body[0] * 0.5
+        self.delta_y        = self.body[1] * 0.5 + self.legs[1]
+        self.x_shift_front  = 0.014
+        self.x_shift_back   = -0.05
+        self.default_height = 0.2
 
-        self.trotGaitController     = TrotGaitController(self.default_stance, stance_time = 0.18, swing_time = 0.3, time_step = 0.02,use_imu = imu)
+        self.trotGaitController     = TrotGaitController(self.default_stance, stance_time = 0.2, swing_time = 0.24, time_step = 0.02,use_imu = imu)
         self.crawlGaitController    = CrawlGaitController(self.default_stance, stance_time = 0.55, swing_time = 0.45, time_step = 0.02)
         self.standController        = StandController(self.default_stance)
 
@@ -49,7 +49,7 @@ class Robot(object):
             if self.state.behavior_state == BehaviorState.REST:
                 self.state.behavior_state = BehaviorState.CRAWL
                 self.currentController = self.crawlGaitController
-                self.currentController.first_cycle = True;
+                self.currentController.first_cycle = True
                 self.state.ticks = 0
             self.command.crawl_event = False
 

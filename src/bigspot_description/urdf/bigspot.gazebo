@@ -47,86 +47,87 @@
 
 <gazebo reference="FLF_1">
   <material>${body_color}</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
-  <selfCollide>true</selfCollide>
+  <mu1>1.0</mu1>
+  <mu2>1.0</mu2>
+  <minDepth>0.0002</minDepth>
+  <kp  value="1000000.0"/>
+  <kd  value="100.0"/>
 </gazebo>
 
 <gazebo reference="RRS_1">
   <material>${body_color}</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
+  <mu1>1.0</mu1>
+  <mu2>1.0</mu2>
   <selfCollide>true</selfCollide>
 </gazebo>
 
 <gazebo reference="RRL_1">
   <material>${body_color}</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
-  <selfCollide>true</selfCollide>
+  <mu1>1.0</mu1>
+  <mu2>1.0</mu2>
 </gazebo>
 
 <gazebo reference="RRF_1">
   <material>${body_color}</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
-  <selfCollide>true</selfCollide>
+  <mu1>1.0</mu1>
+  <mu2>1.0</mu2>
+  <minDepth>0.0002</minDepth>
+  <kp  value="1000000.0"/>
+  <kd  value="100.0"/>
 </gazebo>
 
 <gazebo reference="RLS_1">
   <material>${body_color}</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
-  <selfCollide>true</selfCollide>
+  <mu1>1.0</mu1>
+  <mu2>1.0</mu2>
 </gazebo>
 
 <gazebo reference="RLF_1">
   <material>${body_color}</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
-  <selfCollide>true</selfCollide>
+  <mu1>1.0</mu1>
+  <mu2>1.0</mu2>
+  <minDepth>0.0002</minDepth>
+  <kp  value="1000000.0"/>
+  <kd  value="100.0"/>
 </gazebo>
 
 <gazebo reference="FLL_1">
   <material>${body_color}</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
-  <selfCollide>true</selfCollide>
+  <mu1>1.0</mu1>
+  <mu2>1.0</mu2>
 </gazebo>
 
 <gazebo reference="FLS_1">
   <material>${body_color}</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
-  <selfCollide>true</selfCollide>
+  <mu1>1.0</mu1>
+  <mu2>1.0</mu2>
 </gazebo>
 
 <gazebo reference="RLL_1">
   <material>${body_color}</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
-  <selfCollide>true</selfCollide>
+  <mu1>1.0</mu1>
+  <mu2>1.0</mu2>
 </gazebo>
 
 <gazebo reference="FRS_1">
   <material>${body_color}</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
-  <selfCollide>true</selfCollide>
+  <mu1>1.0</mu1>
+  <mu2>1.0</mu2>
 </gazebo>
 
 <gazebo reference="FRL_1">
   <material>${body_color}</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
-  <selfCollide>true</selfCollide>
+  <mu1>1.0</mu1>
+  <mu2>1.0</mu2>
 </gazebo>
 
 <gazebo reference="FRF_1">
   <material>${body_color}</material>
-  <mu1>0.2</mu1>
-  <mu2>0.2</mu2>
-  <selfCollide>true</selfCollide>
+  <mu1>1.0</mu1>
+  <mu2>1.0</mu2>
+  <minDepth>0.0002</minDepth>
+  <kp  value="1000000.0"/>
+  <kd  value="100.0"/>
 </gazebo>
 
 </robot>

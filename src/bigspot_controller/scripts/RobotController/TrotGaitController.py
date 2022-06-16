@@ -145,8 +145,7 @@ class TrotSwingController(object):
 
         time_left = self.time_step* self.swing_ticks * (1.0 - swing_prop)
         
-        velocity = (touchdown_location - foot_location) / float(time_left) *\
-             np.array([1, 1, 0])
+        velocity = (touchdown_location - foot_location) / float(time_left) * np.array([1, 1, 0])
 
         delta_foot_location = velocity * self.time_step
         z_vector = np.array([0, 0, swing_height_ + command.robot_height])

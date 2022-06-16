@@ -8,7 +8,7 @@ from RobotController import RobotController
 from InverseKinematics import robot_IK
 from std_msgs.msg import Float64
 
-USE_IMU = False
+USE_IMU = True
 RATE = 60
 
 rospy.init_node("Robot_Controller")
@@ -18,7 +18,7 @@ rospy.init_node("Robot_Controller")
 #legs = [0.0, 0.078, 0.183, 0.197]
 
 body = [0.4, 0.13]
-legs = [0.0, 0.04, 0.183, 0.197] 
+legs = [0.0, 0.04, 0.183, 0.2] 
 
 notspot_robot = RobotController.Robot(body, legs, USE_IMU)
 inverseKinematics = robot_IK.InverseKinematics(body, legs)

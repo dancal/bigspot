@@ -24,7 +24,7 @@ class RestController(object):
         # local body position
         state.body_local_position[0] = msg.axes[7] * 0.03
         state.body_local_position[1] = msg.axes[6] * 0.03
-        state.body_local_position[2] = msg.axes[1] * 0.03
+        state.body_local_position[2] = msg.axes[1] * 0.1
 
         # local body orientation
         state.body_local_orientation[0] = msg.axes[0] * 0.3

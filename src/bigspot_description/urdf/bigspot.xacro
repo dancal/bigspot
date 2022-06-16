@@ -282,7 +282,7 @@
   <parent link="base_link"/>
   <child link="FRS_1"/>
   <axis xyz="-0.999998 3e-05 0.001745"/>
-  <limit upper="0.523599" lower="-0.349066" effort="100" velocity="100"/>
+  <limit upper="0.523599" lower="-0.349066" effort="60.0" velocity="3"/>
 </joint>
 
 <joint name="FRL_Joint" type="revolute">
@@ -290,7 +290,7 @@
   <parent link="FRS_1"/>
   <child link="FRL_1"/>
   <axis xyz="2.6e-05 0.999998 -0.002125"/>
-  <limit upper="1.570796" lower="-1.570796" effort="100" velocity="100"/>
+  <limit upper="1.570796" lower="-1.570796" effort="60.0" velocity="3"/>
 </joint>
 
 <joint name="FRF_Joint" type="revolute">
@@ -298,7 +298,7 @@
   <parent link="FRL_1"/>
   <child link="FRF_1"/>
   <axis xyz="2.6e-05 0.999998 -0.002125"/>
-  <limit upper="0.0" lower="-2.617994" effort="100" velocity="100"/>
+  <limit upper="0.0" lower="-2.617994" effort="60.0" velocity="3"/>
 </joint>
 
 <joint name="FLS_Joint" type="revolute">
@@ -306,7 +306,7 @@
   <parent link="base_link"/>
   <child link="FLS_1"/>
   <axis xyz="-0.999998 3e-05 0.001745"/>
-  <limit upper="0.349066" lower="-0.523599" effort="100" velocity="100"/>
+  <limit upper="0.349066" lower="-0.523599" effort="60.0" velocity="3"/>
 </joint>
 
 <joint name="FLL_Joint" type="revolute">
@@ -314,7 +314,7 @@
   <parent link="FLS_1"/>
   <child link="FLL_1"/>
   <axis xyz="3.9e-05 0.999985 0.005513"/>
-  <limit upper="1.570796" lower="-1.570796" effort="100" velocity="100"/>
+  <limit upper="1.570796" lower="-1.570796" effort="60.0" velocity="3"/>
 </joint>
 
 <joint name="FLF_Joint" type="revolute">
@@ -322,7 +322,7 @@
   <parent link="FLL_1"/>
   <child link="FLF_1"/>
   <axis xyz="-3.9e-05 -0.999985 -0.005513"/>
-  <limit upper="2.617994" lower="0.0" effort="100" velocity="100"/>
+  <limit upper="2.617994" lower="0.0" effort="60.0" velocity="3"/>
 </joint>
 
 <joint name="RRS_Joint" type="revolute">
@@ -330,7 +330,7 @@
   <parent link="base_link"/>
   <child link="RRS_1"/>
   <axis xyz="-0.999998 7e-06 -0.001745"/>
-  <limit upper="0.523599" lower="-0.349066" effort="100" velocity="100"/>
+  <limit upper="0.523599" lower="-0.349066" effort="60.0" velocity="3"/>
 </joint>
 
 <joint name="RRL_Joint" type="revolute">
@@ -338,7 +338,7 @@
   <parent link="RRS_1"/>
   <child link="RRL_1"/>
   <axis xyz="-1.5e-05 -0.999988 0.00488"/>
-  <limit upper="1.570796" lower="-1.570796" effort="100" velocity="100"/>
+  <limit upper="1.570796" lower="-1.570796" effort="60.0" velocity="3"/>
 </joint>
 
 <joint name="RRF_Joint" type="revolute">
@@ -346,7 +346,7 @@
   <parent link="RRL_1"/>
   <child link="RRF_1"/>
   <axis xyz="-0.004077 0.999989 -0.002405"/>
-  <limit upper="0.0" lower="-2.792527" effort="100" velocity="100"/>
+  <limit upper="0.0" lower="-2.792527" effort="60.0" velocity="3"/>
 </joint>
 
 <joint name="RLS_Joint" type="revolute">
@@ -354,7 +354,7 @@
   <parent link="base_link"/>
   <child link="RLS_1"/>
   <axis xyz="-0.999998 7e-06 -0.001745"/>
-  <limit upper="0.349066" lower="-0.523599" effort="100" velocity="100"/>
+  <limit upper="0.349066" lower="-0.523599" effort="60.0" velocity="3"/>
 </joint>
 
 <joint name="RLL_Joint" type="revolute">
@@ -362,7 +362,7 @@
   <parent link="RLS_1"/>
   <child link="RLL_1"/>
   <axis xyz="6e-06 -0.999973 -0.007312"/>
-  <limit upper="1.570796" lower="-1.570796" effort="100" velocity="100"/>
+  <limit upper="1.570796" lower="-1.570796" effort="60.0" velocity="3"/>
 </joint>
 
 <joint name="RLF_Joint" type="revolute">
@@ -370,7 +370,7 @@
   <parent link="RLL_1"/>
   <child link="RLF_1"/>
   <axis xyz="-0.004087 -0.99998 -0.004837"/>
-  <limit upper="2.792527" lower="0.0" effort="100" velocity="100"/>
+  <limit upper="2.792527" lower="0.0" effort="60.0" velocity="3"/>
 </joint>
 
 </robot>
