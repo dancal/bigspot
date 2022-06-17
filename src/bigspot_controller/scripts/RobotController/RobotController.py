@@ -3,6 +3,7 @@
 
 import numpy as np
 import tf
+import rospy
 
 from . StateCommand import State, Command, BehaviorState
 from . ReadyController import ReadyController
@@ -30,7 +31,7 @@ class Robot(object):
         self.restController         = RestController(self.default_stance)
         self.readyController        = ReadyController(self.default_stance, stance_time = 0.55, swing_time = 0.45, time_step = 0.02)
         
-        self.currentController      = self.readyController
+        self.currentController      = self.restController
         self.state                  = State(self.default_height)
         self.state.foot_locations   = self.default_stance
         self.command                = Command(self.default_height)
@@ -80,6 +81,7 @@ class Robot(object):
             self.command.ready_event    = False
             self.command.rest_event     = True
             print("rest")
+            rospy.loginfo(f"Rest")
 
         elif msg.buttons[1]: # trot
             self.command.trot_event     = True
@@ -88,6 +90,7 @@ class Robot(object):
             self.command.ready_event    = False
             self.command.rest_event     = False
             print("trot")
+            rospy.loginfo(f"trot")
 
         #elif msg.buttons[2]: # crawl
         #    self.command.trot_event = False
@@ -111,6 +114,7 @@ class Robot(object):
             self.command.ready_event    = True
             self.command.rest_event     = False
             print("ready")
+            rospy.loginfo(f"ready")
 
         self.currentController.updateStateCommand(msg, self.state, self.command)
 

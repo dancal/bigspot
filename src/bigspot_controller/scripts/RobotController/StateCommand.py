@@ -26,7 +26,7 @@ class State(object):
         self.imu_pitch = 0.
         
         self.ticks = 0
-        self.behavior_state = BehaviorState.READY
+        self.behavior_state = BehaviorState.REST
 
 class Command(object):
     def __init__(self,default_height):
