@@ -8,7 +8,7 @@ from RobotController import RobotController
 from InverseKinematics import robot_IK
 from std_msgs.msg import Float64
 
-USE_IMU = True
+USE_IMU = False
 RATE = 60
 
 rospy.init_node("Robot_Controller")
@@ -57,31 +57,18 @@ while not rospy.is_shutdown():
     leg_positions = notspot_robot.run()
     notspot_robot.change_controller()
 
-    dx = notspot_robot.state.body_local_position[0]
-    dy = notspot_robot.state.body_local_position[1]
-    dz = notspot_robot.state.body_local_position[2]
+    dx      = notspot_robot.state.body_local_position[0]
+    dy      = notspot_robot.state.body_local_position[1]
+    dz      = notspot_robot.state.body_local_position[2]
     
-    roll = notspot_robot.state.body_local_orientation[0]
-    pitch = notspot_robot.state.body_local_orientation[1]
-    yaw = notspot_robot.state.body_local_orientation[2]
+    roll    = notspot_robot.state.body_local_orientation[0]
+    pitch   = notspot_robot.state.body_local_orientation[1]
+    yaw     = notspot_robot.state.body_local_orientation[2]
 
     try:
         joint_angles = inverseKinematics.inverse_kinematics(leg_positions, dx, dy, dz, roll, pitch, yaw)
         for i in range(len(joint_angles)):
             #                 FR,                              ,FL,                              ,RR                               ,RL
-#            if i == 1:
-#                joint_angles[i] = joint_angles[i] * -1
-#            if i == 2:
-#                joint_angles[i] = joint_angles[i] * -1
-#
-            #if i == 5:
-            #    joint_angles[i] = joint_angles[i] * -1
-#
-            #if i == 10:
-            #    joint_angles[i] = joint_angles[i] * -1
-            #if i == 11:
-            #    joint_angles[i] = joint_angles[i] * -1
-
             publishers[i].publish(joint_angles[i])
         #print(joint_angles)
     except Exception as e:

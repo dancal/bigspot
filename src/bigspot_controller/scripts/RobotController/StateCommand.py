@@ -9,7 +9,7 @@ class BehaviorState(Enum):
     TROT    = 1
     CRAWL   = 2
     STAND   = 3
-    LIE     = 4
+    READY   = 4
 
 class State(object):
     def __init__(self,default_height):
@@ -26,7 +26,7 @@ class State(object):
         self.imu_pitch = 0.
         
         self.ticks = 0
-        self.behavior_state = BehaviorState.REST
+        self.behavior_state = BehaviorState.READY
 
 class Command(object):
     def __init__(self,default_height):
@@ -38,4 +38,4 @@ class Command(object):
         self.crawl_event    = False
         self.rest_event     = False
         self.stand_event    = False
-        self.lie_event      = False
+        self.ready_event    = False

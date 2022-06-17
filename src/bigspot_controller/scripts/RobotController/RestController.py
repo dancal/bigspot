@@ -3,12 +3,14 @@
 
 import rospy
 import numpy as np
+import time
 from RoboticsUtilities.Transformations import rotxyz
 from . PIDController import PID_controller
 
 class RestController(object):
     def __init__(self, default_stance):
         self.def_stance = default_stance
+        self.first_init = True
 
         # TODO: tune kp, ki and kd
         #                                     kp     ki    kd
@@ -61,6 +63,10 @@ class RestController(object):
             rot = rotxyz(roll_compensation,pitch_compensation,0)
             temp = np.matmul(rot,temp)
 
+        if self.first_init == True:
+            time.sleep(0.5)
+            
+        self.first_init = False
         return temp
 
     def run(self, state, command):

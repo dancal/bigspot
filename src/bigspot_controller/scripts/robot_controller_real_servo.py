@@ -13,7 +13,7 @@ from RobotHardwares import RobotHardwares
 from std_msgs.msg import Float64
 #from time import sleep, time
 import numpy as np
-import pygame
+#import pygame
 
 USE_IMU = True
 RATE = 60
@@ -59,7 +59,7 @@ del USE_IMU
 
 #deg2rad         = pi/180
 #rad2deg         = 180/pi
-clock           = pygame.time.Clock()    
+#clock           = pygame.time.Clock()    
 while not rospy.is_shutdown():
 
     leg_positions = notspot_robot.run()

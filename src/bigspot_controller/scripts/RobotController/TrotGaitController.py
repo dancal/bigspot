@@ -21,16 +21,18 @@ class TrotGaitController(GaitController):
                                    [1, 0, 1, 1],  
                                    [1, 1, 1, 0]])
 
-        z_error_constant = 0.02 * 4    # This constant determines how fast we move
+        z_error_constant = 0.03 * 4    # This constant determines how fast we move
                                        # toward the goal in the z direction
         
 
         z_leg_lift = 0.07
 
         super().__init__(stance_time, swing_time, time_step, contact_phases, default_stance)
+        #self.max_x_velocity = 0.024 #[m/s] 
+        #self.max_y_velocity = 0.015 #[m/s]
 
-        self.max_x_velocity = 0.024 #[m/s] 
-        self.max_y_velocity = 0.015 #[m/s]
+        self.max_x_velocity = 0.036 #[m/s] 
+        self.max_y_velocity = 0.026 #[m/s]
         self.max_yaw_rate = 0.6 #[rad/s]
 
 
@@ -43,7 +45,7 @@ class TrotGaitController(GaitController):
 
         # TODO: tune kp, ki and kd
         #                                     kp    ki    kd
-        self.pid_controller = PID_controller(0.15, 0.02, 0.002)
+        self.pid_controller = PID_controller(0.01, 0.01, 0.001)
 
     def updateStateCommand(self, msg, state, command):
         command.velocity[0] = msg.axes[4] * self.max_x_velocity
@@ -162,11 +164,9 @@ class TrotStanceController(object):
     def position_delta(self, leg_index, state, command):
         z = state.foot_locations[2, leg_index]
 
-        step_dist_x = command.velocity[0] *\
-                      (float(self.phase_length)/self.swing_ticks)
+        step_dist_x = command.velocity[0] * (float(self.phase_length)/self.swing_ticks)
 
-        step_dist_y = command.velocity[1] *\
-                      (float(self.phase_length)/self.swing_ticks)
+        step_dist_y = command.velocity[1] * (float(self.phase_length)/self.swing_ticks)
 
         velocity = np.array([-(step_dist_x/4)/(float(self.time_step)*self.stance_ticks), 
                              -(step_dist_y/4)/(float(self.time_step)*self.stance_ticks), 

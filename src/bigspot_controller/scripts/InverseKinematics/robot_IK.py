@@ -61,21 +61,6 @@ class InverseKinematics(object):
                 domain = -0.99
         return domain
 
-    def _solve_IK(self, coord, hip, leg, foot, right_side):
-        domain = (coord[1] ** 2 + (-coord[2]) ** 2 - hip ** 2 + (-coord[0]) ** 2 - leg ** 2 - foot ** 2) / (2 * foot * leg)
-        domain = self.check_domain(domain)
-        gamma = np.arctan2(-np.sqrt(1 - domain ** 2), domain)
-        sqrt_value = coord[1] ** 2 + (-coord[2]) ** 2 - hip ** 2
-        if sqrt_value < 0.0:
-            sqrt_value = 0.0
-        alpha = np.arctan2(-coord[0], np.sqrt(sqrt_value)) - np.arctan2(foot * np.sin(gamma), leg + foot * np.cos(gamma))
-        hip_val = hip
-        if right_side:
-            hip_val = -hip
-        theta = -np.arctan2(coord[2], coord[1]) - np.arctan2(np.sqrt(sqrt_value), hip_val)
-        angles = np.array([theta, -alpha, -gamma])
-        return 
-
     def inverse_kinematics(self,leg_positions,dx,dy,dz,roll,pitch,yaw):
         """
         Compute the inverse kinematics for all the legs.
