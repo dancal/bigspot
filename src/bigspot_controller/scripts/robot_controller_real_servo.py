@@ -28,6 +28,7 @@ notspot_robot       = RobotController.Robot(body, legs, USE_IMU)
 inverseKinematics   = robot_IK.InverseKinematics(body, legs)
 servoControllers    = RobotHardwares.ServoController()
 
+command_topics = ["/bigspot_controller/FRS_Joint/command",
                   "/bigspot_controller/FRL_Joint/command",
                   "/bigspot_controller/FRF_Joint/command",
                   "/bigspot_controller/FLS_Joint/command",
