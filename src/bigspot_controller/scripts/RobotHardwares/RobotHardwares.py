@@ -111,8 +111,8 @@ class ServoItem:
         curPos                  = int(math.ceil(((self.rad2deg(angle) * self.direction) + self.defAngle)))
         
         self.currentPos         = curPos + self.restPos
-        if self.direction < 0 and self.currentPos < 0:
-            self.currentPos     = 0
+        #if self.direction < 0 and self.currentPos < 0:
+        #    self.currentPos     = 0
 
         if ( self.currentPos > 180 ):
             self.currentPos     = 180
@@ -183,11 +183,13 @@ class ServoController:
         # REAR
         self.servoMoters.append( ServoItem('RLS', self.ServoKitB, 0, 90,  -1, -5))     # 6
         self.servoMoters.append( ServoItem('RLL', self.ServoKitB, 1, 48,  -1, 45))     # 7
-        self.servoMoters.append( ServoItem('RLF', self.ServoKitB, 2, 158,  -1, 10))     # 8
+        self.servoMoters.append( ServoItem('RLF', self.ServoKitB, 2, 158,  1, 10))     # 8
 
-        self.servoMoters.append( ServoItem('RRS', self.ServoKitB, 3, 90,  -1, -3))     # 9
-        self.servoMoters.append( ServoItem('RRL', self.ServoKitB, 4, 48,  1, -32))     # 10
-        self.servoMoters.append( ServoItem('RRF', self.ServoKitB, 5, 22,  -1, -30))     # 11
+        self.servoMoters.append( ServoItem('RRS', self.ServoKitB, 3, 90,  -1, -10))     # 9
+        self.servoMoters.append( ServoItem('RRL', self.ServoKitB, 4, 136,  1, -32))     # 10
+        self.servoMoters.append( ServoItem('RRF', self.ServoKitB, 5, 22,  1, -30))     # 11
+
+        #self.servoMoters.append( ServoItem('RRX', self.ServoKitB, 6, 22,  1, -30))     # 11
 
         #self.moveFirst()
         
@@ -202,7 +204,7 @@ class ServoController:
     def move(self, joint_angles, state):
         for i in range(len(self.servoMoters)):
             self.servoMoters[i].moveAngle(joint_angles[i])
-        #    #time.sleep(0.1)
+            #time.sleep(0.1)
         
 if __name__ == "__main__":
     ps4 = ServoController()
