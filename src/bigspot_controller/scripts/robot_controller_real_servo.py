@@ -28,18 +28,17 @@ notspot_robot       = RobotController.Robot(body, legs, USE_IMU)
 inverseKinematics   = robot_IK.InverseKinematics(body, legs)
 servoControllers    = RobotHardwares.ServoController()
 
-command_topics = ["/notspot_controller/FR1_joint/command",
-                  "/notspot_controller/FR2_joint/command",
-                  "/notspot_controller/FR3_joint/command",
-                  "/notspot_controller/FL1_joint/command",
-                  "/notspot_controller/FL2_joint/command",
-                  "/notspot_controller/FL3_joint/command",
-                  "/notspot_controller/RR1_joint/command",
-                  "/notspot_controller/RR2_joint/command",
-                  "/notspot_controller/RR3_joint/command",
-                  "/notspot_controller/RL1_joint/command",
-                  "/notspot_controller/RL2_joint/command",
-                  "/notspot_controller/RL3_joint/command"]
+                  "/bigspot_controller/FRL_Joint/command",
+                  "/bigspot_controller/FRF_Joint/command",
+                  "/bigspot_controller/FLS_Joint/command",
+                  "/bigspot_controller/FLL_Joint/command",
+                  "/bigspot_controller/FLF_Joint/command",
+                  "/bigspot_controller/RRS_Joint/command",
+                  "/bigspot_controller/RRL_Joint/command",
+                  "/bigspot_controller/RRF_Joint/command",
+                  "/bigspot_controller/RLS_Joint/command",
+                  "/bigspot_controller/RLL_Joint/command",
+                  "/bigspot_controller/RLF_Joint/command"]
 
 publishers = []
 for i in range(len(command_topics)):
@@ -76,12 +75,11 @@ while not rospy.is_shutdown():
     try:
         # FR, FL, RR, RL
         joint_angles    = inverseKinematics.inverse_kinematics(leg_positions, dx, dy, dz, roll, pitch, yaw)
-        print(joint_angles)
+        #print(joint_angles)
     except Exception as e:
         print('inverseKinematics = ', e)
         pass
 
-    continue
     try:
         for i in range(len(joint_angles)):
             publishers[i].publish(joint_angles[i])
@@ -96,4 +94,5 @@ while not rospy.is_shutdown():
         pass
 
     #clock.tick(RATE)
+    time.sleep(0.05)
     rate.sleep()
