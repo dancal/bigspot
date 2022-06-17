@@ -15,14 +15,14 @@ from std_msgs.msg import Float64
 import numpy as np
 #import pygame
 
-USE_IMU = True
+USE_IMU = False
 RATE = 60
 
 rospy.init_node("Robot_Controller")
 
 # Robot geometry
-body = [0.1908, 0.080]
-legs = [0.0, 0.04, 0.100, 0.094333] 
+body = [0.4, 0.13]
+legs = [0.0, 0.04, 0.183, 0.2] 
 
 notspot_robot       = RobotController.Robot(body, legs, USE_IMU)
 inverseKinematics   = robot_IK.InverseKinematics(body, legs)
@@ -76,10 +76,12 @@ while not rospy.is_shutdown():
     try:
         # FR, FL, RR, RL
         joint_angles    = inverseKinematics.inverse_kinematics(leg_positions, dx, dy, dz, roll, pitch, yaw)
+        print(joint_angles)
     except Exception as e:
         print('inverseKinematics = ', e)
         pass
-    
+
+    continue
     try:
         for i in range(len(joint_angles)):
             publishers[i].publish(joint_angles[i])
