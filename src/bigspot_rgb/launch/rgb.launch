@@ -1,5 +1,5 @@
 <launch>
 
-    <node pkg="notspot_rgb" type="rgb_node.py" name="i2c_rgb" output="screen"/>
+    <node pkg="bigspot_rgb" type="rgb_node.py" name="i2c_rgb" output="screen"/>
 
 </launch>

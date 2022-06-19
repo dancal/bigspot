@@ -31,8 +31,8 @@ class SpotMicroLcd():
 
 		#rospy.Subscriber('sm_speed_cmd',Vector3,self.update_speed_cmd)
 		#rospy.Subscriber('sm_angle_cmd',Vector3,self.update_angle_cmd)
-		rospy.Subscriber('notspot_lcd/state', String, self.update_state_string)
-		rospy.Subscriber('notspot_lcd/joy_speed', String, self.update_joy_speed_string)
+		rospy.Subscriber('bigspot_lcd/state', String, self.update_state_string)
+		rospy.Subscriber('bigspot_lcd/joy_speed', String, self.update_joy_speed_string)
 		rospy.loginfo(f"LCD init")
 
 	def getLocalIps(self, ifaceName):

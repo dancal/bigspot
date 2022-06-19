@@ -48,8 +48,8 @@ class UltraSonic:
         self.sonarL             = adafruit_hcsr04.HCSR04(trigger_pin=board.D16, echo_pin=board.D19)
         self.sonarR             = adafruit_hcsr04.HCSR04(trigger_pin=board.D20, echo_pin=board.D21)
 
-        self.rgb_publisher      = rospy.Publisher('notspot_rgb/rgb_dist', String, queue_size=1)
-        self.distance_publisher = rospy.Publisher('notspot_ultrasonic/sonic_dist', Joy, queue_size=1)
+        self.rgb_publisher      = rospy.Publisher('bigspot_rgb/rgb_dist', String, queue_size=1)
+        self.distance_publisher = rospy.Publisher('bigspot_ultrasonic/sonic_dist', Joy, queue_size=1)
         
         self.rate               = rospy.Rate(rate)
 

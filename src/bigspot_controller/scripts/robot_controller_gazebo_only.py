@@ -20,7 +20,7 @@ rospy.init_node("Robot_Controller")
 body = [0.4, 0.13]
 legs = [0.0, 0.04, 0.183, 0.2] 
 
-notspot_robot = RobotController.Robot(body, legs, USE_IMU)
+bigspot_robot = RobotController.Robot(body, legs, USE_IMU)
 inverseKinematics = robot_IK.InverseKinematics(body, legs)
 
 command_topics = ["/bigspot_controller/FRS_Joint/command",
@@ -41,8 +41,8 @@ for i in range(len(command_topics)):
     publishers.append(rospy.Publisher(command_topics[i], Float64, queue_size = 10))
 
 if USE_IMU:
-    rospy.Subscriber("bigspot_imu/base_link_orientation",Imu,notspot_robot.imu_orientation)
-rospy.Subscriber("bigspot_joy/joy_ramped",Joy,notspot_robot.joystick_command)
+    rospy.Subscriber("bigspot_imu/base_link_orientation",Imu,bigspot_robot.imu_orientation)
+rospy.Subscriber("bigspot_joy/joy_ramped",Joy,bigspot_robot.joystick_command)
 
 rate = rospy.Rate(RATE)
 
@@ -54,16 +54,16 @@ del RATE
 
 print("loop")
 while not rospy.is_shutdown():
-    leg_positions = notspot_robot.run()
-    notspot_robot.change_controller()
+    leg_positions = bigspot_robot.run()
+    bigspot_robot.change_controller()
 
-    dx      = notspot_robot.state.body_local_position[0]
-    dy      = notspot_robot.state.body_local_position[1]
-    dz      = notspot_robot.state.body_local_position[2]
+    dx      = bigspot_robot.state.body_local_position[0]
+    dy      = bigspot_robot.state.body_local_position[1]
+    dz      = bigspot_robot.state.body_local_position[2]
     
-    roll    = notspot_robot.state.body_local_orientation[0]
-    pitch   = notspot_robot.state.body_local_orientation[1]
-    yaw     = notspot_robot.state.body_local_orientation[2]
+    roll    = bigspot_robot.state.body_local_orientation[0]
+    pitch   = bigspot_robot.state.body_local_orientation[1]
+    yaw     = bigspot_robot.state.body_local_orientation[2]
 
     try:
         joint_angles = inverseKinematics.inverse_kinematics(leg_positions, dx, dy, dz, roll, pitch, yaw)

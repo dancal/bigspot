@@ -169,8 +169,6 @@ class ServoController:
         ##self.servoMoters.append( ServoItem('RRL', self.ServoKitB, 4, 48,  1, -32))     # 10
         ##self.servoMoters.append( ServoItem('RRF', self.ServoKitB, 5, 22,  -1, -30))     # 11
 
-
-
         # FRONT
         self.servoMoters.append( ServoItem('FLS', self.ServoKitF, 0, 90,   1, 5))     # 0
         self.servoMoters.append( ServoItem('FLL', self.ServoKitF, 1, 60,   1, 50))     # 1
@@ -188,8 +186,6 @@ class ServoController:
         self.servoMoters.append( ServoItem('RRS', self.ServoKitB, 3, 90,  -1, -10))     # 9
         self.servoMoters.append( ServoItem('RRL', self.ServoKitB, 4, 136,  1, -32))     # 10
         self.servoMoters.append( ServoItem('RRF', self.ServoKitB, 5, 22,  1, -30))     # 11
-
-        #self.servoMoters.append( ServoItem('RRX', self.ServoKitB, 6, 22,  1, -30))     # 11
 
         #self.moveFirst()
         

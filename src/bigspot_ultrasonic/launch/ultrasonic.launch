@@ -1,5 +1,5 @@
 <launch>
 
-    <node pkg="notspot_ultrasonic" type="ultrasonic_node.py" name="i2c_ultrasonic" output="screen"/>
+    <node pkg="bigspot_ultrasonic" type="ultrasonic_node.py" name="i2c_ultrasonic" output="screen"/>
 
 </launch>

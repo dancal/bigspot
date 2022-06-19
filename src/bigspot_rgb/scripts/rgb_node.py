@@ -73,7 +73,7 @@ class RgbSensor:
     def __init__(self, rate):
 
         rospy.init_node('rgb_node', anonymous=True)
-        rospy.Subscriber("notspot_rgb/rgb_dist", String, self.callback_rgb)
+        rospy.Subscriber("bigspot_rgb/rgb_dist", String, self.callback_rgb)
         rospy.loginfo(f"Rgb Sensor Init")
 
         self.rgb    = Squid(17, 27, 22)

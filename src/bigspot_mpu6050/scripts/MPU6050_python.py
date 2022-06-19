@@ -63,8 +63,8 @@ class Kalman():
 #print(x1)
 
 if __name__ == "__main__":
-    rospy.init_node("notspot_mpu6050")
-    pub         = rospy.Publisher("notspot_imu/base_link_orientation", Imu,queue_size=10)
+    rospy.init_node("bigspot_mpu6050")
+    pub         = rospy.Publisher("bigspot_imu/base_link_orientation", Imu,queue_size=10)
 
     i2c_bus = 1
     device_address = 0x68
