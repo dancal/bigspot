@@ -45,7 +45,7 @@ class RestController(object):
 
     @property
     def default_stance(self):
-        return self.def_stance
+        return np.copy(self.def_stance)
 
     def step(self, state, command):
         temp = self.default_stance
