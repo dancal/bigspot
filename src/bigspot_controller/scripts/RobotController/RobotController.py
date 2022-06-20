@@ -84,7 +84,7 @@ class Robot(object):
 
     def joystick_command(self,msg):
 
-        if msg.buttons[0]: # rest
+        if msg.buttons[0]:              # rest [PS2:A, PS3:X]
             self.command.trot_event     = False
             self.command.crawl_event    = False
             self.command.stand_event    = False
@@ -92,7 +92,7 @@ class Robot(object):
             self.command.rest_event     = True
             rospy.loginfo(f"Rest")
 
-        elif msg.buttons[1]: # trot
+        elif msg.buttons[1]:            # trot [PS2:B, PS3:O]
             self.command.trot_event     = True
             self.command.crawl_event    = False
             self.command.stand_event    = False
@@ -100,13 +100,13 @@ class Robot(object):
             self.command.rest_event     = False
             rospy.loginfo(f"trot")
 
-        elif msg.buttons[3]: # dance
-            self.command.trot_event = False
-            self.command.crawl_event = False
-            self.command.stand_event = False
-            self.command.ready_event = False
-            self.command.dance_event = True
-            self.command.rest_event = False
+        elif msg.buttons[3]:            # dance [PS2:X, PS3:ㅁ]
+            self.command.trot_event     = False
+            self.command.crawl_event    = False
+            self.command.stand_event    = False
+            self.command.ready_event    = False
+            self.command.dance_event    = True
+            self.command.rest_event     = False
             rospy.loginfo(f"dance")
 
         #elif msg.buttons[3]: # stand
@@ -117,7 +117,7 @@ class Robot(object):
         #    self.command.rest_event     = False
         #    print("stand")
 
-        elif msg.buttons[4]: # ready
+        elif msg.buttons[4]:            # ready [PS2: Y, PS3: △]
             self.command.trot_event     = False
             self.command.crawl_event    = False
             self.command.stand_event    = False
