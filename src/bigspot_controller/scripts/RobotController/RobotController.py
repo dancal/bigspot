@@ -44,7 +44,7 @@ class Robot(object):
             if self.state.behavior_state == BehaviorState.STAND:
                 self.state.behavior_state = BehaviorState.READY
                 self.currentController = self.readyController
-                self.command.rest_event = False
+                self.command.ready_event = True
             else:
                 self.state.behavior_state = BehaviorState.REST
                 self.currentController = self.restController
@@ -75,14 +75,14 @@ class Robot(object):
             #    self.state.behavior_state = BehaviorState.READY
             #    self.currentController = self.readyController
             #    print('r')
-            #self.command.stand_event = False
+            #self.command.stan_event = False
 
-        #elif self.command.ready_event:
-        #    #if self.state.behavior_state == BehaviorState.STAND:
-        #    self.state.behavior_state = BehaviorState.READY
-        #    self.currentController = self.readyController
-        #    self.command.ready_event = False
-        #    print('ready')
+        elif self.command.ready_event:
+            
+            self.state.behavior_state = BehaviorState.READY
+            self.currentController = self.readyController
+            self.command.ready_event = False
+            print('ready')
 
         #elif self.command.crawl_event:
         #    if self.state.behavior_state == BehaviorState.REST:

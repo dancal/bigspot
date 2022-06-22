@@ -21,44 +21,51 @@ class ReadyController(object):
         self.FL_X       = 0.
         self.FL_Y       = 0.
 
-        self.IDX        = 0.1
-        self.STEP       = 0.05
-        self.STEP_MAX   = 3
+        self.IDX        = 0
+        self.STEP       = 0.01
+        self.STEP_MAX   = 1
+        self.HEIGHT     = 4
 
     def updateStateCommand(self, msg, state, command):
 
         print('a')
+        self.IDX        = 0
         #if state.body_local_position[0] == -0.15:
         #    self.DOWN    = True
         #else:
         #    self.DOWN    = False
-        state.body_local_position[0] = -0.2
-        state.body_local_position[2] = 0.5
+        state.body_local_position[0] = -self.IDX  *0.12
         #state.body_local_orientation[0] = -1 * 0.3
-        self.IDX    = 0.1
+
+        #state.body_local_position[2] = 0.8 * 0.1
+        #state.body_local_position[2] = 0.5
+        #state.body_local_orientation[0] = -1 * 0.3
 
         #self.FR_X       = msg.axes[1]
         #self.FR_Y       = msg.axes[0]
         #self.FL_X       = msg.axes[4]
         #self.FL_Y       = msg.axes[3]
         
+
     @property
     def default_stance(self):
         a = np.copy(self.def_stance)
         return a
 
     def run(self, state, command):
-        self.IDX    += self.STEP 
-        #time.sleep(0.2)
-        if self.IDX > self.STEP_MAX:
-            self.IDX    = self.STEP_MAX
-        
-        temp        = self.default_stance
-        temp[2]     = [command.robot_height/self.IDX] * 4
 
-        #temp[0][2]  = -0.01 * self.IDX
-        #state.body_local_position[0] = -0.1 * self.IDX
-        #temp[2][3]  = 0.01 * self.IDX
+        temp        = self.default_stance
+        temp[2]     = [command.robot_height*self.IDX] * 4
+
+        self.IDX += self.STEP
+        if self.IDX > self.STEP_MAX:
+            self.IDX = 1
+
+        temp[0][2]  += -1 * 0.05
+        temp[0][3]  += -1 * 0.05
+        temp[2][2]  += 1 * 0.05
+        temp[2][3]  += 1 * 0.05
+
         print(self.IDX)
 
         #state.foot_locations = self.step(state, command)

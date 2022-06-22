@@ -24,10 +24,6 @@ class StandController(object):
         
     def updateStateCommand(self, msg, state, command):
 
-        #if state.body_local_position[0] == -0.15:
-        #    self.DOWN    = True
-        #else:
-        #    self.DOWN    = False
         state.body_local_position[0] = -1 * 0.15
 
         self.FR_X       = msg.axes[1]
