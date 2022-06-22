@@ -137,6 +137,7 @@ class PS3Controller(object):
                     if event.type == pygame.JOYAXISMOTION:
                         self.axis_data[event.axis]  = round(event.value,2) * -1
                         # * self.available_speeds[self.speed_index])
+                        #self.button_data    = [1,0,0,0,0,0,0,0,0,0,0]
                     elif event.type == pygame.JOYBUTTONUP:
                         if event.button == 5:        # return
                             self.speed_index += 1

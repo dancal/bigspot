@@ -11,76 +11,56 @@ from RoboticsUtilities.Transformations import rotxyz
 #from .PIDController import PID_controller
 
 class ReadyController(object):
+    IDX    = 1
     def __init__(self, default_stance, stance_time, swing_time, time_step):
-        self.def_stance     = default_stance
-        self.default_stance = np.copy(default_stance)
-
-        self.ticks      = 1
-
-        self.max_reach  = 0.065
+        self.def_stance = default_stance
+        self.max_reach = 0.065
 
         self.FR_X       = 0.
         self.FR_Y       = 0.
         self.FL_X       = 0.
         self.FL_Y       = 0.
-        self.STEP_DEF   = 0.1
-        self.STEP       = self.STEP_DEF
+
+        self.IDX        = 0.1
+        self.STEP       = 0.05
         self.STEP_MAX   = 3
-        self.TOGGLE     = False
 
     def updateStateCommand(self, msg, state, command):
-        # local body position
-        #self.index      = 1
 
-        self.FR_X       = msg.axes[1]
-        self.FR_Y       = msg.axes[0]
+        print('a')
+        #if state.body_local_position[0] == -0.15:
+        #    self.DOWN    = True
+        #else:
+        #    self.DOWN    = False
+        state.body_local_position[0] = -0.2
+        state.body_local_position[2] = 0.5
+        #state.body_local_orientation[0] = -1 * 0.3
+        self.IDX    = 0.1
 
-        self.FL_X       = msg.axes[4]
-        self.FL_Y       = msg.axes[3]
-
-    def step(self, state, command):
-
-        #state.body_local_position[0] = -0.09
-        state.body_local_position[0] = (self.STEP * self.ticks) * 0.12
-
-        temp        = np.copy(self.default_stance)
-        temp[2]     = [command.robot_height/self.ticks] * 4
-
-        #temp[0][2]  += (self.STEP * self.ticks)/2
-        #temp[0][3]  += (self.STEP * self.ticks)/2
-        #print(self.ticks, temp[0][2])
-        #if self.ticks >= (self.STEP_MAX - 1):
-        #    temp[0][2] -= 0.02
-        #    temp[0][3] -= 0.02
-
-        #if self.ticks > 1.0:
-        #    temp[0][2]  = -0.1 * self.ticks
-        #    temp[0][3]  = -0.1 * self.ticks
-
-        #print(self.ticks, self.STEP)
-        #temp[2][0]  = -0.01 * self.index
-        #temp[2][1]  = -0.01 * self.index
-
-        temp[1][0] += self.FR_Y * self.max_reach
-        temp[0][0] += self.FR_X * self.max_reach
-
-        temp[1][1] += self.FL_Y * self.max_reach
-        temp[0][1] += self.FL_X * self.max_reach
-
-        return temp
+        #self.FR_X       = msg.axes[1]
+        #self.FR_Y       = msg.axes[0]
+        #self.FL_X       = msg.axes[4]
+        #self.FL_Y       = msg.axes[3]
+        
+    @property
+    def default_stance(self):
+        a = np.copy(self.def_stance)
+        return a
 
     def run(self, state, command):
+        self.IDX    += self.STEP 
+        #time.sleep(0.2)
+        if self.IDX > self.STEP_MAX:
+            self.IDX    = self.STEP_MAX
+        
+        temp        = self.default_stance
+        temp[2]     = [command.robot_height/self.IDX] * 4
 
-        if self.ticks > self.STEP_MAX:
-            self.ticks  = self.STEP_MAX
-            self.TOGGLE = True
-            self.STEP   = -self.STEP_DEF
-        elif self.ticks < 1:
-            self.ticks  = 1
-            self.TOGGLE = False
-            self.STEP   = self.STEP_DEF
-        else:
-            self.ticks      = self.ticks + self.STEP
+        #temp[0][2]  = -0.01 * self.IDX
+        #state.body_local_position[0] = -0.1 * self.IDX
+        #temp[2][3]  = 0.01 * self.IDX
+        print(self.IDX)
 
-        state.foot_locations = self.step(state, command)
+        #state.foot_locations = self.step(state, command)
+        state.foot_locations = temp
         return state.foot_locations
