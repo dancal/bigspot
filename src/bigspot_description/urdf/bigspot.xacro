@@ -25,6 +25,40 @@
   </collision>
 </link>
 
+<link name='camera_link'>
+  <pose frame=''>0.1 0 0 0 0 0</pose>
+  <inertial>
+    <pose frame=''>0.01 0.025 0.025 0 -0 0</pose>
+    <mass>0.01</mass>
+    <inertia>
+      <ixx>4.15e-06</ixx>
+      <ixy>0</ixy>
+      <ixz>0</ixz>
+      <iyy>2.407e-06</iyy>
+      <iyz>0</iyz>
+      <izz>2.407e-06</izz>
+    </inertia>
+  </inertial>
+  <self_collide>0</self_collide>
+  <kinematic>0</kinematic>
+  <visual name='visual'>
+    <geometry>
+      <box>
+        <size>0.026012 0.029339 0.024291</size>
+      </box>
+    </geometry>
+    <pose frame=''>0 0 0 0 -0 0</pose>
+    <cast_shadows>1</cast_shadows>
+    <transparency>0</transparency>
+  </visual>
+</link>
+
+<joint name="camera_joint" type="fixed">
+  <origin xyz="0.021842 -0.003983 -0.141112" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="camera_link"/>
+</joint>
+
 <link name="FRS_1">
   <inertial>
     <origin xyz="-0.03262402906297844 -0.008891213440249235 -0.01859885653575638" rpy="0 0 0"/>
