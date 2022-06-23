@@ -4,6 +4,8 @@
 <xacro:include filename="$(find bigspot_description)/urdf/materials.xacro" />
 <xacro:include filename="$(find bigspot_description)/urdf/bigspot.trans" />
 <xacro:include filename="$(find bigspot_description)/urdf/bigspot.gazebo" />
+<xacro:property name="camera_link" value="0.05" /> <!-- Size of square 'camera' box -->
+
 <link name="base_link">
   <inertial>
     <origin xyz="-0.005924455452065034 -0.00013954843544972099 0.33234964114268223" rpy="0 0 0"/>
@@ -25,39 +27,36 @@
   </collision>
 </link>
 
-<link name='camera_link'>
-  <pose frame=''>0.1 0 0 0 0 0</pose>
-  <inertial>
-    <pose frame=''>0.01 0.025 0.025 0 -0 0</pose>
-    <mass>0.01</mass>
-    <inertia>
-      <ixx>4.15e-06</ixx>
-      <ixy>0</ixy>
-      <ixz>0</ixz>
-      <iyy>2.407e-06</iyy>
-      <iyz>0</iyz>
-      <izz>2.407e-06</izz>
-    </inertia>
-  </inertial>
-  <self_collide>0</self_collide>
-  <kinematic>0</kinematic>
-  <visual name='visual'>
-    <geometry>
-      <box>
-        <size>0.026012 0.029339 0.024291</size>
-      </box>
-    </geometry>
-    <pose frame=''>0 0 0 0 -0 0</pose>
-    <cast_shadows>1</cast_shadows>
-    <transparency>0</transparency>
-  </visual>
-</link>
+  <joint name="camera_joint" type="fixed">
+    <axis xyz="0 1 0" />
+    <origin xyz="${camera_link} 0 0" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="camera_link"/>
+  </joint>
 
-<joint name="camera_joint" type="fixed">
-  <origin xyz="0.021842 -0.003983 -0.141112" rpy="0 0 0"/>
-  <parent link="base_link"/>
-  <child link="camera_link"/>
-</joint>
+  <!-- Camera -->
+  <link name="camera_link">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+    <box size="${camera_link} ${camera_link} ${camera_link}"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+    <box size="${camera_link} ${camera_link} ${camera_link}"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
 
 <link name="FRS_1">
   <inertial>
