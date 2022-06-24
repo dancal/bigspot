@@ -6,6 +6,7 @@ import numpy as np
 import time
 from RoboticsUtilities.Transformations import rotxyz
 from . PIDController import PID_controller
+from std_msgs.msg import String
 
 class RestController(object):
     def __init__(self, default_stance):
@@ -16,10 +17,12 @@ class RestController(object):
         #                                     kp     ki    kd
         #self.pid_controller = PID_controller(1, 1.7, 3.0)
         self.pid_controller = PID_controller(0.64, 2.28, 0.0)
-        self.use_imu        = True
+        self.use_imu        = False
         self.use_button     = True
         self.pid_controller.reset()
         
+        self.publisher_lcd_use_imu  = rospy.Publisher("bigspot_lcd/use_imu", String, queue_size = 3)
+
     def updateStateCommand(self, msg, state, command):
 
         # local body position
@@ -46,6 +49,7 @@ class RestController(object):
             if msg.buttons[7]:
                 self.use_imu = not self.use_imu
                 self.use_button = False
+                self.publisher_lcd_use_imu.publish(f"{self.use_imu}")
                 rospy.loginfo(f"Rest Controller - Use roll/pitch compensation: {self.use_imu}")
 
         if not self.use_button:

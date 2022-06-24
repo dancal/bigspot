@@ -24,6 +24,7 @@ class SpotMicroLcd():
 
 		self._spot_state_str	= 'ready'
 		self._speed				= '1'
+		self._use_imu			= 'True'
 		self._under_voltage		= 'Under voltage'
 		self._under_voltage		= self._under_voltage.ljust(16,' ')
 
@@ -33,6 +34,7 @@ class SpotMicroLcd():
 		#rospy.Subscriber('sm_angle_cmd',Vector3,self.update_angle_cmd)
 		rospy.Subscriber('bigspot_lcd/state', String, self.update_state_string)
 		rospy.Subscriber('bigspot_lcd/joy_speed', String, self.update_joy_speed_string)
+		rospy.Subscriber('bigspot_lcd/use_imu', String, self.update_use_imu_string)
 		rospy.loginfo(f"LCD init")
 
 	def getLocalIps(self, ifaceName):
@@ -54,7 +56,11 @@ class SpotMicroLcd():
 	def update_joy_speed_string(self, msg):
 		''' Updates angle command attributes'''
 		self._speed 			= msg.data
-	
+
+	def update_use_imu_string(self, msg):
+		''' Updates angle command attributes'''
+		self._use_imu 			= msg.data
+
 	def run(self):
 		''' Runs the lcd driver and prints data'''
 
@@ -71,7 +77,7 @@ class SpotMicroLcd():
 			self._cpu_percent		= str(int(round(self.cpu_use_percent(),0)))
 			self._ram_percent		= str(int(round(psutil.virtual_memory().percent,0)))
 			self._speed_str			= str(int(round(float(self._speed),0)))
-			
+			self._use_imu_str	    = self._speed_str.ljust(16,'X')
 			self._wlan0_str			= self._wlan0_str.ljust(16,' ')
 			self._wlan1_str			= self._wlan1_str.ljust(16,' ')
 			self._speed_str			= self._speed_str.ljust(16,'X')
@@ -85,6 +91,8 @@ class SpotMicroLcd():
 					self._mylcd.lcd_display_string('F%s'%(self._wlan0_str, ),2)
 				elif (loopIdx == 2) or (loopIdx == 3):
 					self._mylcd.lcd_display_string('S%s'%(self._wlan1_str),2)
+				elif (loopIdx == 4) or (loopIdx == 5):
+					self._mylcd.lcd_display_string('S%s'%(self._use_imu_str),2)
 				else:
 					self._mylcd.lcd_display_string('C:%2s%s R:%2s T:%s'%(self._cpu_percent, '%', self._ram_percent, self._temperature),2)
 

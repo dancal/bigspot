@@ -18,7 +18,7 @@ class PS4_controller(object):
         rospy.Subscriber("/joy", Joy, self.callback)
 
         self.publisher_joy              = rospy.Publisher("bigspot_joy/joy_ramped", Joy, queue_size = 10)
-        self.publisher_lcd_joy_speed    = rospy.Publisher("bigspot_lcd/joy_speed", String, queue_size = 1)
+        self.publisher_lcd_joy_speed    = rospy.Publisher("bigspot_lcd/joy_speed", String, queue_size = 3)
         #self.publisher_rgb              = rospy.Publisher('bigspot_rgb/rgb_dist', Float32, queue_size = 1)
 
         # ultrasonic
