@@ -21,9 +21,9 @@ class Robot(object):
 
         self.delta_x        = self.body[0] * 0.5
         self.delta_y        = self.body[1] * 0.5 + self.legs[1]
-        self.x_shift_front  = 0.04
+        self.x_shift_front  = 0.02
         self.x_shift_back   = -0.082
-        self.default_height = 0.18
+        self.default_height = 0.2
 
         self.trotGaitController     = TrotGaitController(self.default_stance, stance_time = 0.2, swing_time = 0.24, time_step = 0.02,use_imu = imu)
         self.crawlGaitController    = CrawlGaitController(self.default_stance, stance_time = 0.55, swing_time = 0.45, time_step = 0.02)
@@ -59,11 +59,11 @@ class Robot(object):
                 self.state.ticks = 0
             self.command.trot_event = False
 
-        elif self.command.dance_event:
-            if self.state.behavior_state == BehaviorState.REST:
-                self.state.behavior_state = BehaviorState.DANCE
-                self.currentController = self.danceController
-            self.command.dance_event = False
+        #elif self.command.dance_event:
+        #    if self.state.behavior_state == BehaviorState.REST:
+        #        self.state.behavior_state = BehaviorState.DANCE
+        #        self.currentController = self.danceController
+        #    self.command.dance_event = False
 
         elif self.command.stand_event:
             if self.state.behavior_state == BehaviorState.REST:
@@ -121,21 +121,21 @@ class Robot(object):
             #    self.command.rest_event     = False
             #    rospy.loginfo(f"dance")
 
-            #elif msg.buttons[3]: # stand
-            #    self.command.trot_event     = False
-            #    self.command.crawl_event    = False
-            #    self.command.stand_event    = True
-            #    self.command.ready_event    = False
-            #    self.command.rest_event     = False
-            #    print("stand")
-
-            elif msg.buttons[3] or msg.buttons[4]:            # ready [PS2: Y, PS3: △]
+            elif msg.buttons[3]: # stand
                 self.command.trot_event     = False
                 self.command.crawl_event    = False
                 self.command.stand_event    = True
                 self.command.ready_event    = False
                 self.command.rest_event     = False
                 print("stand")
+
+            #elif msg.buttons[3]:            # ready [PS2: Y, PS3: △]
+            #    self.command.trot_event     = False
+            #    self.command.crawl_event    = False
+            #    self.command.stand_event    = True
+            #    self.command.ready_event    = False
+            #    self.command.rest_event     = False
+            #    print("stand")
 
             self.currentController.updateStateCommand(msg, self.state, self.command)
 

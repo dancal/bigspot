@@ -172,20 +172,20 @@ class ServoController:
         # FRONT
         self.servoMoters.append( ServoItem('FLS', self.ServoKitF, 0, 90,   1, 5))     # 0
         self.servoMoters.append( ServoItem('FLL', self.ServoKitF, 1, 60,   1, 40))     # 1
-        self.servoMoters.append( ServoItem('FLF', self.ServoKitF, 2, 160,  1, 20))     # 2
+        self.servoMoters.append( ServoItem('FLF', self.ServoKitF, 2, 160,  1, 15))     # 2
 
         self.servoMoters.append( ServoItem('FRS', self.ServoKitF, 3, 90,  -1, -10))     # 3
         self.servoMoters.append( ServoItem('FRL', self.ServoKitF, 4, 122, -1, -35))     # 4
-        self.servoMoters.append( ServoItem('FRF', self.ServoKitF, 5, 22,  1, -35))     # 5
+        self.servoMoters.append( ServoItem('FRF', self.ServoKitF, 5, 22,  1, -30))     # 5
 
         # REAR
         self.servoMoters.append( ServoItem('RLS', self.ServoKitB, 0, 90,  -1, -5))     # 6
         self.servoMoters.append( ServoItem('RLL', self.ServoKitB, 1, 48,  -1, 35))     # 7
-        self.servoMoters.append( ServoItem('RLF', self.ServoKitB, 2, 158,  1, 10))     # 8
+        self.servoMoters.append( ServoItem('RLF', self.ServoKitB, 2, 158,  1, 15))     # 8
 
         self.servoMoters.append( ServoItem('RRS', self.ServoKitB, 3, 90,  -1, -3))     # 9
         self.servoMoters.append( ServoItem('RRL', self.ServoKitB, 4, 136,  1, -12))     # 10
-        self.servoMoters.append( ServoItem('RRF', self.ServoKitB, 5, 22,  1, -30))     # 11
+        self.servoMoters.append( ServoItem('RRF', self.ServoKitB, 5, 22,  1, -35))     # 11
 
         #self.moveFirst()
         

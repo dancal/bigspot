@@ -73,9 +73,9 @@ class UltraSonic:
                     
                 if distance <= 10:
                     Mode        = True
-                    for i in range(3):
+                    for i in range(5):
                         joy         = Joy()
-                        back_step   = -1
+                        back_step   = 0.9
                         #joy.buttons = [0,0,1,0,0,0,0,0,0,0,0]
                         joy.axes    = [0.,0,0.,0.,0,0.,0.,back_step]
                         self.distance_publisher.publish(joy)
@@ -106,7 +106,7 @@ class UltraSonic:
                     self.rgb_publisher.publish('FFFFFF')
 
                 self.rate.sleep()
-                time.sleep(0.1)
+                time.sleep(0.05)
 
         except KeyboardInterrupt:
             pass
