@@ -24,17 +24,11 @@ class ReadyController(object):
         self.IDX        = 0
         self.STEP       = 0.01
         self.STEP_MAX   = 1
-        self.HEIGHT     = 4
 
     def updateStateCommand(self, msg, state, command):
 
-        print('a')
         self.IDX        = 0
-        #if state.body_local_position[0] == -0.15:
-        #    self.DOWN    = True
-        #else:
-        #    self.DOWN    = False
-        state.body_local_position[0] = -self.IDX  *0.12
+        state.body_local_position[0] = -self.IDX  * 0.12
         #state.body_local_orientation[0] = -1 * 0.3
 
         #state.body_local_position[2] = 0.8 * 0.1
@@ -44,8 +38,7 @@ class ReadyController(object):
         #self.FR_X       = msg.axes[1]
         #self.FR_Y       = msg.axes[0]
         #self.FL_X       = msg.axes[4]
-        #self.FL_Y       = msg.axes[3]
-        
+        #self.FL_Y       = msg.axes[3]   
 
     @property
     def default_stance(self):
@@ -63,10 +56,8 @@ class ReadyController(object):
 
         temp[0][2]  += -1 * 0.05
         temp[0][3]  += -1 * 0.05
-        temp[2][2]  += 1 * 0.05
-        temp[2][3]  += 1 * 0.05
-
-        print(self.IDX)
+        temp[2][2]  -= 1 * 0.02
+        temp[2][3]  -= 1 * 0.02
 
         #state.foot_locations = self.step(state, command)
         state.foot_locations = temp

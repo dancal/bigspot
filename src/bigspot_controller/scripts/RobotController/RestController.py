@@ -14,10 +14,9 @@ class RestController(object):
 
         # TODO: tune kp, ki and kd
         #                                     kp     ki    kd
-        #self.pid_controller = PID_controller(1.75, 3.29, 0.0)
-        #self.pid_controller = PID_controller(0.45, 1.29, 0.0)
-        self.pid_controller = PID_controller(0.1, 0.1, 0.0)
-        self.use_imu        = False
+        #self.pid_controller = PID_controller(1, 1.7, 3.0)
+        self.pid_controller = PID_controller(0.64, 2.28, 0.0)
+        self.use_imu        = True
         self.use_button     = True
         self.pid_controller.reset()
         
@@ -26,12 +25,22 @@ class RestController(object):
         # local body position
         state.body_local_position[0] = msg.axes[7] * 0.03
         state.body_local_position[1] = msg.axes[6] * 0.03
-        state.body_local_position[2] = msg.axes[1] * 0.1
+        state.body_local_position[2] = msg.axes[1] * 0.03
 
         # local body orientation
-        state.body_local_orientation[0] = msg.axes[0] * 0.3
-        state.body_local_orientation[1] = msg.axes[4] * 0.3
-        state.body_local_orientation[2] = msg.axes[3] * 0.05
+        state.body_local_orientation[0] = msg.axes[0] * 0.4
+        state.body_local_orientation[1] = msg.axes[4] * 0.4
+        state.body_local_orientation[2] = msg.axes[3] * 0.4
+
+        # local body position
+        #tate.body_local_position[0] = msg.axes[7] * 0.04
+        #state.body_local_position[1] = msg.axes[6] * 0.0#
+        #state.body_local_position[2] = msg.axes[1] * 0.0#3
+
+        # local body orientation
+        #state.body_local_orientation[0] = msg.axes[0] * 0.4
+        #state.body_local_orientation[1] = msg.axes[4] * 0.5
+        #state.body_local_orientation[2] = msg.axes[3] * 0.4
 
         if self.use_button:
             if msg.buttons[7]:
@@ -57,6 +66,7 @@ class RestController(object):
         # using a PID controller
         if self.use_imu:
             compensation = self.pid_controller.run(state.imu_roll, state.imu_pitch)
+            
             roll_compensation = -compensation[0]
             pitch_compensation = -compensation[1]
 

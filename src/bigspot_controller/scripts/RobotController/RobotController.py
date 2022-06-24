@@ -28,7 +28,7 @@ class Robot(object):
         self.trotGaitController     = TrotGaitController(self.default_stance, stance_time = 0.2, swing_time = 0.24, time_step = 0.02,use_imu = imu)
         self.crawlGaitController    = CrawlGaitController(self.default_stance, stance_time = 0.55, swing_time = 0.45, time_step = 0.02)
         self.standController        = StandController(self.default_stance)
-        self.danceController        = DanceController(self.default_stance)
+        #self.danceController        = DanceController(self.default_stance)
 
         self.restController         = RestController(self.default_stance)
         self.readyController        = ReadyController(self.default_stance, stance_time = 0.55, swing_time = 0.45, time_step = 0.02)
@@ -70,12 +70,6 @@ class Robot(object):
                 self.state.behavior_state = BehaviorState.STAND
                 self.currentController = self.standController
             self.command.stand_event = False
-
-            #elif self.state.behavior_state == BehaviorState.STAND and self.currentController == self.standController:
-            #    self.state.behavior_state = BehaviorState.READY
-            #    self.currentController = self.readyController
-            #    print('r')
-            #self.command.stan_event = False
 
         elif self.command.ready_event:
             
@@ -150,6 +144,13 @@ class Robot(object):
 
     @property
     def default_stance(self):
+        # FR, FL, RR, RL
+        return np.array([[self.delta_x + self.x_shift_front,self.delta_x + self.x_shift_front,-self.delta_x + self.x_shift_back,-self.delta_x + self.x_shift_back],
+                         [-self.delta_y                    ,self.delta_y                     ,-self.delta_y                    ,self.delta_y                    ],
+                         [0                                ,0                                ,0                                ,0                                ]])
+
+    @property
+    def default_stance_org(self):
         # FR, FL, RR, RL
         return np.array([[self.delta_x + self.x_shift_front,self.delta_x + self.x_shift_front,-self.delta_x + self.x_shift_back,-self.delta_x + self.x_shift_back],
                          [-self.delta_y                    ,self.delta_y                     ,-self.delta_y                    , self.delta_y                    ],

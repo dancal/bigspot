@@ -8,7 +8,7 @@ from RobotController import RobotController
 from InverseKinematics import robot_IK
 from std_msgs.msg import Float64
 
-USE_IMU = False
+USE_IMU = True
 RATE = 60
 
 rospy.init_node("Robot_Controller")
@@ -41,7 +41,7 @@ for i in range(len(command_topics)):
     publishers.append(rospy.Publisher(command_topics[i], Float64, queue_size = 10))
 
 if USE_IMU:
-    rospy.Subscriber("bigspot_imu/base_link_orientation",Imu,bigspot_robot.imu_orientation)
+    rospy.Subscriber("bigspot_imu/base_link_orientation", Imu, bigspot_robot.imu_orientation)
 rospy.Subscriber("bigspot_joy/joy_ramped",Joy,bigspot_robot.joystick_command)
 
 rate = rospy.Rate(RATE)

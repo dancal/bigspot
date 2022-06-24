@@ -20,7 +20,7 @@ class DanceController(object):
         self.FR_Y       = 0.
         self.FL_X       = 0.
         self.FL_Y       = 0.
-        self.STEP_DEF   = 0.15
+        self.STEP_DEF   = 0.1
         self.STEP       = self.STEP_DEF
         self.STEP_MAX   = 3
         self.TOGGLE     = False
@@ -36,7 +36,7 @@ class DanceController(object):
     def step(self, state, command):
 
         #state.body_local_position[0] = -0.09
-        state.body_local_position[0] = (self.STEP * self.ticks) * 0.14
+        state.body_local_position[0] = (self.STEP * self.ticks) * 0.19
 
         temp        = np.copy(self.default_stance)
         temp[2]     = [command.robot_height/self.ticks] * 4
@@ -45,6 +45,9 @@ class DanceController(object):
         temp[0][0] += self.FR_X * self.max_reach
         temp[1][1] += self.FL_Y * self.max_reach
         temp[0][1] += self.FL_X * self.max_reach
+
+        #temp[2][2] += self.ticks
+        #temp[2][3] += self.STEP * self.ticks
 
         return temp
 

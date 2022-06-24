@@ -18,7 +18,7 @@ class PID_controller(object):
         self.D_term = np.array([0.0,0.0])
 
         # TODO: Tune max_I
-        self.max_I = 0.2
+        self.max_I = 0.15
         self.last_error = np.array([0.0,0.0])
 
     def run(self, roll, pitch):
