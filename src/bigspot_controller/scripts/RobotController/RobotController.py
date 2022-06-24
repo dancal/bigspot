@@ -21,7 +21,7 @@ class Robot(object):
 
         self.delta_x        = self.body[0] * 0.5
         self.delta_y        = self.body[1] * 0.5 + self.legs[1]
-        self.x_shift_front  = 0.02
+        self.x_shift_front  = 0.04
         self.x_shift_back   = -0.082
         self.default_height = 0.18
 
@@ -112,14 +112,14 @@ class Robot(object):
                 self.command.rest_event     = False
                 rospy.loginfo(f"trot")
 
-            elif msg.buttons[3]:            # dance [PS2:X, PS3:ㅁ]
-                self.command.trot_event     = False
-                self.command.crawl_event    = False
-                self.command.stand_event    = False
-                self.command.ready_event    = False
-                self.command.dance_event    = True
-                self.command.rest_event     = False
-                rospy.loginfo(f"dance")
+            #elif msg.buttons[3]:            # dance [PS2:X, PS3:ㅁ]
+            #    self.command.trot_event     = False
+            #    self.command.crawl_event    = False
+            #    self.command.stand_event    = False
+            #    self.command.ready_event    = False
+            #    self.command.dance_event    = True
+            #    self.command.rest_event     = False
+            #    rospy.loginfo(f"dance")
 
             #elif msg.buttons[3]: # stand
             #    self.command.trot_event     = False
@@ -129,7 +129,7 @@ class Robot(object):
             #    self.command.rest_event     = False
             #    print("stand")
 
-            elif msg.buttons[4]:            # ready [PS2: Y, PS3: △]
+            elif msg.buttons[3] or msg.buttons[4]:            # ready [PS2: Y, PS3: △]
                 self.command.trot_event     = False
                 self.command.crawl_event    = False
                 self.command.stand_event    = True

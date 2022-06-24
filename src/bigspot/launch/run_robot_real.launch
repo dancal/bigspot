@@ -32,7 +32,12 @@
   <!-- Robot servo controller -->
   <!-- <node pkg="bigspot_controller" type="robot_controller_real_servo.py" name="ROBOT_CONTROLLER" output="screen"/> -->
 
+  <include file="$(find bigspot_rgb)/launch/rgb.launch" />
+  <include file="$(find bigspot_lcd)/launch/lcd.launch" />
+  <include file="$(find bigspot_mpu6050)/launch/mpu.launch" />
+  <include file="$(find bigspot_ultrasonic)/launch/ultrasonic.launch" />
+
   <!-- Joystick -->
-  <!-- <include file="$(find bigspot_joystick)/launch/ramped_joystick.launch" /> -->
+  <include file="$(find bigspot_joystick)/launch/ramped_joystick.launch" />
   
 </launch>

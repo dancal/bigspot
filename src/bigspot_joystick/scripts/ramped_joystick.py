@@ -41,7 +41,7 @@ class PS4_controller(object):
 
         self.use_button = True
 
-        self.speed_index = 2
+        self.speed_index = 1
         self.available_speeds = [1.0, 2.0, 3.0, 4.0, 5.0]
 
         rospy.loginfo(f"PS4 Joystick start")

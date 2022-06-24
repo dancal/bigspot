@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 #Author: lnotspotl
 
 from xmlrpc.client import FastMarshaller
@@ -95,5 +94,5 @@ while not rospy.is_shutdown():
         pass
 
     #clock.tick(RATE)
-    time.sleep(0.05)
+    #time.sleep(0.05)
     rate.sleep()

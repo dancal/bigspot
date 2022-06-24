@@ -14,6 +14,9 @@
   -->
 
   <!-- Robot servo controller -->
-  <node pkg="bigspot_controller" type="robot_controller_gazebo_only.py" name="ROBOT_CONTROLLER" output="screen"/>
+  <!-- <node pkg="bigspot_controller" type="robot_controller_gazebo_only.py" name="ROBOT_CONTROLLER" output="screen"/> -->
+
+  <!-- Robot servo controller -->
+  <node pkg="bigspot_controller" type="robot_controller_real_servo.py" name="ROBOT_CONTROLLER" output="screen"/>
 
 </launch>
