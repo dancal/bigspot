@@ -40,7 +40,7 @@ class StandController(object):
     def run(self, state, command):
 
         temp        = self.default_stance
-        temp[2]     = [command.robot_height] * 4
+        temp[2]     = [command.robot_height/2] * 4
         
         temp[1][0] += self.FR_Y * self.max_reach
         temp[0][0] += self.FR_X * self.max_reach

@@ -51,6 +51,7 @@ class Robot(object):
                 self.currentController.pid_controller.reset()
                 self.command.rest_event = False
 
+
         elif self.command.trot_event:
             if self.state.behavior_state == BehaviorState.REST:
                 self.state.behavior_state = BehaviorState.TROT
@@ -72,11 +73,11 @@ class Robot(object):
             self.command.ready_event = False
             print('ready')
 
-        #elif self.command.stand_event:
-        #    if self.state.behavior_state == BehaviorState.REST:
-        #        self.state.behavior_state = BehaviorState.STAND
-        #        self.currentController = self.standController
-        #    self.command.stand_event = False
+        elif self.command.stand_event:
+            if self.state.behavior_state == BehaviorState.REST:
+                self.state.behavior_state = BehaviorState.STAND
+                self.currentController = self.standController
+            self.command.stand_event = False
 
         #elif self.command.crawl_event:
         #    if self.state.behavior_state == BehaviorState.REST:
@@ -106,22 +107,22 @@ class Robot(object):
                 self.command.rest_event     = False
                 rospy.loginfo(f"trot")
 
-            elif msg.buttons[4]:            # dance [PS2:X, PS3:ㅁ]
-                self.command.trot_event     = False
-                self.command.crawl_event    = False
-                self.command.stand_event    = False
-                self.command.ready_event    = False
-                self.command.dance_event    = True
-                self.command.rest_event     = False
-                rospy.loginfo(f"dance")
-
-            #elif msg.buttons[3]: # stand
+            #elif msg.buttons[2]:            # dance [PS2:X, PS3:ㅁ]
             #    self.command.trot_event     = False
             #    self.command.crawl_event    = False
-            #    self.command.stand_event    = True
+            #    self.command.stand_event    = False
             #    self.command.ready_event    = False
+            #    self.command.dance_event    = True
             #    self.command.rest_event     = False
-            #    print("stand")
+            #    rospy.loginfo(f"dance")
+
+            elif msg.buttons[2]: # stand
+                self.command.trot_event     = False
+                self.command.crawl_event    = False
+                self.command.stand_event    = True
+                self.command.ready_event    = False
+                self.command.rest_event     = False
+                print("stand")
 
             #elif msg.buttons[3]:            # ready [PS2: Y, PS3: △]
             #    self.command.trot_event     = False
