@@ -17,7 +17,7 @@ class RestController(object):
         #                                     kp     ki    kd
         #self.pid_controller = PID_controller(1, 1.7, 3.0)
         self.pid_controller = PID_controller(0.64, 2.28, 0.0)
-        self.use_imu        = False
+        self.use_imu        = True
         self.use_button     = True
         self.pid_controller.reset()
         
