@@ -150,7 +150,7 @@ class ServoController:
 
         self.servoMoters.append( ServoItem('FRS', self.ServoKitF, 3, 90,  -1, -10))     # 3
         self.servoMoters.append( ServoItem('FRL', self.ServoKitF, 4, 122, -1, -35))     # 4
-        self.servoMoters.append( ServoItem('FRF', self.ServoKitF, 5, 22,  1, -30))     # 5
+        self.servoMoters.append( ServoItem('FRF', self.ServoKitF, 5, 22,  1, -35))     # 5
 
         # REAR
         self.servoMoters.append( ServoItem('RLS', self.ServoKitB, 0, 90,  -1, -5))     # 6
