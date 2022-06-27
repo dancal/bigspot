@@ -5,6 +5,9 @@ import numpy as np
 import tf
 import rospy
 
+from sensor_msgs.msg import Range
+from sensor_msgs.msg import Joy
+
 from . StateCommand import State, Command, BehaviorState
 from . RestController import RestController
 from . TrotGaitController import TrotGaitController
@@ -38,6 +41,8 @@ class Robot(object):
         self.state                  = State(self.default_height)
         self.state.foot_locations   = self.default_stance
         self.command                = Command(self.default_height)
+
+        rospy.Subscriber("bigspot_ultrasonic/sonic_dist", Range, self.ultrasonic_command)
 
     def change_controller(self):
         
@@ -95,6 +100,49 @@ class Robot(object):
         #    self.command.crawl_event = False
 
 
+    def ultrasonic_command(self,msg):
+
+        distance        = 100
+        try:
+            distance1   = msg.range * 100
+            distance2   = msg.range * 100
+            distance    = np.min([distance1, distance2])
+        except:
+            pass
+        
+        #if distance <= 10:
+        #    self.command.trot_event     = True
+        #    self.command.crawl_event    = False
+        #    self.command.stand_event    = False
+        #    self.command.ready_event    = False
+        #    self.command.rest_event     = False
+        #else:
+        #    self.command.trot_event     = False
+        #    self.command.crawl_event    = False
+        #    self.command.stand_event    = False
+        #    self.command.ready_event    = False
+        #    self.command.rest_event     = True
+         
+        #rospy.loginfo(f"sonic trot")
+        if distance <= 10:
+            JoyMsg          = Joy()
+            JoyMsg.axes     = [0.,0.,1.,0.,0.,1.,0.,-0.9]
+            #JoyMsg.buttons  = [0,0,0,0,0,0,0,0,0,0,0]
+            #self.joystick_command(JoyMsg)
+            self.command.trot_event     = True
+            self.command.crawl_event    = False
+            self.command.stand_event    = False
+            self.command.ready_event    = False
+            self.command.rest_event     = False            
+
+        else:
+            self.command.trot_event     = False
+            self.command.crawl_event    = False
+            self.command.stand_event    = False
+            self.command.ready_event    = False
+            self.command.rest_event     = True            
+        print(distance)
+
     def joystick_command(self,msg):
         if len(msg.buttons) > 0:
 
@@ -131,7 +179,7 @@ class Robot(object):
             #    self.command.ready_event    = False
             #    self.command.rest_event     = False
             #    print("stand")
-
+            #print(msg)
             self.currentController.updateStateCommand(msg, self.state, self.command)
 
     def imu_orientation(self,msg):
