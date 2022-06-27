@@ -77,7 +77,7 @@ class UltraSonic:
                         joy         = Joy()
                         back_step   = 0.9
                         #joy.buttons = [0,0,1,0,0,0,0,0,0,0,0]
-                        joy.axes    = [0.,0,1,0.,0,0.,0.,back_step]
+                        joy.axes    = [0.,0,1,0.,0,0.,0.,-back_step]
                         self.distance_publisher.publish(joy)
                         time.sleep(0.1)
 
@@ -112,5 +112,5 @@ class UltraSonic:
             pass
 
 if __name__ == "__main__":
-    sonic = UltraSonic(rate = 30)
+    sonic = UltraSonic(rate = 60)
     sonic.run()
