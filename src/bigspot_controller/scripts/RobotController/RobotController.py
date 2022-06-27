@@ -28,7 +28,7 @@ class Robot(object):
         self.trotGaitController     = TrotGaitController(self.default_stance, stance_time = 0.2, swing_time = 0.24, time_step = 0.02,use_imu = imu)
         self.crawlGaitController    = CrawlGaitController(self.default_stance, stance_time = 0.55, swing_time = 0.45, time_step = 0.02)
         self.standController        = StandController(self.default_stance)
-        #self.danceController        = DanceController(self.default_stance)
+        self.danceController        = DanceController(self.default_stance)
 
         self.restController         = RestController(self.default_stance)
         self.readyController        = ReadyController(self.default_stance, stance_time = 0.55, swing_time = 0.45, time_step = 0.02)
@@ -59,17 +59,11 @@ class Robot(object):
                 self.state.ticks = 0
             self.command.trot_event = False
 
-        #elif self.command.dance_event:
-        #    if self.state.behavior_state == BehaviorState.REST:
-        #        self.state.behavior_state = BehaviorState.DANCE
-        #        self.currentController = self.danceController
-        #    self.command.dance_event = False
-
-        elif self.command.stand_event:
+        elif self.command.dance_event:
             if self.state.behavior_state == BehaviorState.REST:
-                self.state.behavior_state = BehaviorState.STAND
-                self.currentController = self.standController
-            self.command.stand_event = False
+                self.state.behavior_state = BehaviorState.DANCE
+                self.currentController = self.danceController
+            self.command.dance_event = False
 
         elif self.command.ready_event:
             
@@ -77,6 +71,12 @@ class Robot(object):
             self.currentController = self.readyController
             self.command.ready_event = False
             print('ready')
+
+        #elif self.command.stand_event:
+        #    if self.state.behavior_state == BehaviorState.REST:
+        #        self.state.behavior_state = BehaviorState.STAND
+        #        self.currentController = self.standController
+        #    self.command.stand_event = False
 
         #elif self.command.crawl_event:
         #    if self.state.behavior_state == BehaviorState.REST:
@@ -106,14 +106,14 @@ class Robot(object):
                 self.command.rest_event     = False
                 rospy.loginfo(f"trot")
 
-            #elif msg.buttons[3]:            # dance [PS2:X, PS3:ㅁ]
-            #    self.command.trot_event     = False
-            #    self.command.crawl_event    = False
-            #    self.command.stand_event    = False
-            #    self.command.ready_event    = False
-            #    self.command.dance_event    = True
-            #    self.command.rest_event     = False
-            #    rospy.loginfo(f"dance")
+            elif msg.buttons[4]:            # dance [PS2:X, PS3:ㅁ]
+                self.command.trot_event     = False
+                self.command.crawl_event    = False
+                self.command.stand_event    = False
+                self.command.ready_event    = False
+                self.command.dance_event    = True
+                self.command.rest_event     = False
+                rospy.loginfo(f"dance")
 
             elif msg.buttons[3]: # stand
                 self.command.trot_event     = False
