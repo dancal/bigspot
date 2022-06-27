@@ -17,7 +17,7 @@ class RestController(object):
         #                                     kp     ki    kd
         #self.pid_controller = PID_controller(1, 1.7, 3.0)
         self.pid_controller = PID_controller(0.64, 2.28, 0.0)
-        self.use_imu        = True
+        self.use_imu        = False
         self.use_button     = True
         self.pid_controller.reset()
         
@@ -31,9 +31,9 @@ class RestController(object):
         state.body_local_position[2] = msg.axes[1] * 0.12
 
         # local body orientation
-        state.body_local_orientation[0] = msg.axes[0] * 0.3
+        state.body_local_orientation[0] = msg.axes[0] * 0.5
         state.body_local_orientation[1] = msg.axes[4] * 0.3
-        state.body_local_orientation[2] = msg.axes[3] * 0.4
+        state.body_local_orientation[2] = msg.axes[3] * 0.2
 
         #print(msg)
         # local body position

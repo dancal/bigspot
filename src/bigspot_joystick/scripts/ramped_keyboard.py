@@ -133,18 +133,25 @@ class PS3Controller(object):
                     if not self.is_activated:
                         rospy.loginfo('Press START/OPTIONS to enable the servos')
                         continue
-                        
+                    
                     if event.type == pygame.JOYAXISMOTION:
                         self.axis_data[event.axis]  = round(event.value,2) * -1
                         # * self.available_speeds[self.speed_index])
                         #self.button_data    = [1,0,0,0,0,0,0,0,0,0,0]
                     elif event.type == pygame.JOYBUTTONUP:
-                        if event.button == 5:        # return
+
+                        if event.button == 8:   
+                            self.use_button = False
+                            self.button_data    = [0,0,0,0,0,0,0,0,0,0,0]
+                        if event.button == 9:   
+                            self.use_button = True
+                            self.button_data    = [0,0,0,0,0,0,0,1,0,0,0]
+                        elif event.button == 6:        # return
                             self.speed_index += 1
                             if self.speed_index >= len(self.available_speeds):
                                 self.speed_index = 0
                             logMessage          = "Joystick speed: " + str(self.available_speeds[self.speed_index])
-                        elif event.button == 9:      # list
+                        elif event.button == 7:      # list
                             self.speed_index -= 1
                             if self.speed_index < 0:
                                 self.speed_index = 0
