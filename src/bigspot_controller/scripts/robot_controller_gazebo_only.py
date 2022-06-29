@@ -8,7 +8,7 @@ from RobotController import RobotController
 from InverseKinematics import robot_IK
 from std_msgs.msg import Float64
 
-USE_IMU = True
+USE_IMU = False
 RATE = 60
 
 rospy.init_node("Robot_Controller")
