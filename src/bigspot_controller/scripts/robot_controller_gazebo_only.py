@@ -4,6 +4,8 @@
 import rospy
 
 from sensor_msgs.msg import Joy,Imu
+from sensor_msgs.msg import Range
+
 from RobotController import RobotController
 from InverseKinematics import robot_IK
 from std_msgs.msg import Float64
@@ -14,14 +16,11 @@ RATE = 60
 rospy.init_node("Robot_Controller")
  
 # Robot geometry
-#body = [0.399853, 0.135999]
-#legs = [0.0, 0.078, 0.183, 0.197]
+body                = [0.399, 0.135]
+legs                = [0.0, 0.04, 0.183, 0.2] 
 
-body = [0.399, 0.135]
-legs = [0.0, 0.04, 0.183, 0.2] 
-
-bigspot_robot = RobotController.Robot(body, legs, USE_IMU)
-inverseKinematics = robot_IK.InverseKinematics(body, legs)
+bigspot_robot       = RobotController.Robot(body, legs, USE_IMU)
+inverseKinematics   = robot_IK.InverseKinematics(body, legs)
 
 command_topics = ["/bigspot_controller/FRS_Joint/command",
                   "/bigspot_controller/FRL_Joint/command",
@@ -42,7 +41,9 @@ for i in range(len(command_topics)):
 
 if USE_IMU:
     rospy.Subscriber("bigspot_imu/base_link_orientation", Imu, bigspot_robot.imu_orientation)
-rospy.Subscriber("bigspot_joy/joy_ramped",Joy,bigspot_robot.joystick_command)
+
+rospy.Subscriber("bigspot_joy/joy_ramped", Joy, bigspot_robot.joystick_command)
+rospy.Subscriber("bigspot_ultrasonic/sonic_dist", Range, bigspot_robot.ultrasonic_command)
 
 rate = rospy.Rate(RATE)
 

@@ -14,33 +14,37 @@ from . TrotGaitController import TrotGaitController
 from . CrawlGaitController import CrawlGaitController
 from . DanceController import DanceController
 from . StandController import StandController
+from . StandUpController import StandUpController
+
+from RobotSensors.RgbSensorController import RgbSensorController
 
 class Robot(object):
     def __init__(self, body, legs, imu):
-        self.body           = body
-        self.legs           = legs
+        self.body                   = body
+        self.legs                   = legs
 
-        self.delta_x        = self.body[0] * 0.5
-        self.delta_y        = self.body[1] * 0.5 + self.legs[1]
-        self.x_shift_front  = 0.025
-        self.x_shift_back   = -0.06
-        self.default_height = 0.2
+        self.delta_x                = self.body[0] * 0.5
+        self.delta_y                = self.body[1] * 0.5 + self.legs[1]
+        self.x_shift_front          = 0.024
+        self.x_shift_back           = -0.06
+        self.default_height         = 0.2
+
+        self.rgbController          = RgbSensorController()
 
         self.restController         = RestController(self.default_stance)
-
         self.trotGaitController     = TrotGaitController(self.default_stance, stance_time = 0.18, swing_time = 0.24, time_step = 0.02,use_imu = imu)
         self.crawlGaitController    = CrawlGaitController(self.default_stance, stance_time = 0.55, swing_time = 0.45, time_step = 0.02)
         
-        self.standController        = StandController(self.default_stance)
+        #self.standController        = StandController(self.default_stance)
+        self.standUpController      = StandUpController(self.default_stance)
         
         self.danceController        = DanceController(self.default_stance)
 
-        self.currentController      = self.restController
+        self.currentController      = self.standUpController
         self.state                  = State(self.default_height)
         self.state.foot_locations   = self.default_stance
         self.command                = Command(self.default_height)
-
-        #rospy.Subscriber("bigspot_ultrasonic/sonic_dist", Range, self.ultrasonic_command)
+        self.lastButtonMsg          = []
 
     def change_controller(self):
         
@@ -50,11 +54,11 @@ class Robot(object):
             self.currentController.pid_controller.reset()
             self.command.rest_event = False
 
-        elif self.command.stand_event:
-            if self.state.behavior_state == BehaviorState.REST:
-                self.state.behavior_state = BehaviorState.STAND
-                self.currentController = self.standController
-            #self.command.stand_event = False
+        #elif self.command.stand_event:
+        #    if self.state.behavior_state == BehaviorState.REST:
+        #        self.state.behavior_state = BehaviorState.STAND
+        #        self.currentController = self.standController
+        #    #self.command.stand_event = False
 
         elif self.command.trot_event:
             if self.state.behavior_state == BehaviorState.REST:
@@ -70,13 +74,13 @@ class Robot(object):
         #        self.currentController = self.danceController
         #    self.command.dance_event = False
 
-        #elif self.command.crawl_event:
-        #    if self.state.behavior_state == BehaviorState.REST:
-        #        self.state.behavior_state = BehaviorState.CRAWL
-        #        self.currentController = self.crawlGaitController
-        #        self.currentController.first_cycle = True
-        #        self.state.ticks = 0
-        #    self.command.crawl_event = False
+        elif self.command.crawl_event:
+            if self.state.behavior_state == BehaviorState.REST:
+                self.state.behavior_state = BehaviorState.CRAWL
+                self.currentController = self.crawlGaitController
+                self.currentController.first_cycle = True
+                self.state.ticks = 0
+            self.command.crawl_event = False
 
 
     def ultrasonic_command(self,msg):
@@ -88,43 +92,22 @@ class Robot(object):
             distance    = np.min([distance1, distance2])
         except:
             pass
-        
-        #if distance <= 10:
-        #    self.command.trot_event     = True
-        #    self.command.crawl_event    = False
-        #    self.command.stand_event    = False
-        #    self.command.ready_event    = False
-        #    self.command.rest_event     = False
-        #else:
-        #    self.command.trot_event     = False
-        #    self.command.crawl_event    = False
-        #    self.command.stand_event    = False
-        #    self.command.ready_event    = False
-        #    self.command.rest_event     = True
-         
-        #rospy.loginfo(f"sonic trot")
-        if distance <= 10:
-            JoyMsg          = Joy()
-            JoyMsg.axes     = [0.,0.,1.,0.,0.,1.,0.,-0.9]
-            #JoyMsg.buttons  = [0,0,0,0,0,0,0,0,0,0,0]
-            #self.joystick_command(JoyMsg)
-            self.command.trot_event     = True
-            self.command.crawl_event    = False
-            self.command.stand_event    = False
-            self.command.ready_event    = False
-            self.command.rest_event     = False            
 
-        else:
-            self.command.trot_event     = False
-            self.command.crawl_event    = False
-            self.command.stand_event    = False
-            self.command.ready_event    = False
-            self.command.rest_event     = True            
-        print(distance)
+        #if distance <= 100:
+        #    # axes
+        #    JoyMsg          = Joy()
+        #    JoyMsg.axes     = [0.,1,0.,0.,0.,0.9,0.,0]
+        #    JoyMsg.buttons  = self.lastButtonMsg 
+        #    self.joystick_command(JoyMsg)
+        #    #self.currentController.updateStateCommand(JoyMsg, self.state, self.command)
+        # 
+        #print('distance = ', distance)
+        #rospy.loginfo(f"sonic trot")
 
     def joystick_command(self,msg):
-        if len(msg.buttons) > 0:
 
+        if len(msg.buttons) > 0:
+            
             if msg.buttons[0]:              # rest [PS2:A, PS3:X]
                 self.command.trot_event     = False
                 self.command.crawl_event    = False
@@ -140,6 +123,16 @@ class Robot(object):
                 self.command.ready_event    = False
                 self.command.rest_event     = False
                 rospy.loginfo(f"trot")
+
+            elif msg.buttons[4]:            # stand
+                self.command.trot_event     = False
+                self.command.crawl_event    = True
+                self.command.ready_event    = False
+                self.command.dance_event    = False
+                self.command.rest_event     = False
+                self.command.standup_event  = False
+                self.command.stand_event    = True
+                print("crawl")
 
             #if msg.buttons[4]: # stand
             #    self.command.trot_event     = False
@@ -160,6 +153,10 @@ class Robot(object):
             #    print("stand")
             #print(msg)
             self.currentController.updateStateCommand(msg, self.state, self.command)
+            self.lastButtonMsg  = msg.buttons
+
+    def rgb_controller(self):
+        print('rgb')
 
     def imu_orientation(self,msg):
         q = msg.orientation

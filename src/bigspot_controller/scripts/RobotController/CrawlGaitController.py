@@ -13,24 +13,19 @@ class CrawlGaitController(GaitController):
                                    [1, 0, 1, 1, 1, 1, 1, 1],    
                                    [1, 1, 1, 1, 1, 0, 1, 1]])
 
-        z_error_constant = 0.02     # This constant determines how fast we move
+        z_error_constant = 0.04     # This constant determines how fast we move
                                     # toward the goal in the z axis
         
-        z_leg_lift = 0.08
+        z_leg_lift = 0.16
 
         super().__init__(stance_time, swing_time, time_step, contact_phases, default_stance)
-        self.max_x_velocity = 0.003 #[m/s]
-        self.max_y_velocity = 0.006 #[m/s]
-        self.max_yaw_rate = 0.15 #[rad/s]
+        self.max_x_velocity = 0.006 #[m/s]
+        self.max_y_velocity = 0.02 #[m/s]
+        self.max_yaw_rate   = 0.15 #[rad/s]
+        self.body_shift_y   = 0.025
 
-        self.body_shift_y = 0.025
-
-        self.swingController = CrawlSwingController(self.stance_ticks,
-            self.swing_ticks, self.time_step, self.phase_length, z_leg_lift,
-            self.default_stance, self.body_shift_y)
-        self.stanceController = CrawlStanceController(self.phase_length,
-            self.stance_ticks, self.swing_ticks, self.time_step,
-            z_error_constant, self.body_shift_y)
+        self.swingController = CrawlSwingController(self.stance_ticks, self.swing_ticks, self.time_step, self.phase_length, z_leg_lift, self.default_stance, self.body_shift_y)
+        self.stanceController = CrawlStanceController(self.phase_length, self.stance_ticks, self.swing_ticks, self.time_step, z_error_constant, self.body_shift_y)
 
         self.first_cycle = True
 

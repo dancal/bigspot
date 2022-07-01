@@ -45,7 +45,8 @@ class TrotGaitController(GaitController):
 
         # TODO: tune kp, ki and kd
         #                                     kp    ki    kd
-        self.pid_controller = PID_controller(0.01, 0.01, 0.001)
+        #self.pid_controller = PID_controller(0.01, 0.01, 0.001)
+        self.pid_controller = PID_controller(0.64, 2.28, 0.0)
 
     def updateStateCommand(self, msg, state, command):
         command.velocity[0] = msg.axes[4] * self.max_x_velocity
