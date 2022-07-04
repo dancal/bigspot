@@ -11,9 +11,11 @@ from RoboticsUtilities.Transformations import rotxyz
 #from .PIDController import PID_controller
 
 class StandUpController(object):
+
     def __init__(self, default_stance):
         self.def_stance = default_stance
         self.max_reach  = 0.065
+
         self.FR_X       = 0.
         self.FR_Y       = 0.
         self.FL_X       = 0.
@@ -24,7 +26,6 @@ class StandUpController(object):
         self.ISDOWN     = False
 
     def updateStateCommand(self, msg, state, command):
-
         #state.body_local_position[0]    = -1 * 0.1
         #state.body_local_orientation[0]  = state.ticks * -0.1
 
