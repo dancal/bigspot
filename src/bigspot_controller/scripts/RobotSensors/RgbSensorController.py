@@ -23,8 +23,10 @@ class RgbSensorController:
 
     red_pwm     = 0
     green_pwm   = 0
+    
     blue_pwm    = 0
-
+    global _rpiLoaded
+    
     def __init__(self):
 
         if _rpiLoaded == False:
@@ -62,9 +64,10 @@ class RgbSensorController:
         self.set_blue(rgb[2] * brightness / 100)
         
     def set_color_rgb(self, rgb_string):
-        self.set_red(int(rgb_string[1:3], 16) / 255.0)
-        self.set_green(int(rgb_string[3:5], 16) / 255.0)
-        self.set_blue(int(rgb_string[5:7], 16) / 255.0)
+        if _rpiLoaded:
+            self.set_red(int(rgb_string[1:3], 16) / 255.0)
+            self.set_green(int(rgb_string[3:5], 16) / 255.0)
+            self.set_blue(int(rgb_string[5:7], 16) / 255.0)
 
     def hex_to_rgb(self, colorStr):
         self.set_color_rgb( self.hex_to_rgb(colorStr)  )

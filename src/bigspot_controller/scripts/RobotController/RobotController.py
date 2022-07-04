@@ -93,6 +93,20 @@ class Robot(object):
         except:
             pass
 
+        # 
+        sColor          = 'FFFFFF'
+        if distance <= 20:
+            sColor      = 'FF0000'
+        elif distance <= 30:
+            sColor      = '0000FF'
+        elif distance <= 40:
+            sColor      = '00FF00'
+        elif distance <= 50:
+            sColor      = '66CC00'
+        elif distance <= 80:
+            sColor      = '00FF00'
+
+        self.rgbController.rgb.set_color_rgb(sColor)
         #if distance <= 100:
         #    # axes
         #    JoyMsg          = Joy()
