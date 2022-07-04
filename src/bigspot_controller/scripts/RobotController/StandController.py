@@ -22,17 +22,17 @@ class StandController(object):
         self.STEP       = 0.03
         self.STEP_MAX   = 3
         self.ISDOWN     = False
-
+        
     def updateStateCommand(self, msg, state, command):
 
         state.body_local_position[0]    = -1 * 0.1
         #state.body_local_orientation[0]  = state.ticks * -0.1
 
-        self.FR_X       = msg.axes[1]
-        self.FR_Y       = msg.axes[0]
+        #self.FR_X       = msg.axes[1]
+        #self.FR_Y       = msg.axes[0]
 
-        self.FL_X       = msg.axes[4]
-        self.FL_Y       = msg.axes[3]
+        #self.FL_X       = msg.axes[4]
+        #self.FL_Y       = msg.axes[3]
         
     @property
     def default_stance(self):
@@ -40,7 +40,9 @@ class StandController(object):
         return a
 
     def run(self, state, command):
-
+        if state.ticks == 0:
+            state.ticks = 1
+            
         temp        = self.default_stance
         state.ticks = state.ticks + 0.9
         temp[2]     = [command.robot_height/state.ticks] * 4

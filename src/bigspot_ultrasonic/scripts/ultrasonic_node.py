@@ -15,6 +15,7 @@ import adafruit_hcsr04
 
 from sensor_msgs.msg import Joy
 from std_msgs.msg import String
+from sensor_msgs.msg import Range
 
 class UltraSonic:
 
@@ -71,46 +72,30 @@ class UltraSonic:
                 except:
                     pass
                     
-                if distance <= 10:
-                    Mode        = True
-                    for i in range(5):
-                        joy         = Joy()
-                        back_step   = 0.9
-                        #joy.buttons = [0,0,1,0,0,0,0,0,0,0,0]
-                        joy.axes    = [0.,0,1,0.,0,0.,0.,back_step]
-                        self.distance_publisher.publish(joy)
-                        time.sleep(0.1)
+                range       = Range()
+                range.distance  = distance
+                self.distance_publisher.publish(range)
 
-                if distance > 50 and Mode == True:
-                    joy         = Joy()
-                    #joy.buttons = [1,0,0,0,0,0,0,0,0,0,0]
-                    joy.axes    = [0.,0,0.,0.,0,0.,0.,0.]
-                    self.distance_publisher.publish(joy)
-                    Mode    = False
-
-                #print(distance)
-
-                if distance <= 10:
-                    self.rgb_publisher.publish('FF0000')
-                elif distance <= 20:
-                    self.rgb_publisher.publish('0000FF')
-                elif distance <= 30:
-                    self.rgb_publisher.publish('00FF00')
-                elif distance <= 40:
-                    self.rgb_publisher.publish('FFFF00')
-                elif distance <= 50:
-                    self.rgb_publisher.publish('00BFFF')
-                elif distance <= 60:
-                    self.rgb_publisher.publish('FF9900')
-                else:
-                    self.rgb_publisher.publish('FFFFFF')
+                #if distance <= 10:
+                #    self.rgb_publisher.publish('FF0000')
+                #elif distance <= 20:
+                #    self.rgb_publisher.publish('0000FF')
+                #elif distance <= 30:
+                #    self.rgb_publisher.publish('00FF00')
+                #elif distance <= 40:
+                #    self.rgb_publisher.publish('FFFF00')
+                #elif distance <= 50:
+                #    self.rgb_publisher.publish('00BFFF')
+                #elif distance <= 60:
+                #    self.rgb_publisher.publish('FF9900')
+                #else:
+                #    self.rgb_publisher.publish('FFFFFF')
 
                 self.rate.sleep()
-                #time.sleep(0.05)
 
         except KeyboardInterrupt:
             pass
 
 if __name__ == "__main__":
-    sonic = UltraSonic(rate = 30)
+    sonic = UltraSonic(rate = 60)
     sonic.run()

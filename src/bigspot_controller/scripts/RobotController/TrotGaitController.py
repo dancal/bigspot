@@ -25,15 +25,15 @@ class TrotGaitController(GaitController):
                                        # toward the goal in the z direction
         
 
-        z_leg_lift = 0.07
+        z_leg_lift = 0.16
 
         super().__init__(stance_time, swing_time, time_step, contact_phases, default_stance)
         #self.max_x_velocity = 0.024 #[m/s] 
         #self.max_y_velocity = 0.015 #[m/s]
 
-        self.max_x_velocity = 0.036 #[m/s] 
-        self.max_y_velocity = 0.026 #[m/s]
-        self.max_yaw_rate = 0.6 #[rad/s]
+        self.max_x_velocity = 0.03 #[m/s] 
+        self.max_y_velocity = 0.02 #[m/s]
+        self.max_yaw_rate   = 0.6 #[rad/s]
 
 
         self.swingController = TrotSwingController(self.stance_ticks, self.swing_ticks, self.time_step,
@@ -45,7 +45,8 @@ class TrotGaitController(GaitController):
 
         # TODO: tune kp, ki and kd
         #                                     kp    ki    kd
-        self.pid_controller = PID_controller(0.01, 0.01, 0.001)
+        #self.pid_controller = PID_controller(0.01, 0.01, 0.001)
+        self.pid_controller = PID_controller(0.64, 2.28, 0.0)
 
     def updateStateCommand(self, msg, state, command):
         command.velocity[0] = msg.axes[4] * self.max_x_velocity

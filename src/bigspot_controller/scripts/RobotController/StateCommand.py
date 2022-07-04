@@ -31,9 +31,9 @@ class State(object):
 
 class Command(object):
     def __init__(self,default_height):
-        self.velocity = np.array([0., 0.])
-        self.yaw_rate = 0.
-        self.robot_height = -default_height
+        self.velocity       = np.array([0., 0.])
+        self.yaw_rate       = 0.
+        self.robot_height   = -default_height
 
         self.trot_event     = False
         self.crawl_event    = False

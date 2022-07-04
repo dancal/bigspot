@@ -22,7 +22,7 @@ class PS4_controller(object):
         #self.publisher_rgb              = rospy.Publisher('bigspot_rgb/rgb_dist', Float32, queue_size = 1)
 
         # ultrasonic
-        rospy.Subscriber("bigspot_ultrasonic/sonic_dist", Joy, self.callback_sonic)
+        #rospy.Subscriber("bigspot_ultrasonic/sonic_dist", Joy, self.callback_sonic)
         
         self.rate = rospy.Rate(rate)
 
@@ -53,11 +53,10 @@ class PS4_controller(object):
 
         rospy.loginfo(f"PS4 Joystick stop")
 
-    def callback_sonic(self, msg):
-
-        self.target_joy.axes    = msg.axes
-        #self.target_joy.buttons = msg.buttons
-        self.publish_joy()
+    #def callback_sonic(self, msg):
+    #    self.target_joy.axes    = msg.axes
+    #    #self.target_joy.buttons = msg.buttons
+    #    self.publish_joy()
 
     def callback(self, msg):
         if self.use_button:
