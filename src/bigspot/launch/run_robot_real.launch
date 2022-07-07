@@ -29,10 +29,10 @@
     <remap from="/joint_states" to="/bigspot/joint_states"/>
   </node>
 
-  <include file="$(find bigspot_rgb)/launch/rgb.launch" />
+<!--  <include file="$(find bigspot_rgb)/launch/rgb.launch" /> -->
   <include file="$(find bigspot_lcd)/launch/lcd.launch" />
-  <include file="$(find bigspot_mpu6050)/launch/mpu.launch" />
-  <include file="$(find bigspot_ultrasonic)/launch/ultrasonic.launch" />
+<!--  <include file="$(find bigspot_mpu6050)/launch/mpu.launch" /> -->
+<!--  <include file="$(find bigspot_ultrasonic)/launch/ultrasonic.launch" /> -->
 
   <!-- Joystick -->
   <include file="$(find bigspot_joystick)/launch/ramped_joystick.launch" />
