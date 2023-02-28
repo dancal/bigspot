@@ -2,6 +2,9 @@
 
 The MicriSpotAI has the following main components:
 
+https://youtu.be/u6ZRoQI9YBw
+
+
 - Raspberry Pi 4B + 
 - Raspberry Pi Camera
 - UK 831N Multi tester
