@@ -28,10 +28,10 @@
   </node>
 
   <!-- Robot servo controller -->
-  <!-- <node pkg="bigspot_controller" type="robot_controller_gazebo_only.py" name="ROBOT_CONTROLLER" output="screen"/> -->
+  <node pkg="bigspot_controller" type="robot_controller_gazebo_only.py" name="ROBOT_CONTROLLER" output="screen"/>
 
 
   <!-- Joystick -->
-  <!-- <include file="$(find bigspot_joystick)/launch/ramped_joystick.launch" /> -->
+  <include file="$(find bigspot_joystick)/launch/ramped_joystick.launch" />
   
 </launch>
