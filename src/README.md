@@ -19,11 +19,10 @@
 # roslaunch bigspot_ultrasonic ultrasonic.launch
 
 
-
-
-# apt-get install ros-noetic-joy
-# apt-get install ros-noetic-imu-tools
-# apt-get install libgpiod2
+# sudo apt-get install ros-noetic-joy
+# sudo apt-get install ros-noetic-imu-tools
+# sudo apt-get install libgpiod2
+# sudo apt install ros-noetic-ros-controllers
 
 # pip3 install pygame
 # pip3 install adafruit-circuitpython-rgbled
