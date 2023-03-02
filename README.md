@@ -1,4 +1,4 @@
-# "BigSpot"
+# "BigSpot" - quadruped robot
 
 demo video : https://youtu.be/u6ZRoQI9YBw
 
