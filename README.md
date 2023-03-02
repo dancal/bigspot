@@ -7,9 +7,8 @@ The BigSpot has the following main components:
 ## Hardware
 - Raspberry Pi 4B + 
 - Raspberry Pi Camera
-- UK 831N Multi tester
+
 - MicroSD 32G 
-- USB wlan / NEXT-202N-MINI
 - 4 x 12A Step Down Module
 - 2 × HC-SR04P Ultrasonic sensor
 - 1 × MPU-6050 Gyro sensor
@@ -24,9 +23,11 @@ The BigSpot has the following main components:
 - 50A LED Display
 - PS4 DualShock compatible Joystick
 - XT60H +/-
+
+- USB wlan / NEXT-202N-MINI
 - HDMI to MICRO HDMI gender
 - IMAX B6
-
+- UK 831N Multi tester
 
 ## gazebo
 ```
