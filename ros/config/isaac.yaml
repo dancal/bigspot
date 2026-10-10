@@ -1,0 +1,44 @@
+visual_slam_node:
+  ros__parameters:
+    num_cameras: 2
+    min_num_images: 2
+    tracking_mode: 1
+    base_frame: base_link
+    odom_frame: odom
+    map_frame: map
+    camera_optical_frames: [camera_infra1_optical_frame, camera_infra2_optical_frame]
+    imu_frame: camera_gyro_optical_frame
+    rectified_images: true
+    enable_image_denoising: false
+    publish_odom_to_base_tf: true
+    publish_map_to_odom_tf: true
+    gyro_noise_density: 0.000244
+    gyro_random_walk: 0.000019393
+    accel_noise_density: 0.001862
+    accel_random_walk: 0.003
+    calibration_frequency: 200.0
+    image_jitter_threshold_ms: 35.0
+nvblox_node:
+  ros__parameters:
+    num_cameras: 1
+    voxel_size: 0.04
+    mapping_type: static_tsdf
+    use_tf_transforms: true
+    global_frame: odom
+    use_depth: true
+    use_color: true
+    use_lidar: false
+    esdf_mode: 2d
+    publish_esdf_distance_slice: true
+    integrate_depth_rate_hz: 20.0
+    integrate_color_rate_hz: 5.0
+    update_esdf_rate_hz: 10.0
+    map_clearing_frame_id: base_link
+    static_mapper:
+      esdf_slice_min_height: 0.06
+      esdf_slice_max_height: 0.65
+      esdf_slice_height: 0.25
+      projective_integrator_max_integration_distance_m: 4.0
+      workspace_bounds_type: height_bounds
+      workspace_bounds_min_height_m: 0.04
+      workspace_bounds_max_height_m: 1.0

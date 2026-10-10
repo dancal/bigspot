@@ -1,0 +1,134 @@
+{
+  "solid_count": 31,
+  "solids": [
+    {
+      "name": "body_shell",
+      "valid": true
+    },
+    {
+      "name": "belly_skid",
+      "valid": true
+    },
+    {
+      "name": "camera_envelope",
+      "valid": true
+    },
+    {
+      "name": "FL_abad_motor",
+      "valid": true
+    },
+    {
+      "name": "FR_abad_motor",
+      "valid": true
+    },
+    {
+      "name": "RL_abad_motor",
+      "valid": true
+    },
+    {
+      "name": "RR_abad_motor",
+      "valid": true
+    },
+    {
+      "name": "FL_hip_bracket",
+      "valid": true
+    },
+    {
+      "name": "FL_pitch_motor",
+      "valid": true
+    },
+    {
+      "name": "FL_upper_rail",
+      "valid": true
+    },
+    {
+      "name": "FL_knee_motor",
+      "valid": true
+    },
+    {
+      "name": "FL_lower_rail",
+      "valid": true
+    },
+    {
+      "name": "FL_foot",
+      "valid": true
+    },
+    {
+      "name": "FR_hip_bracket",
+      "valid": true
+    },
+    {
+      "name": "FR_pitch_motor",
+      "valid": true
+    },
+    {
+      "name": "FR_upper_rail",
+      "valid": true
+    },
+    {
+      "name": "FR_knee_motor",
+      "valid": true
+    },
+    {
+      "name": "FR_lower_rail",
+      "valid": true
+    },
+    {
+      "name": "FR_foot",
+      "valid": true
+    },
+    {
+      "name": "RL_hip_bracket",
+      "valid": true
+    },
+    {
+      "name": "RL_pitch_motor",
+      "valid": true
+    },
+    {
+      "name": "RL_upper_rail",
+      "valid": true
+    },
+    {
+      "name": "RL_knee_motor",
+      "valid": true
+    },
+    {
+      "name": "RL_lower_rail",
+      "valid": true
+    },
+    {
+      "name": "RL_foot",
+      "valid": true
+    },
+    {
+      "name": "RR_hip_bracket",
+      "valid": true
+    },
+    {
+      "name": "RR_pitch_motor",
+      "valid": true
+    },
+    {
+      "name": "RR_upper_rail",
+      "valid": true
+    },
+    {
+      "name": "RR_knee_motor",
+      "valid": true
+    },
+    {
+      "name": "RR_lower_rail",
+      "valid": true
+    },
+    {
+      "name": "RR_foot",
+      "valid": true
+    }
+  ],
+  "step_status": "IFSelect_ReturnStatus.IFSelect_RetDone",
+  "units": "millimetres",
+  "mounting_holes_verified": false,
+  "manufacturing_ready": false,
+  "rails": "cylinder envelopes; brackets and actuator mounting drawings require detailed CAD"
+}

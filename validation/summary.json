@@ -1,0 +1,89 @@
+{
+  "date": "2026-10-10",
+  "legacy_commit": "d8db47790a6dd9cec28b197f240ba787c3a5a504",
+  "checks": {
+    "startup": true,
+    "walk": true,
+    "holdout": true,
+    "navigation": true,
+    "navigation_holdout": true,
+    "fault_imu": true,
+    "fault_joints": true,
+    "camera_dropout": true,
+    "ros": true
+  },
+  "all_checks_passed": true,
+  "unit_test_count": 11,
+  "python_compile_count": 24,
+  "candidate_count": 45,
+  "cad_valid_solids": 31,
+  "design": {
+    "estimated_mass_kg": 7.48,
+    "actuator_mass_kg": 4.48,
+    "motor_cost_usd": 1660.0,
+    "mass_measured": false
+  },
+  "hardware_tested": false,
+  "isaac_ros_5_tested": false,
+  "vslam_tested": false,
+  "manufacturing_ready": false,
+  "assumptions": [
+    "simulation-truth odometry",
+    "unmeasured mass and thermal path",
+    "60% continuous torque limit",
+    "linear torque-speed envelope",
+    "bounded flat indoor course"
+  ],
+  "source_sha256": {
+    "setup.py": "1f29da5c2ef6a9b6f424aa5e3a8aa28be97e0986c64435c0fc6bbff088291ddc",
+    "bigspot_autonomy\\can_protocol.py": "c1aa59d82bddb288780a1d5cca6c07d4473ab65e18fae6920b0acf4734cf6c8d",
+    "bigspot_autonomy\\design.py": "d34825a255980fe3ffd6de034f31a2387e218a13a97d19c542bba9e5194a98d3",
+    "bigspot_autonomy\\gait.py": "65ffb196e2d91086468c03c4e674edc383b2c368d7364245e29f532bd6c6b239",
+    "bigspot_autonomy\\kinematics.py": "74105d3f498d5d2fe86503bd565dbbaa362530e53f934f2d06c4eee8ba91a53a",
+    "bigspot_autonomy\\model.py": "274c40e636dc08f79bd88eab1ed356a45548c62206494468b0171d5807c71a40",
+    "bigspot_autonomy\\navigation.py": "28bd569a76f775252394ffef7c3ff91c4c0ea16d2f4b1697dbea43b811e6a70c",
+    "bigspot_autonomy\\physics.py": "578e95f42c2ae2d714c3c8934ada66f8462b90df91f698fc2bdf40691b617bce",
+    "bigspot_autonomy\\ros_nodes.py": "d568394d478c8b8dcff4e7f4a6ffc84fee5a38619a7c184c03a8bb0d9abae7e4",
+    "bigspot_autonomy\\safety.py": "1f9ea7d8761f500db52bf6d3b7045495d9ddaa6b723f6a8e8538b7da5b08bc49",
+    "bigspot_autonomy\\__init__.py": "1ec62c1a49b72b617811a115cc248f932f6cf4e8c55bcf9f5a2d553f94d3ad17",
+    "tools\\generate_design.py": "af94719f2c87d3e934ff473525dd7ac3ae888a07e824daf2b46522104cded785",
+    "tools\\isaac_preflight.py": "d54dd9cc83a5608ed8e8adc20e8fdd2eb1f43f30605e8b00c1d1f1f900dda217",
+    "tools\\make_report.py": "3fd5f4fd2fd816701c589b7103b037f5a91dc0fbf5e7451187cb2133488ed10b",
+    "tools\\optimize_design.py": "694e878098b1f37c674390d80c1dc64b3b799e1b4fa06ff981174344a696ca37",
+    "tools\\refine_design.py": "9515dbfc65cdfc2c40e3a8dc736ee0e59380181d13a8bb12c8feddc4144467be",
+    "tools\\ros_smoke.py": "b477754659ff42ee41dba34a24f808864dbae8212cd8b27098f617933d2dee14",
+    "tools\\run_experiments.py": "334ff7920096440ac4246327a8b3d02d0b71b93d4901e791c2a1ce7bc0818659",
+    "tools\\validate_system.py": "1b980ecfabe61acded65e44df25ce1b7880cb96a4a95f9bccadb8860e013c3ab",
+    "tests\\test_core.py": "986c1e93b7f13667794e83a16b55120b8f28fbe2afff21de9bc6ef015d92f459",
+    "ros\\launch\\isaac.launch.py": "837be7c21962386ed697a8a1db3f8a4eef653b94e5160c9c5f446e220fac658f",
+    "ros\\launch\\nav2.launch.py": "2f3e7ae24f76a43108fc821dcdbecd0119d56a84dc6f22b1efe0fc2ccb9634ec",
+    "ros\\launch\\simulation.launch.py": "5f6e00a4deb456e34f0507a18b2af078ddd07decdf0af7ab73a33c4ab0a4476f",
+    "fusion\\BigSpotQDD\\BigSpotQDD.py": "38be50a3619df8a0fca0186a7090a6c38ba63817c4571db0549e4033c7d46ef8"
+  },
+  "artifacts": {
+    "startup": {
+      "sha256": "a9434571889fc42a5993ca12b8d5a911360cb5b2efb54884132bee423e14e1c4",
+      "bytes": 187517,
+      "frames": 200,
+      "seconds": 10.0,
+      "fps": 20,
+      "playback_speed": 1
+    },
+    "walk": {
+      "sha256": "afb19a57d1ecfeba4ac4493c7ebcbc521a30e2a8d787ed7ae74f78f53fc01624",
+      "bytes": 613644,
+      "frames": 300,
+      "seconds": 15.0,
+      "fps": 20,
+      "playback_speed": 1
+    },
+    "navigation": {
+      "sha256": "85d018ebdfe6bfa60cc73cf5b1fde2e7744969536f46c2c577f47a8f05b7db91",
+      "bytes": 287835,
+      "frames": 640,
+      "seconds": 32.0,
+      "fps": 20,
+      "playback_speed": 1
+    }
+  }
+}

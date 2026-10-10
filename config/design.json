@@ -1,0 +1,43 @@
+{
+  "name": "BigSpot Autonomy QDD prototype",
+  "hardware_measured": false,
+  "legacy_commit": "d8db47790a6dd9cec28b197f240ba787c3a5a504",
+  "actuator_layout": "hybrid",
+  "body_length_m": 0.38,
+  "body_width_m": 0.19,
+  "body_height_m": 0.07,
+  "hip_x_m": 0.16,
+  "hip_y_m": 0.105,
+  "hip_offset_m": 0.055,
+  "upper_length_m": 0.16,
+  "lower_length_m": 0.16,
+  "standing_leg_height_m": 0.255,
+  "neutral_foot_x_m": 0.025,
+  "foot_radius_m": 0.018,
+  "base_without_actuators_kg": 2.0,
+  "hip_bracket_kg": 0.055,
+  "upper_structure_kg": 0.08,
+  "lower_structure_kg": 0.115,
+  "camera_xyz_m": [0.205, 0.0, 0.075],
+  "camera_downward_pitch_deg": 12.0,
+  "battery": {
+    "chemistry": "12S lithium-ion, provisional",
+    "nominal_voltage_v": 44.4,
+    "maximum_voltage_v": 50.4,
+    "capacity_ah": 4.0,
+    "maximum_motor_bus_power_w": 600.0,
+    "regeneration_capable_power_path_required": true,
+    "specification_validated": false
+  },
+  "actuators": {
+    "RS00": {"mass_kg": 0.310, "rated_torque_nm": 5.0, "stall_rated_torque_nm": 3.6, "peak_torque_nm": 14.0, "no_load_rpm": 315.0, "diameter_m": 0.057, "length_m": 0.051, "reduction": 10.0, "unit_price_usd": 125.0, "bulk_10_price_usd": 119.0},
+    "RS02": {"mass_kg": 0.405, "rated_torque_nm": 6.0, "stall_rated_torque_nm": 6.0, "peak_torque_nm": 17.0, "no_load_rpm": 410.0, "diameter_m": 0.0785, "length_m": 0.0455, "reduction": 7.75, "unit_price_usd": 145.0, "bulk_10_price_usd": 138.0},
+    "RS06": {"mass_kg": 0.621, "rated_torque_nm": 11.0, "stall_rated_torque_nm": 11.0, "peak_torque_nm": 36.0, "no_load_rpm": 480.0, "diameter_m": 0.090, "length_m": 0.048, "reduction": 9.0, "unit_price_usd": 210.0, "bulk_10_price_usd": 200.0, "stall_rating_verified": false}
+  },
+  "control": {"kp": 55.0, "kd": 2.2, "frequency_hz": 2.0, "duty_factor": 0.62, "swing_height_m": 0.035, "maximum_speed_m_s": 0.4, "thermal_derating": 0.6, "sensor_timeout_s": 0.15, "command_timeout_s": 0.3},
+  "sources": {
+    "motor_specs": "https://github.com/RobStride/Product_Information",
+    "isaac_ros": "https://nvidia-isaac-ros.github.io/v/release-5.0/getting_started/index.html",
+    "camera": "https://nvidia-isaac-ros.github.io/v/release-5.0/concepts/visual_slam/cuvslam/tutorial_realsense.html"
+  }
+}

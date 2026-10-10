@@ -1,0 +1,654 @@
+<robot name="bigspot_autonomy">
+  <link name="base_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="3.24" />
+      <inertia ixx="0.0210079283333335" iyy="0.05714790083333379" izz="0.07601890083333394" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 -0 0" />
+      <geometry>
+        <box size="0.38 0.19 0.07" />
+      </geometry>
+      <material name="color_1">
+        <color rgba="0.180000007 0.519999981 0.670000017 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 -0 0" />
+      <geometry>
+        <box size="0.38 0.19 0.07" />
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 -0.05" rpy="0 -0 0" />
+      <geometry>
+        <box size="0.3 0.16 0.03" />
+      </geometry>
+      <material name="color_2">
+        <color rgba="0.100000001 0.129999995 0.150000006 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.05" rpy="0 -0 0" />
+      <geometry>
+        <box size="0.3 0.16 0.03" />
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.205 0 0.075" rpy="0 -0 0" />
+      <geometry>
+        <box size="0.026 0.09 0.026" />
+      </geometry>
+      <material name="color_3">
+        <color rgba="0.100000001 0.100000001 0.100000001 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.205 0 0.075" rpy="0 -0 0" />
+      <geometry>
+        <box size="0.026 0.09 0.026" />
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.16 0.105 0" rpy="0 1.57079633 0" />
+      <geometry>
+        <cylinder radius="0.0285" length="0.051" />
+      </geometry>
+      <material name="color_4">
+        <color rgba="0.0900000036 0.100000001 0.119999997 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.16 0.105 0" rpy="0 1.57079633 0" />
+      <geometry>
+        <cylinder radius="0.0285" length="0.051" />
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0.16 -0.105 0" rpy="0 1.57079633 0" />
+      <geometry>
+        <cylinder radius="0.0285" length="0.051" />
+      </geometry>
+      <material name="color_5">
+        <color rgba="0.0900000036 0.100000001 0.119999997 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.16 -0.105 0" rpy="0 1.57079633 0" />
+      <geometry>
+        <cylinder radius="0.0285" length="0.051" />
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.16 0.105 0" rpy="0 1.57079633 0" />
+      <geometry>
+        <cylinder radius="0.0285" length="0.051" />
+      </geometry>
+      <material name="color_6">
+        <color rgba="0.0900000036 0.100000001 0.119999997 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.16 0.105 0" rpy="0 1.57079633 0" />
+      <geometry>
+        <cylinder radius="0.0285" length="0.051" />
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="-0.16 -0.105 0" rpy="0 1.57079633 0" />
+      <geometry>
+        <cylinder radius="0.0285" length="0.051" />
+      </geometry>
+      <material name="color_7">
+        <color rgba="0.0900000036 0.100000001 0.119999997 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="-0.16 -0.105 0" rpy="0 1.57079633 0" />
+      <geometry>
+        <cylinder radius="0.0285" length="0.051" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="FL_abduction_link">
+    <inertial>
+      <origin xyz="0 0.0517119565 0" rpy="0 0 0" />
+      <mass value="0.46" />
+      <inertia ixx="0.0002879022084322065" iyy="0.00031574542737676156" izz="0.0002879022084322065" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0.0275 0" rpy="1.57079633 0 0" />
+      <geometry>
+        <cylinder radius="0.012" length="0.055" />
+      </geometry>
+      <material name="color_8">
+        <color rgba="0.649999976 0.699999988 0.720000029 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0.0275 0" rpy="1.57079633 0 0" />
+      <geometry>
+        <cylinder radius="0.012" length="0.055" />
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0.055 0" rpy="1.57079633 -0 0" />
+      <geometry>
+        <cylinder radius="0.03925" length="0.0455" />
+      </geometry>
+      <material name="color_9">
+        <color rgba="0.0900000036 0.100000001 0.119999997 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0.055 0" rpy="1.57079633 -0 0" />
+      <geometry>
+        <cylinder radius="0.03925" length="0.0455" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="FL_abad" type="revolute">
+    <parent link="base_link" />
+    <child link="FL_abduction_link" />
+    <origin xyz="0.16 0.105 0" rpy="0 -0 0" />
+    <axis xyz="1 0 0" />
+    <limit lower="-0.65" upper="0.65" effort="14.0" velocity="12" />
+  </joint>
+  <link name="FL_upper_link">
+    <inertial>
+      <origin xyz="0 0 -0.128453608" rpy="0 0 0" />
+      <mass value="0.48500000000000004" />
+      <inertia ixx="0.0007123409228975257" iyy="0.0007984519385225259" izz="0.00022978332540760942" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 -0.07" rpy="0 -0 0" />
+      <geometry>
+        <cylinder radius="0.01" length="0.14" />
+      </geometry>
+      <material name="color_10">
+        <color rgba="0.649999976 0.699999988 0.720000029 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.07" rpy="0 -0 0" />
+      <geometry>
+        <cylinder radius="0.01" length="0.14" />
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 -0.14" rpy="1.57079633 -0 0" />
+      <geometry>
+        <cylinder radius="0.03925" length="0.0455" />
+      </geometry>
+      <material name="color_11">
+        <color rgba="0.0900000036 0.100000001 0.119999997 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.14" rpy="1.57079633 -0 0" />
+      <geometry>
+        <cylinder radius="0.03925" length="0.0455" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="FL_hip" type="revolute">
+    <parent link="FL_abduction_link" />
+    <child link="FL_upper_link" />
+    <origin xyz="0 0.055 0" rpy="0 -0 0" />
+    <axis xyz="0 1 0" />
+    <limit lower="-2.1" upper="1.25" effort="17.0" velocity="12" />
+  </joint>
+  <link name="FL_lower_link">
+    <inertial>
+      <origin xyz="0 0 -0.0913043478" rpy="0 0 0" />
+      <mass value="0.115" />
+      <inertia ixx="0.0002767216221623702" iyy="0.0002767216221623702" izz="7.059752212389381e-06" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 -0.07" rpy="0 -0 0" />
+      <geometry>
+        <cylinder radius="0.008" length="0.14" />
+      </geometry>
+      <material name="color_12">
+        <color rgba="0.649999976 0.699999988 0.720000029 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.07" rpy="0 -0 0" />
+      <geometry>
+        <cylinder radius="0.008" length="0.14" />
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 -0.14" rpy="0 -0 0" />
+      <geometry>
+        <sphere radius="0.018" />
+      </geometry>
+      <material name="color_13">
+        <color rgba="0.119999997 0.119999997 0.150000006 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.14" rpy="0 -0 0" />
+      <geometry>
+        <sphere radius="0.018" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="FL_knee" type="revolute">
+    <parent link="FL_upper_link" />
+    <child link="FL_lower_link" />
+    <origin xyz="0 0 -0.14" rpy="0 -0 0" />
+    <axis xyz="0 1 0" />
+    <limit lower="0.1" upper="3.0" effort="17.0" velocity="12" />
+  </joint>
+  <link name="FR_abduction_link">
+    <inertial>
+      <origin xyz="0 -0.0517119565 0" rpy="0 0 0" />
+      <mass value="0.46" />
+      <inertia ixx="0.0002879022084322065" iyy="0.00031574542737676156" izz="0.0002879022084322065" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 -0.0275 0" rpy="-1.57079633 0 0" />
+      <geometry>
+        <cylinder radius="0.012" length="0.055" />
+      </geometry>
+      <material name="color_14">
+        <color rgba="0.649999976 0.699999988 0.720000029 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 -0.0275 0" rpy="-1.57079633 0 0" />
+      <geometry>
+        <cylinder radius="0.012" length="0.055" />
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 -0.055 0" rpy="1.57079633 -0 0" />
+      <geometry>
+        <cylinder radius="0.03925" length="0.0455" />
+      </geometry>
+      <material name="color_15">
+        <color rgba="0.0900000036 0.100000001 0.119999997 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 -0.055 0" rpy="1.57079633 -0 0" />
+      <geometry>
+        <cylinder radius="0.03925" length="0.0455" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="FR_abad" type="revolute">
+    <parent link="base_link" />
+    <child link="FR_abduction_link" />
+    <origin xyz="0.16 -0.105 0" rpy="0 -0 0" />
+    <axis xyz="1 0 0" />
+    <limit lower="-0.65" upper="0.65" effort="14.0" velocity="12" />
+  </joint>
+  <link name="FR_upper_link">
+    <inertial>
+      <origin xyz="0 0 -0.128453608" rpy="0 0 0" />
+      <mass value="0.48500000000000004" />
+      <inertia ixx="0.0007123409228975257" iyy="0.0007984519385225259" izz="0.00022978332540760942" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 -0.07" rpy="0 -0 0" />
+      <geometry>
+        <cylinder radius="0.01" length="0.14" />
+      </geometry>
+      <material name="color_16">
+        <color rgba="0.649999976 0.699999988 0.720000029 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.07" rpy="0 -0 0" />
+      <geometry>
+        <cylinder radius="0.01" length="0.14" />
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 -0.14" rpy="1.57079633 -0 0" />
+      <geometry>
+        <cylinder radius="0.03925" length="0.0455" />
+      </geometry>
+      <material name="color_17">
+        <color rgba="0.0900000036 0.100000001 0.119999997 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.14" rpy="1.57079633 -0 0" />
+      <geometry>
+        <cylinder radius="0.03925" length="0.0455" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="FR_hip" type="revolute">
+    <parent link="FR_abduction_link" />
+    <child link="FR_upper_link" />
+    <origin xyz="0 -0.055 0" rpy="0 -0 0" />
+    <axis xyz="0 1 0" />
+    <limit lower="-2.1" upper="1.25" effort="17.0" velocity="12" />
+  </joint>
+  <link name="FR_lower_link">
+    <inertial>
+      <origin xyz="0 0 -0.0913043478" rpy="0 0 0" />
+      <mass value="0.115" />
+      <inertia ixx="0.0002767216221623702" iyy="0.0002767216221623702" izz="7.059752212389381e-06" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 -0.07" rpy="0 -0 0" />
+      <geometry>
+        <cylinder radius="0.008" length="0.14" />
+      </geometry>
+      <material name="color_18">
+        <color rgba="0.649999976 0.699999988 0.720000029 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.07" rpy="0 -0 0" />
+      <geometry>
+        <cylinder radius="0.008" length="0.14" />
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 -0.14" rpy="0 -0 0" />
+      <geometry>
+        <sphere radius="0.018" />
+      </geometry>
+      <material name="color_19">
+        <color rgba="0.119999997 0.119999997 0.150000006 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.14" rpy="0 -0 0" />
+      <geometry>
+        <sphere radius="0.018" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="FR_knee" type="revolute">
+    <parent link="FR_upper_link" />
+    <child link="FR_lower_link" />
+    <origin xyz="0 0 -0.14" rpy="0 -0 0" />
+    <axis xyz="0 1 0" />
+    <limit lower="0.1" upper="3.0" effort="17.0" velocity="12" />
+  </joint>
+  <link name="RL_abduction_link">
+    <inertial>
+      <origin xyz="0 0.0517119565 0" rpy="0 0 0" />
+      <mass value="0.46" />
+      <inertia ixx="0.0002879022084322065" iyy="0.00031574542737676156" izz="0.0002879022084322065" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0.0275 0" rpy="1.57079633 0 0" />
+      <geometry>
+        <cylinder radius="0.012" length="0.055" />
+      </geometry>
+      <material name="color_20">
+        <color rgba="0.649999976 0.699999988 0.720000029 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0.0275 0" rpy="1.57079633 0 0" />
+      <geometry>
+        <cylinder radius="0.012" length="0.055" />
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0.055 0" rpy="1.57079633 -0 0" />
+      <geometry>
+        <cylinder radius="0.03925" length="0.0455" />
+      </geometry>
+      <material name="color_21">
+        <color rgba="0.0900000036 0.100000001 0.119999997 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0.055 0" rpy="1.57079633 -0 0" />
+      <geometry>
+        <cylinder radius="0.03925" length="0.0455" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="RL_abad" type="revolute">
+    <parent link="base_link" />
+    <child link="RL_abduction_link" />
+    <origin xyz="-0.16 0.105 0" rpy="0 -0 0" />
+    <axis xyz="1 0 0" />
+    <limit lower="-0.65" upper="0.65" effort="14.0" velocity="12" />
+  </joint>
+  <link name="RL_upper_link">
+    <inertial>
+      <origin xyz="0 0 -0.128453608" rpy="0 0 0" />
+      <mass value="0.48500000000000004" />
+      <inertia ixx="0.0007123409228975257" iyy="0.0007984519385225259" izz="0.00022978332540760942" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 -0.07" rpy="0 -0 0" />
+      <geometry>
+        <cylinder radius="0.01" length="0.14" />
+      </geometry>
+      <material name="color_22">
+        <color rgba="0.649999976 0.699999988 0.720000029 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.07" rpy="0 -0 0" />
+      <geometry>
+        <cylinder radius="0.01" length="0.14" />
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 -0.14" rpy="1.57079633 -0 0" />
+      <geometry>
+        <cylinder radius="0.03925" length="0.0455" />
+      </geometry>
+      <material name="color_23">
+        <color rgba="0.0900000036 0.100000001 0.119999997 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.14" rpy="1.57079633 -0 0" />
+      <geometry>
+        <cylinder radius="0.03925" length="0.0455" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="RL_hip" type="revolute">
+    <parent link="RL_abduction_link" />
+    <child link="RL_upper_link" />
+    <origin xyz="0 0.055 0" rpy="0 -0 0" />
+    <axis xyz="0 1 0" />
+    <limit lower="-2.1" upper="1.25" effort="17.0" velocity="12" />
+  </joint>
+  <link name="RL_lower_link">
+    <inertial>
+      <origin xyz="0 0 -0.0913043478" rpy="0 0 0" />
+      <mass value="0.115" />
+      <inertia ixx="0.0002767216221623702" iyy="0.0002767216221623702" izz="7.059752212389381e-06" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 -0.07" rpy="0 -0 0" />
+      <geometry>
+        <cylinder radius="0.008" length="0.14" />
+      </geometry>
+      <material name="color_24">
+        <color rgba="0.649999976 0.699999988 0.720000029 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.07" rpy="0 -0 0" />
+      <geometry>
+        <cylinder radius="0.008" length="0.14" />
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 -0.14" rpy="0 -0 0" />
+      <geometry>
+        <sphere radius="0.018" />
+      </geometry>
+      <material name="color_25">
+        <color rgba="0.119999997 0.119999997 0.150000006 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.14" rpy="0 -0 0" />
+      <geometry>
+        <sphere radius="0.018" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="RL_knee" type="revolute">
+    <parent link="RL_upper_link" />
+    <child link="RL_lower_link" />
+    <origin xyz="0 0 -0.14" rpy="0 -0 0" />
+    <axis xyz="0 1 0" />
+    <limit lower="0.1" upper="3.0" effort="17.0" velocity="12" />
+  </joint>
+  <link name="RR_abduction_link">
+    <inertial>
+      <origin xyz="0 -0.0517119565 0" rpy="0 0 0" />
+      <mass value="0.46" />
+      <inertia ixx="0.0002879022084322065" iyy="0.00031574542737676156" izz="0.0002879022084322065" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 -0.0275 0" rpy="-1.57079633 0 0" />
+      <geometry>
+        <cylinder radius="0.012" length="0.055" />
+      </geometry>
+      <material name="color_26">
+        <color rgba="0.649999976 0.699999988 0.720000029 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 -0.0275 0" rpy="-1.57079633 0 0" />
+      <geometry>
+        <cylinder radius="0.012" length="0.055" />
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 -0.055 0" rpy="1.57079633 -0 0" />
+      <geometry>
+        <cylinder radius="0.03925" length="0.0455" />
+      </geometry>
+      <material name="color_27">
+        <color rgba="0.0900000036 0.100000001 0.119999997 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 -0.055 0" rpy="1.57079633 -0 0" />
+      <geometry>
+        <cylinder radius="0.03925" length="0.0455" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="RR_abad" type="revolute">
+    <parent link="base_link" />
+    <child link="RR_abduction_link" />
+    <origin xyz="-0.16 -0.105 0" rpy="0 -0 0" />
+    <axis xyz="1 0 0" />
+    <limit lower="-0.65" upper="0.65" effort="14.0" velocity="12" />
+  </joint>
+  <link name="RR_upper_link">
+    <inertial>
+      <origin xyz="0 0 -0.128453608" rpy="0 0 0" />
+      <mass value="0.48500000000000004" />
+      <inertia ixx="0.0007123409228975257" iyy="0.0007984519385225259" izz="0.00022978332540760942" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 -0.07" rpy="0 -0 0" />
+      <geometry>
+        <cylinder radius="0.01" length="0.14" />
+      </geometry>
+      <material name="color_28">
+        <color rgba="0.649999976 0.699999988 0.720000029 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.07" rpy="0 -0 0" />
+      <geometry>
+        <cylinder radius="0.01" length="0.14" />
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 -0.14" rpy="1.57079633 -0 0" />
+      <geometry>
+        <cylinder radius="0.03925" length="0.0455" />
+      </geometry>
+      <material name="color_29">
+        <color rgba="0.0900000036 0.100000001 0.119999997 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.14" rpy="1.57079633 -0 0" />
+      <geometry>
+        <cylinder radius="0.03925" length="0.0455" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="RR_hip" type="revolute">
+    <parent link="RR_abduction_link" />
+    <child link="RR_upper_link" />
+    <origin xyz="0 -0.055 0" rpy="0 -0 0" />
+    <axis xyz="0 1 0" />
+    <limit lower="-2.1" upper="1.25" effort="17.0" velocity="12" />
+  </joint>
+  <link name="RR_lower_link">
+    <inertial>
+      <origin xyz="0 0 -0.0913043478" rpy="0 0 0" />
+      <mass value="0.115" />
+      <inertia ixx="0.0002767216221623702" iyy="0.0002767216221623702" izz="7.059752212389381e-06" ixy="0.0" ixz="0.0" iyz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 -0.07" rpy="0 -0 0" />
+      <geometry>
+        <cylinder radius="0.008" length="0.14" />
+      </geometry>
+      <material name="color_30">
+        <color rgba="0.649999976 0.699999988 0.720000029 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.07" rpy="0 -0 0" />
+      <geometry>
+        <cylinder radius="0.008" length="0.14" />
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 -0.14" rpy="0 -0 0" />
+      <geometry>
+        <sphere radius="0.018" />
+      </geometry>
+      <material name="color_31">
+        <color rgba="0.119999997 0.119999997 0.150000006 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.14" rpy="0 -0 0" />
+      <geometry>
+        <sphere radius="0.018" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="RR_knee" type="revolute">
+    <parent link="RR_upper_link" />
+    <child link="RR_lower_link" />
+    <origin xyz="0 0 -0.14" rpy="0 -0 0" />
+    <axis xyz="0 1 0" />
+    <limit lower="0.1" upper="3.0" effort="17.0" velocity="12" />
+  </joint>
+  <link name="camera_link" />
+  <joint name="camera_link_mount" type="fixed">
+    <parent link="base_link" />
+    <child link="camera_link" />
+    <origin xyz="0.205 0 0.075" rpy="0 0.20943951 0" />
+  </joint>
+  <link name="body_imu_link" />
+  <joint name="body_imu_link_mount" type="fixed">
+    <parent link="base_link" />
+    <child link="body_imu_link" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </joint>
+</robot>

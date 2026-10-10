@@ -1,0 +1,16 @@
+test_acceleration_limit_and_bus_budget (__main__.Tests.test_acceleration_limit_and_bus_budget) ... ok
+test_can_endpoints_and_model_difference (__main__.Tests.test_can_endpoints_and_model_difference) ... ok
+test_can_zero_golden_vector (__main__.Tests.test_can_zero_golden_vector) ... ok
+test_command_timeout_and_estop (__main__.Tests.test_command_timeout_and_estop) ... ok
+test_fault_latches_and_camera_keeps_standing (__main__.Tests.test_fault_latches_and_camera_keeps_standing) ... ok
+test_feedback_source_and_temperature (__main__.Tests.test_feedback_source_and_temperature) ... ok
+test_ik_roundtrip_both_sides (__main__.Tests.test_ik_roundtrip_both_sides) ... ok
+test_no_mixed_quantity_discount (__main__.Tests.test_no_mixed_quantity_discount) ... ok
+test_outside_workspace (__main__.Tests.test_outside_workspace) ... ok
+test_planner_obstacle_inflation (__main__.Tests.test_planner_obstacle_inflation) ... ok
+test_waiting_for_first_sensor_does_not_latch (__main__.Tests.test_waiting_for_first_sensor_does_not_latch) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.116s
+
+OK

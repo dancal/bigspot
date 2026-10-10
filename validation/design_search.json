@@ -1,0 +1,509 @@
+[
+  {
+    "round": "design_search",
+    "selected": null,
+    "candidates": [
+      {
+        "tag": "all00_0.14_1.55",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.559553418445303,
+        "motor_cost_usd": 1428.0,
+        "estimated_mass_kg": 6.72,
+        "net_x_m": 1.5142949085835555,
+        "max_tilt_deg": 5.769470826180615,
+        "holdout": null
+      },
+      {
+        "tag": "all00_0.14_1.70",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.8818231350230068,
+        "motor_cost_usd": 1428.0,
+        "estimated_mass_kg": 6.72,
+        "net_x_m": 1.234816940665795,
+        "max_tilt_deg": 6.977427874071314,
+        "holdout": null
+      },
+      {
+        "tag": "all00_0.14_1.80",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.847928701169484,
+        "motor_cost_usd": 1428.0,
+        "estimated_mass_kg": 6.72,
+        "net_x_m": 1.238596223918309,
+        "max_tilt_deg": 6.50137055510045,
+        "holdout": null
+      },
+      {
+        "tag": "all00_0.16_1.55",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.92325105788712,
+        "motor_cost_usd": 1428.0,
+        "estimated_mass_kg": 6.72,
+        "net_x_m": 1.1191351399042468,
+        "max_tilt_deg": 7.1266557189721045,
+        "holdout": null
+      },
+      {
+        "tag": "all00_0.16_1.70",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.7222312798283823,
+        "motor_cost_usd": 1428.0,
+        "estimated_mass_kg": 6.72,
+        "net_x_m": 1.232716799026156,
+        "max_tilt_deg": 6.898339683358695,
+        "holdout": null
+      },
+      {
+        "tag": "all00_0.16_1.80",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.6749249656968253,
+        "motor_cost_usd": 1428.0,
+        "estimated_mass_kg": 6.72,
+        "net_x_m": 1.1120392275077229,
+        "max_tilt_deg": 7.655510783315236,
+        "holdout": null
+      },
+      {
+        "tag": "all00_0.18_1.55",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.9737585950136465,
+        "motor_cost_usd": 1428.0,
+        "estimated_mass_kg": 6.72,
+        "net_x_m": 0.944428021369721,
+        "max_tilt_deg": 8.202380906981995,
+        "holdout": null
+      },
+      {
+        "tag": "all00_0.18_1.70",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.7708215762772643,
+        "motor_cost_usd": 1428.0,
+        "estimated_mass_kg": 6.72,
+        "net_x_m": 1.0028292403027539,
+        "max_tilt_deg": 6.771438680686059,
+        "holdout": null
+      },
+      {
+        "tag": "all00_0.18_1.80",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.6212888921762192,
+        "motor_cost_usd": 1428.0,
+        "estimated_mass_kg": 6.72,
+        "net_x_m": 1.1739315914194526,
+        "max_tilt_deg": 6.667504639673567,
+        "holdout": null
+      },
+      {
+        "tag": "hybrid_0.14_1.55",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.2891444271044394,
+        "motor_cost_usd": 1660.0,
+        "estimated_mass_kg": 7.48,
+        "net_x_m": 1.0073822476002405,
+        "max_tilt_deg": 6.1505124058330365,
+        "holdout": null
+      },
+      {
+        "tag": "hybrid_0.14_1.70",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.304804122838827,
+        "motor_cost_usd": 1660.0,
+        "estimated_mass_kg": 7.48,
+        "net_x_m": 0.959159356068091,
+        "max_tilt_deg": 7.889429651031081,
+        "holdout": null
+      },
+      {
+        "tag": "hybrid_0.14_1.80",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.1154700155609816,
+        "motor_cost_usd": 1660.0,
+        "estimated_mass_kg": 7.48,
+        "net_x_m": 1.2900795423993345,
+        "max_tilt_deg": 7.251539037409212,
+        "holdout": null
+      },
+      {
+        "tag": "hybrid_0.16_1.55",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.2904624286587507,
+        "motor_cost_usd": 1660.0,
+        "estimated_mass_kg": 7.48,
+        "net_x_m": 1.0956288941640937,
+        "max_tilt_deg": 6.226881082721996,
+        "holdout": null
+      },
+      {
+        "tag": "hybrid_0.16_1.70",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.1413018527237377,
+        "motor_cost_usd": 1660.0,
+        "estimated_mass_kg": 7.48,
+        "net_x_m": 1.2525134841243866,
+        "max_tilt_deg": 6.765064274436877,
+        "holdout": null
+      },
+      {
+        "tag": "hybrid_0.16_1.80",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.031527505106466,
+        "motor_cost_usd": 1660.0,
+        "estimated_mass_kg": 7.48,
+        "net_x_m": 1.2265124314496967,
+        "max_tilt_deg": 6.122421306435443,
+        "holdout": null
+      },
+      {
+        "tag": "hybrid_0.18_1.55",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.2583205171632166,
+        "motor_cost_usd": 1660.0,
+        "estimated_mass_kg": 7.48,
+        "net_x_m": 1.2963450533805525,
+        "max_tilt_deg": 3.8374281610438876,
+        "holdout": null
+      },
+      {
+        "tag": "hybrid_0.18_1.70",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.1997026232886538,
+        "motor_cost_usd": 1660.0,
+        "estimated_mass_kg": 7.48,
+        "net_x_m": 0.8925580382615433,
+        "max_tilt_deg": 7.9395644764918245,
+        "holdout": null
+      },
+      {
+        "tag": "hybrid_0.18_1.80",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.0869518983591429,
+        "motor_cost_usd": 1660.0,
+        "estimated_mass_kg": 7.48,
+        "net_x_m": 1.1029657682716163,
+        "max_tilt_deg": 6.208137181151601,
+        "holdout": null
+      },
+      {
+        "tag": "all02_0.14_1.55",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.3610212400554884,
+        "motor_cost_usd": 1656.0,
+        "estimated_mass_kg": 7.86,
+        "net_x_m": 0.9494291274229552,
+        "max_tilt_deg": 6.82489340860961,
+        "holdout": null
+      },
+      {
+        "tag": "all02_0.14_1.70",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.2200821496160281,
+        "motor_cost_usd": 1656.0,
+        "estimated_mass_kg": 7.86,
+        "net_x_m": 1.021631364289176,
+        "max_tilt_deg": 7.225918259568097,
+        "holdout": null
+      },
+      {
+        "tag": "all02_0.14_1.80",
+        "passed": true,
+        "failure": null,
+        "thermal_margin_ratio": 0.9883772211406949,
+        "motor_cost_usd": 1656.0,
+        "estimated_mass_kg": 7.86,
+        "net_x_m": 1.2343256226858095,
+        "max_tilt_deg": 8.337852688510647,
+        "holdout": false
+      },
+      {
+        "tag": "all02_0.16_1.55",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.317917207068598,
+        "motor_cost_usd": 1656.0,
+        "estimated_mass_kg": 7.86,
+        "net_x_m": 1.1192104737757034,
+        "max_tilt_deg": 6.956460011330548,
+        "holdout": null
+      },
+      {
+        "tag": "all02_0.16_1.70",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.1518552114716372,
+        "motor_cost_usd": 1656.0,
+        "estimated_mass_kg": 7.86,
+        "net_x_m": 1.213081743492608,
+        "max_tilt_deg": 6.420080072607595,
+        "holdout": null
+      },
+      {
+        "tag": "all02_0.16_1.80",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.080499058343826,
+        "motor_cost_usd": 1656.0,
+        "estimated_mass_kg": 7.86,
+        "net_x_m": 1.140593722482738,
+        "max_tilt_deg": 7.043467342138682,
+        "holdout": null
+      },
+      {
+        "tag": "all02_0.18_1.55",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.3125432182210965,
+        "motor_cost_usd": 1656.0,
+        "estimated_mass_kg": 7.86,
+        "net_x_m": 1.2637780083013563,
+        "max_tilt_deg": 3.6968491953282623,
+        "holdout": null
+      },
+      {
+        "tag": "all02_0.18_1.70",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.2728137946263778,
+        "motor_cost_usd": 1656.0,
+        "estimated_mass_kg": 7.86,
+        "net_x_m": 1.0302812935508914,
+        "max_tilt_deg": 6.277002101830872,
+        "holdout": null
+      },
+      {
+        "tag": "all02_0.18_1.80",
+        "passed": false,
+        "failure": null,
+        "thermal_margin_ratio": 1.1128112480512842,
+        "motor_cost_usd": 1656.0,
+        "estimated_mass_kg": 7.86,
+        "net_x_m": 1.105775234854643,
+        "max_tilt_deg": 6.272476672042008,
+        "holdout": null
+      }
+    ]
+  },
+  {
+    "round": "design_search_round2",
+    "selected": "hybrid_014_1.70_offset0.025",
+    "candidates": [
+      {
+        "tag": "hybrid_014_1.70_offset0.025",
+        "passed": true,
+        "failure": null,
+        "thermal_margin_ratio": 0.7753073195496619,
+        "motor_cost_usd": 1660.0,
+        "estimated_mass_kg": 7.48,
+        "net_x_m": 1.693214340115342,
+        "max_tilt_deg": 3.8770897600956924,
+        "holdout": true
+      },
+      {
+        "tag": "hybrid_014_1.70_offset0.040",
+        "passed": true,
+        "failure": null,
+        "thermal_margin_ratio": 0.51630274752247,
+        "motor_cost_usd": 1660.0,
+        "estimated_mass_kg": 7.48,
+        "net_x_m": 1.5215885405331961,
+        "max_tilt_deg": 2.796735496264267,
+        "holdout": null
+      },
+      {
+        "tag": "hybrid_014_1.80_offset0.025",
+        "passed": true,
+        "failure": null,
+        "thermal_margin_ratio": 0.7259672496975895,
+        "motor_cost_usd": 1660.0,
+        "estimated_mass_kg": 7.48,
+        "net_x_m": 1.6552730787265577,
+        "max_tilt_deg": 4.094306002437526,
+        "holdout": null
+      },
+      {
+        "tag": "hybrid_014_1.80_offset0.040",
+        "passed": true,
+        "failure": null,
+        "thermal_margin_ratio": 0.6174476467073038,
+        "motor_cost_usd": 1660.0,
+        "estimated_mass_kg": 7.48,
+        "net_x_m": 1.4239448542959376,
+        "max_tilt_deg": 3.9775475355262957,
+        "holdout": null
+      },
+      {
+        "tag": "hybrid_014_1.85_offset0.025",
+        "passed": true,
+        "failure": null,
+        "thermal_margin_ratio": 0.6393232528560351,
+        "motor_cost_usd": 1660.0,
+        "estimated_mass_kg": 7.48,
+        "net_x_m": 1.6288536881825735,
+        "max_tilt_deg": 4.42678502360656,
+        "holdout": null
+      },
+      {
+        "tag": "hybrid_014_1.85_offset0.040",
+        "passed": false,
+        "failure": "Foot target outside workspace",
+        "thermal_margin_ratio": null,
+        "motor_cost_usd": null,
+        "estimated_mass_kg": null,
+        "net_x_m": null,
+        "max_tilt_deg": null,
+        "holdout": null
+      },
+      {
+        "tag": "all02_014_1.70_offset0.025",
+        "passed": true,
+        "failure": null,
+        "thermal_margin_ratio": 0.789354783934026,
+        "motor_cost_usd": 1656.0,
+        "estimated_mass_kg": 7.86,
+        "net_x_m": 1.6713903361575537,
+        "max_tilt_deg": 3.98286579686263,
+        "holdout": null
+      },
+      {
+        "tag": "all02_014_1.70_offset0.040",
+        "passed": true,
+        "failure": null,
+        "thermal_margin_ratio": 0.5408528222736128,
+        "motor_cost_usd": 1656.0,
+        "estimated_mass_kg": 7.86,
+        "net_x_m": 1.50131851960757,
+        "max_tilt_deg": 2.8376987212277722,
+        "holdout": null
+      },
+      {
+        "tag": "all02_014_1.80_offset0.025",
+        "passed": true,
+        "failure": null,
+        "thermal_margin_ratio": 0.7190987173787453,
+        "motor_cost_usd": 1656.0,
+        "estimated_mass_kg": 7.86,
+        "net_x_m": 1.643551153405196,
+        "max_tilt_deg": 4.492333997379389,
+        "holdout": null
+      },
+      {
+        "tag": "all02_014_1.80_offset0.040",
+        "passed": true,
+        "failure": null,
+        "thermal_margin_ratio": 0.633397579726802,
+        "motor_cost_usd": 1656.0,
+        "estimated_mass_kg": 7.86,
+        "net_x_m": 1.2062659385784118,
+        "max_tilt_deg": 4.09704713473972,
+        "holdout": null
+      },
+      {
+        "tag": "all02_014_1.85_offset0.025",
+        "passed": true,
+        "failure": null,
+        "thermal_margin_ratio": 0.6749464297469537,
+        "motor_cost_usd": 1656.0,
+        "estimated_mass_kg": 7.86,
+        "net_x_m": 1.6200962759622761,
+        "max_tilt_deg": 4.158989588458128,
+        "holdout": null
+      },
+      {
+        "tag": "all02_014_1.85_offset0.040",
+        "passed": false,
+        "failure": "Foot target outside workspace",
+        "thermal_margin_ratio": null,
+        "motor_cost_usd": null,
+        "estimated_mass_kg": null,
+        "net_x_m": null,
+        "max_tilt_deg": null,
+        "holdout": null
+      },
+      {
+        "tag": "power_knees_014_1.70_offset0.025",
+        "passed": true,
+        "failure": null,
+        "thermal_margin_ratio": 0.7357947767931492,
+        "motor_cost_usd": 1920.0,
+        "estimated_mass_kg": 8.344000000000001,
+        "net_x_m": 1.4493992326080547,
+        "max_tilt_deg": 5.252642907879446,
+        "holdout": null
+      },
+      {
+        "tag": "power_knees_014_1.70_offset0.040",
+        "passed": true,
+        "failure": null,
+        "thermal_margin_ratio": 0.6631194306882703,
+        "motor_cost_usd": 1920.0,
+        "estimated_mass_kg": 8.344000000000001,
+        "net_x_m": 1.587493193930544,
+        "max_tilt_deg": 4.060366552070298,
+        "holdout": null
+      },
+      {
+        "tag": "power_knees_014_1.80_offset0.025",
+        "passed": true,
+        "failure": null,
+        "thermal_margin_ratio": 0.7283412907992375,
+        "motor_cost_usd": 1920.0,
+        "estimated_mass_kg": 8.344000000000001,
+        "net_x_m": 1.3563720549188782,
+        "max_tilt_deg": 5.1246401078375445,
+        "holdout": null
+      },
+      {
+        "tag": "power_knees_014_1.80_offset0.040",
+        "passed": true,
+        "failure": null,
+        "thermal_margin_ratio": 0.6732808582751508,
+        "motor_cost_usd": 1920.0,
+        "estimated_mass_kg": 8.344000000000001,
+        "net_x_m": 1.4612558639707087,
+        "max_tilt_deg": 4.11802266301954,
+        "holdout": null
+      },
+      {
+        "tag": "power_knees_014_1.85_offset0.025",
+        "passed": true,
+        "failure": null,
+        "thermal_margin_ratio": 0.8800647324521977,
+        "motor_cost_usd": 1920.0,
+        "estimated_mass_kg": 8.344000000000001,
+        "net_x_m": 1.4743598471522015,
+        "max_tilt_deg": 5.012232780196196,
+        "holdout": null
+      },
+      {
+        "tag": "power_knees_014_1.85_offset0.040",
+        "passed": false,
+        "failure": "Foot target outside workspace",
+        "thermal_margin_ratio": null,
+        "motor_cost_usd": null,
+        "estimated_mass_kg": null,
+        "net_x_m": null,
+        "max_tilt_deg": null,
+        "holdout": null
+      }
+    ]
+  }
+]

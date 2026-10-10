@@ -1,0 +1,4 @@
+* text=auto eol=lf
+*.step binary
+*.mp4 binary
+*.npz binary

@@ -1,0 +1,152 @@
+bt_navigator:
+  ros__parameters:
+    global_frame: odom
+    robot_base_frame: base_link
+    odom_topic: /visual_slam/tracking/odometry
+    enable_stamped_cmd_vel: true
+    navigators: [navigate_to_pose, navigate_through_poses]
+    navigate_to_pose:
+      plugin: nav2_bt_navigator::NavigateToPoseNavigator
+    navigate_through_poses:
+      plugin: nav2_bt_navigator::NavigateThroughPosesNavigator
+controller_server:
+  ros__parameters:
+    controller_frequency: 20.0
+    enable_stamped_cmd_vel: true
+    odom_topic: /visual_slam/tracking/odometry
+    progress_checker_plugins: [progress_checker]
+    goal_checker_plugins: [goal_checker]
+    controller_plugins: [FollowPath]
+    progress_checker:
+      plugin: nav2_controller::SimpleProgressChecker
+      required_movement_radius: 0.15
+      movement_time_allowance: 10.0
+    goal_checker:
+      plugin: nav2_controller::SimpleGoalChecker
+      xy_goal_tolerance: 0.16
+      yaw_goal_tolerance: 0.3
+    FollowPath:
+      plugin: nav2_mppi_controller::MPPIController
+      motion_model: Omni
+      time_steps: 40
+      model_dt: 0.05
+      batch_size: 1000
+      vx_max: 0.24
+      vx_min: -0.12
+      vy_max: 0.15
+      wz_max: 0.3
+      ax_max: 0.5
+      ax_min: -0.5
+      ay_max: 0.4
+      az_max: 0.6
+      vx_std: 0.1
+      vy_std: 0.08
+      wz_std: 0.15
+      prune_distance: 1.0
+      transform_tolerance: 0.3
+      critics: [ConstraintCritic, CostCritic, GoalCritic, GoalAngleCritic, PathAlignCritic, PathFollowCritic]
+      CostCritic:
+        consider_footprint: true
+        critical_cost: 253.0
+        collision_cost: 1000000.0
+planner_server:
+  ros__parameters:
+    planner_plugins: [GridBased]
+    GridBased:
+      plugin: nav2_navfn_planner::NavfnPlanner
+      use_astar: true
+      allow_unknown: false
+      tolerance: 0.16
+smoother_server:
+  ros__parameters:
+    smoother_plugins: [simple_smoother]
+    simple_smoother:
+      plugin: nav2_smoother::SimpleSmoother
+      tolerance: 1.0e-10
+      max_its: 1000
+      do_refinement: true
+local_costmap:
+  local_costmap:
+    ros__parameters:
+      global_frame: odom
+      robot_base_frame: base_link
+      rolling_window: true
+      width: 5
+      height: 5
+      resolution: 0.04
+      footprint: "[[0.27,0.24],[0.27,-0.24],[-0.27,-0.24],[-0.27,0.24]]"
+      footprint_padding: 0.03
+      plugins: [nvblox_layer, inflation_layer]
+      nvblox_layer:
+        plugin: nvblox::nav2::NvbloxCostmapLayer
+        enabled: true
+        nav2_costmap_global_frame: odom
+        nvblox_map_slice_topic: /nvblox_node/static_map_slice
+        convert_to_binary_costmap: true
+      inflation_layer:
+        plugin: nav2_costmap_2d::InflationLayer
+        inflation_radius: 0.45
+        cost_scaling_factor: 4.0
+global_costmap:
+  global_costmap:
+    ros__parameters:
+      global_frame: odom
+      robot_base_frame: base_link
+      resolution: 0.04
+      width: 12
+      height: 12
+      origin_x: -6.0
+      origin_y: -6.0
+      track_unknown_space: true
+      footprint: "[[0.27,0.24],[0.27,-0.24],[-0.27,-0.24],[-0.27,0.24]]"
+      plugins: [nvblox_layer, inflation_layer]
+      nvblox_layer:
+        plugin: nvblox::nav2::NvbloxCostmapLayer
+        enabled: true
+        nav2_costmap_global_frame: odom
+        nvblox_map_slice_topic: /nvblox_node/static_map_slice
+        convert_to_binary_costmap: true
+      inflation_layer:
+        plugin: nav2_costmap_2d::InflationLayer
+        inflation_radius: 0.45
+        cost_scaling_factor: 4.0
+behavior_server:
+  ros__parameters:
+    enable_stamped_cmd_vel: true
+    local_frame: odom
+    global_frame: odom
+    robot_base_frame: base_link
+    behavior_plugins: [wait]
+    wait:
+      plugin: nav2_behaviors::Wait
+velocity_smoother:
+  ros__parameters:
+    enable_stamped_cmd_vel: true
+    smoothing_frequency: 20.0
+    feedback: OPEN_LOOP
+    odom_topic: /visual_slam/tracking/odometry
+    max_velocity: [0.24,0.15,0.3]
+    min_velocity: [-0.12,-0.15,-0.3]
+    max_accel: [0.5,0.4,0.6]
+    max_decel: [-0.5,-0.4,-0.6]
+    velocity_timeout: 0.3
+collision_monitor:
+  ros__parameters:
+    enable_stamped_cmd_vel: true
+    base_frame_id: base_link
+    odom_frame_id: odom
+    cmd_vel_in_topic: cmd_vel_smoothed
+    cmd_vel_out_topic: cmd_vel
+    source_timeout: 0.3
+    polygons: [StopZone]
+    StopZone:
+      type: polygon
+      points: "[[0.45,0.29],[0.45,-0.29],[-0.30,-0.29],[-0.30,0.29]]"
+      action_type: stop
+      min_points: 3
+    observation_sources: [depth]
+    depth:
+      type: pointcloud
+      topic: /camera/depth/color/points
+      min_height: 0.06
+      max_height: 0.9

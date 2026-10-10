@@ -1,150 +1,95 @@
-# "BigSpot" - quadruped robot
+# BigSpot Autonomy QDD
 
-## Fusion / Isaac ROS 5.0 simulation work
+기존 서보 프로젝트를 보존하고 따로 만든 **설계·제어·자율 이동 실험 프로젝트**다. 실물 완성품은 아니다.
 
-The 2026-10-10 [whole-motion audit](simulation/QUALITY.ko.md) removes coarse
-angle stair steps across body routines, matches horizontal foot velocity at
-swing boundaries, confirms lifted-paw landing before weight return, and waits
-for sensor settling before allowing another action after walking stops.
-The catalog contains 30 routines; jumping and vertical acrobatics remain
-unvalidated experiments. These results use local ROS 2 Humble / MuJoCo CPU.
-Real hardware, full self-collision and Isaac GPU execution are unverified.
+기존 저장소: `../bigspot`, 커밋 `d8db47790a6dd9cec28b197f240ba787c3a5a504`. 기존 조이스틱·춤·서보 보정 코드는 이 커밋에 보존했다. 새 프로젝트에서 검증한 동작은 바닥에서 일어서기, 보행, 카메라 장애물 회피다. 기존 고난도 동작이 새 모터에서도 검증됐다는 뜻은 아니다.
 
-The current default dance is `dance_funk`: 120 BPM, diagonal pair steps
-every 0.5 seconds, with hip wiggles, front-body shakes and nods, side shuffles,
-forward/back steps, turns and simultaneous body rhythms. There is no neck
-joint; front emphasis is produced by the trunk and legs. See
-[the current hip/front-body dance](simulation/GROOVE.ko.md).
-The preceding hip/front-body update passed nine ROS cases, 95 code tests and
-the local ROS package build. Its
-37-second video includes the original beat and two fixed views at normal speed.
-The preceding five-phrase version passed nine ROS cases and 91 code tests.
-Its 25-second recording includes an original synthesized beat at normal speed.
-Button 5 + 12 requests it; the selector contains 30 routines. See
-[the preceding dance and measured validation](simulation/FUNK.ko.md).
-The following paragraphs describe earlier development stages and their mappings.
+## 선정안
 
-See [the Korean setup and validation record](simulation/README.ko.md) for the new
-ROS 2 Lyrical simulation adapter, Isaac Sim 6.0.1 bridge, Fusion audit scripts,
-and original controller fixes. A local ROS 2 Humble / MuJoCo CPU simulation has
-run the crouch, rise, balance, crawl and input-loss stop sequence. Thirty CEM
-trials learned controller parameters, followed by independent validation and a
-40-second actual ROS run. A gait review then corrected the rear stance, added
-one-foot wave steps and landed-foot stopping, and repeated 30 trials with foot
-clearance and body-motion metrics. The revised policy ran through real ROS for
-24 seconds. A separate diagonal-trot profile then reached a measured
-0.103 m/s, 10.4 times the slow profile, with a 24-second actual ROS run and a
-60-second physics endurance check. The multi-action profile adds lateral/reverse
-motion, sensor-controlled 90-degree turns, boost/run buttons and pose sequences,
-with actual ROS validation using an RDS5160 x12, nominal 7.4V / 30A motor model.
-Jump experiments did not meet flight criteria; rear standing violated current
-joint workspace and the front standing attempt did not reach a vertical pose.
-IMU SI conversion and sensor mounting configuration are implemented; real PWM
-joint feedback and contact sensing remain unavailable. The adaptive profile adds
-continuous acceleration/deceleration, jerk limits, dual forward-sonar braking,
-relative heading hold and thirteen sensor-settled poses with support transfer.
-Actual ROS trials cover sensor dropout, missing orientation, a lateral force
-disturbance and mass/friction/noise holdouts. The optional GPIO sonar driver now
-publishes typed Range messages in metres; physical acquisition remains untested.
-Three grounded dance routines now use smooth entry/exit, tempo-based phrases,
-IMU damping, measured joints and contact gates. Actual ROS tests completed the
-60 BPM routines and checked stop/deadman buttons and sensor loss. A 90 BPM
-mass/friction/noise trial finished but failed the three-foot support criterion;
-tempo above 60 BPM in those routines requires simulation experiment opt-in. A larger routine now
-has 5.6 times the measured height excursion and 3.8 times the roll excursion.
-Four dog-like gestures add body tilts, an 8 cm front-paw wave and a play bow.
-All five new nominal ROS actions completed. The mass/friction/noise holdout
-passed the paw wave but failed the larger dance's strict support criterion.
-A new 90 BPM rhythm uses a 2.67-second body cycle, three times the cadence of
-the larger dance. Nominal and mass/friction/IMU-noise ROS trials both retained
-at least three supporting feet. Joystick chords select and execute all 26
-grounded routines, with edge triggering and stop/deadman/input-loss recovery.
-Twelve new actual ROS cases and seventy-one regression tests pass. Button 12
-selected the rhythm dance; physical gamepad mapping remains unverified.
-A new larger 90 BPM routine now measures 69.9 mm of height excursion and
-17.5 degrees of roll excursion, 2.38 and 2.97 times the preceding rhythm.
-Seated clapping confirms three actual front-paw mesh contacts, then lands
-and returns upright. Both routines pass nominal and mass/friction/noise ROS
-trials. Fourteen new ROS cases and seventy-seven code tests pass. Button 8
-requests seated clapping, button 12 requests the larger dance, and the
-selector then contained 28 routines. See [the large dance and clap record](simulation/SHOW.ko.md).
-The preceding paw-step dance transfers weight and lifts each paw, taps forward
-or backward and outward, and confirms four landings. Measured clearance is
-37--41 mm, with 35--45 mm fore/aft travel. Nominal and mass/friction/noise
-holdouts retain at least three supporting paws. Nine actual ROS cases verify
-completion, joystick operation, airborne cancellation and sensor-loss command
-holds. Button 12 then selected paw steps; the selector had 29 routines, including
-the preceding body dances. The 33.5-second recording shows two fixed views at
-normal speed. See [the paw-step validation record](simulation/STEPS.ko.md).
-GPU simulation,
-physical hardware and mechanical CAD changes are not yet validated.
+| 항목 | 구성 | 확인 상태 |
+|---|---|---|
+| 좌우 벌림 | RobStride RS00 ×4 | 제조사 CAN 명령 형식 확인, 실물 미시험 |
+| 엉덩이·무릎 | RobStride RS02 ×8 | 제조사 CAN 명령 형식 확인, 실물 미시험 |
+| 다리 | 상·하부 각각 140mm, 발 중심 앞으로 25mm | CPU 물리 시험 |
+| 서기 | 다리 높이 238mm, 발 반지름 18mm | CPU 물리 시험 |
+| 몸체 | 380×190×70mm, 하부 보호판 | CAD 배치 모델 |
+| 무게 | 7.48kg 추정 | 저울 측정 필요 |
+| 카메라 | RealSense D435i, 전방·아래 12° | 가상 깊이 카메라 시험, 실물 미시험 |
+| 컴퓨터 | Jetson Orin Nano Super 후보 | Isaac ROS 5.0 성능·발열 시험 필요 |
+| 통신 | CAN 1Mbps ×2, 각 6축·200Hz | 패킷 시험, 실제 버스 미시험 |
+| 전원 | 12S, 만충 50.4V 후보 | BMS·회생·방열 설계 미확정 |
 
-demo video : https://youtu.be/u6ZRoQI9YBw
+모터만 $1,660: RS00 4×$125 + RS02 8×$145. 혼합 수량을 합쳐 10개 할인으로 계산하지 않았다. [RS00 판매 페이지](https://www.seeedstudio.com/Robostride-00-Actuator-p-6664.html), [RS02 판매 페이지](https://www.seeedstudio.com/Robostride-02-Actuator-p-6665.html). 배송·세금·카메라·전원·가공비는 별도다.
 
-The BigSpot has the following main components:
+기존 7.4V 배터리와 PCA9685를 이 모터에 연결할 수 없다. 모터·전원·프레임·통신을 함께 바꾸는 새 설계다.
 
-## Hardware
-- Raspberry Pi 4B + 
-- Raspberry Pi Camera
+## 검증 범위
 
-- MicroSD 32G 
-- 4 x 12A Step Down Module
-- 2 × HC-SR04P Ultrasonic sensor
-- 1 × MPU-6050 Gyro sensor
-- 1 × I2C 16x2 LCD Module
-- 7.4v Battery ( 2s2p )
-- 6 x F625ZZ
-- 2 x pca9685
-- 12 x RDS5160 servo moter
-- 20A Push button (Lock type)
-- 18AWG
-- 12V 5A Adaptor ( test )
-- 50A LED Display
-- PS4 DualShock compatible Joystick
-- XT60H +/-
+`validation/summary.json`에 실행 결과가 있다. 자유롭게 움직이는 몸체, 중력, 바닥 접촉, 모터 토크 제한을 계산했다. 초기 위치 설정 이후 몸체를 강제로 이동시키거나 외부 힘으로 들어 올리지 않았다.
 
-- USB wlan / NEXT-202N-MINI
-- HDMI to MICRO HDMI gender
-- IMAX B6
-- UK 831N Multi tester
+- 최초 27개 후보는 무게 +15% 시험까지 통과한 구성이 없었다. 발 위치를 바꾸어 18개 후보를 추가 비교했다. 전 세계 제품과 모든 설계에서 최적임을 증명한 것은 아니다.
+- 선정안을 다시 검증해 바닥에서 일어서기, 보행, 마찰 0.55·무게 +15% 시험을 통과했다.
+- 깊이 카메라로 두 장애물을 측정하고 A* 경로를 만들어 3m 목표까지 이동했다.
+- 로컬 Ubuntu/ROS 2 Humble에서 실제 DDS 토픽으로 카메라→경로→보행을 연결한 폐루프 시험을 통과했다.
+- IMU·관절 피드백 단절 시 0.15초 후 토크 차단, 카메라 단절 시 이동 정지를 시험했다. 토크 차단 이후 몸체가 바닥으로 내려가는 것은 정상 정지 자세와 구분한다.
 
-## gazebo
-```
-roslaunch bigspot run_gazebo_only.launch
-roslaunch bigspot_joystick ramped_keyboard.launch
+카메라 시험의 위치 정보는 **시뮬레이터 정답**이다. 실제 VSLAM, 사람·계단·야외 이동, 장시간 발열, 낙하·충격 시험, 강화학습 정책은 검증하지 않았다. 보행만으로 직선 위치가 정확히 유지되지는 않아 위치 피드백이 필요하다. 열 모델은 정격의 60%를 연속 한도로 가정했으며 실측 온도 모델이 아니다. 모터 무부하 속도와 최대 토크를 동시에 낼 수 있다고 가정하지 않고 선형 토크–속도 한도를 사용했다. 구리 손실·배터리 지속 시간은 아직 계산하지 않았다.
+
+## 로컬 실행
+
+Python 3.10 이상에서:
+
+```sh
+python -m venv .venv
+# Windows: .venv\Scripts\activate
+# Linux: source .venv/bin/activate
+pip install -r requirements.txt
+python tests/test_core.py
+python tools/validate_system.py --case all --render
+python tools/make_report.py
+python -m http.server 59354 --bind 127.0.0.1 --directory generated/viewer
 ```
 
-## real
-```
-roslaunch bigspot run_robot_real.launch
-roslaunch bigspot_description controller.launch
-roslaunch bigspot_joystick ramped_joystick.launch
+브라우저에서 `http://127.0.0.1:59354/`를 연다. 모든 영상은 시뮬레이션 시간과 같은 1배속이다. 실행은 새 프로젝트 내부에서 한다. Windows에서는 이미 있는 이전 프로젝트의 Python 캐시도 사용한다. 독립 실행은 위 의존성을 설치하면 된다.
+
+ROS 2 Humble 로컬 시험 환경에서는:
+
+```sh
+source /opt/ros/humble/setup.bash
+python3 -m venv --system-site-packages .venv-linux
+.venv-linux/bin/pip install -r requirements.txt
+colcon build --symlink-install --base-paths . --packages-select bigspot_autonomy
+bash tools/ros_smoke.sh
 ```
 
-## etc
-```
-roslaunch bigspot_mpu6050 mpu.launch
-roslaunch bigspot_mpu9250 mpu.launch
-roslaunch bigspot_lcd lcd.launch
-roslaunch bigspot_rgb rgb.launch
-roslaunch bigspot_ultrasonic ultrasonic.launch
+시각화 포함 ROS launch는 `.venv-linux`의 MuJoCo 패키지를 ROS 실행 Python에서 찾을 수 있게 설정한 후 `ros2 launch bigspot_autonomy simulation.launch.py`를 실행한다. `ros_smoke.sh`는 이 의존성을 갖춘 Python을 직접 사용한다. `controller_node`는 CAN 패킷을 `/can/dry_run_frames`에만 보낸다. 실물 CAN 출력은 구현·활성화하지 않았다.
+
+## Fusion / CAD
+
+`design/BigSpot_QDD_layout.step`를 Fusion의 **파일 → 열기 → 내 컴퓨터에서 열기**로 연다. 기존 모델과 별도 문서로 열린다. 자동 가져오기는 `fusion/BigSpotQDD`를 Fusion 스크립트로 등록해 실행한다. 이 스크립트의 Fusion 내부 실행은 아직 확인하지 않았다.
+
+STEP는 치수와 모터·카메라 배치를 확인하는 입체 모델이다. 체결 구멍, 베어링, 케이블 길이, 방열판, 강도와 간섭까지 끝난 제작 도면이 아니다. `cad_validation.json`은 입체 유효성을 검증한다. `bigspot.urdf`는 관절·질량·관성·카메라 장착 위치를 제공한다. URDF의 다리 막대는 MJCF 캡슐을 원통으로 근사했다. Isaac Sim의 실제 충돌 검증은 따로 해야 한다.
+
+CAD 재생성은 `pip install cadquery-ocp` 후 `python tools/generate_design.py`로 한다. Fusion 원본의 편집 가능한 설계 이력은 STEP 가져오기만으로 복원되지 않는다.
+
+## Isaac ROS 5.0
+
+`ros/launch/isaac.launch.py`, `ros/config/isaac.yaml`, `ros/config/nav2.yaml`, `isaac_ros.repos`를 준비했다. **GPU·실제 카메라에서 실행하지 않은 배포 초안**이다.
+
+Isaac ROS 5.0은 ROS 2 Lyrical을 사용한다. x86은 Ubuntu 24.04·NVIDIA Ampere 이상·VRAM 8GB 이상·드라이버 595 이상·CUDA 13.2 이상, Jetson은 JetPack 7.2 환경을 확인해야 한다. 현재 Windows/AMD PC에서 CUDA 스택을 실행할 수 없다. [NVIDIA 공식 요구 사항](https://nvidia-isaac-ros.github.io/v/release-5.0/getting_started/index.html).
+
+GPU 환경에서 공식 Isaac ROS 5.0 설치 절차를 완료한 뒤:
+
+```sh
+source /opt/ros/lyrical/setup.bash
+python tools/isaac_preflight.py  # x86 확인용; Jetson은 JetPack 버전 별도 확인
+colcon build --symlink-install --base-paths . --packages-select bigspot_autonomy
+source install/setup.bash
+ros2 launch bigspot_autonomy isaac.launch.py
 ```
 
-## packages
-```
-sudo apt install ros-noetic-joy
-sudo apt install ros-noetic-ros-controllers
-sudo apt install ros-noetic-imu-tools
-sudo apt install libgpiod2
+필요 패키지는 `isaac_ros_cuvslam`, `nvblox_ros`, `nvblox_nav2`, `realsense2_camera`, Nav2의 controller/planner/smoother/behaviors/bt_navigator/velocity_smoother/collision_monitor/lifecycle_manager다. 이전 `isaac_ros_visual_slam` 실행 파일 이름을 그대로 사용하지 않는다.
 
-pip3 install pygame
-pip3 install adafruit-circuitpython-rgbled
-pip3 install adafruit-circuitpython-motor
-pip3 install adafruit-circuitpython-servokit
-pip3 install adafruit-circuitpython-rgbled 	# https://github.com/adafruit/Adafruit_CircuitPython_RGBLED
-```
+좌표 연결은 `odom → base_link → camera_link → camera_*_optical_frame`이다. VSLAM이 `odom → base_link`를, 로봇 URDF와 카메라 드라이버가 고정 변환을 담당한다. 카메라 드라이버를 두 번 실행하지 않는다. Nav2의 명령은 `cmd_vel_nav → velocity_smoother → cmd_vel_smoothed → collision_monitor → cmd_vel → controller` 순서다. `TwistStamped`를 사용한다. 카메라 IMU는 VIO용이며 몸체 자세 제어용 IMU와 분리한다. 카메라 IMU 노이즈 수치는 초기값이라 실제 보정이 필요하다.
 
-
-## Credits
- - mike4192  : https://github.com/mike4192/spotMicro
- - lnotspotl : https://github.com/lnotspotl/notspot_sim_py
+다음은 [실물 제작 전 확인할 항목](docs/hardware_plan.md)이다. 실물과 GPU 환경이 확보되기 전에는 “완성”, “정확한 자율주행”, “구매 확정”으로 판단할 수 없다.

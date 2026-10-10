@@ -1,0 +1,19 @@
+{
+  "hardware_output_enabled": false,
+  "commissioning_completed": false,
+  "motor_protocol": "RobStride private 29-bit CAN, operation control",
+  "bus_bitrate": 1000000,
+  "control_frequency_hz": 200,
+  "bus0": {"channel": "can0", "joints": ["FL_abad", "FL_hip", "FL_knee", "FR_abad", "FR_hip", "FR_knee"], "ids": [1,2,3,4,5,6]},
+  "bus1": {"channel": "can1", "joints": ["RL_abad", "RL_hip", "RL_knee", "RR_abad", "RR_hip", "RR_knee"], "ids": [1,2,3,4,5,6]},
+  "encoder_offsets_rad": null,
+  "encoder_directions": null,
+  "firmware_version_confirmed": false,
+  "mcu_watchdog_required": true,
+  "python_loop_realtime_validated": false,
+  "body_imu": "dedicated IMU rigidly attached to base_link",
+  "camera": "RealSense D435i, USB3, rigid mount",
+  "foot_sensors": "four load/contact sensors; thresholds require calibration",
+  "battery": "12S, 50.4V full; BMS/regen/DC-DC sizing pending",
+  "existing_7_4v_battery_compatible": false
+}

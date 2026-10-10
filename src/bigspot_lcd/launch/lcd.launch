@@ -1,5 +1,0 @@
-<launch>
-
-    <node pkg="bigspot_lcd" type="sm_lcd_node.py" name="i2c_lcd" output="screen"/>
-
-</launch>

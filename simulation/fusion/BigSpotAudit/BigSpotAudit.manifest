@@ -1,9 +1,0 @@
-{
-  "autodeskProduct": "Fusion360",
-  "type": "script",
-  "author": "BigSpot",
-  "description": {"": "Read-only BigSpot CAD mass, bounds, and joint audit."},
-  "version": "0.1.0",
-  "runOnStartup": false,
-  "supportedOS": "windows|mac"
-}
