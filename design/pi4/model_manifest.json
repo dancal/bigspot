@@ -1,0 +1,9 @@
+{
+  "profile": "pi4",
+  "mass_kg": 9.21372225809047,
+  "actuated_joints": 12,
+  "cad_inertia_used": true,
+  "collision_geometry": "analytic proxies",
+  "hardware_tested": false,
+  "isaac_tested": false
+}

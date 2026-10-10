@@ -2,6 +2,12 @@
 
 기존 서보 프로젝트를 보존하고 따로 만든 **설계·제어·자율 이동 실험 프로젝트**다. 실물 완성품은 아니다.
 
+## 현재 연동 변경
+
+Pi 4 9.214kg 모델에 외부 제어기 → 관절 목표 → 모터 로컬 PD → 물리 시뮬레이터 경로를 구현했다. 제어·전송 시험 **22개**, CPU 물리·오류 시나리오 **9개**가 통과했다. CPU 장애물 회피는 3m 목표에 약 0.156m까지 도달했다. [실행 절차와 검증 범위](docs/isaac_integration.md), [물리 검증 결과](validation/control_loop.json)를 참고한다.
+
+Isaac Sim 6.0.1 stereo/depth ROS bridge 및 Isaac ROS 5.0 Visual SLAM → nvblox → Nav2 연결 코드를 추가했다. **새 ROS DDS 경로와 Isaac GPU 런타임은 아직 실행하지 않았다.** 현재 PC는 RTX 5070 Laptop 8GB, Windows, 드라이버 573.22이며 [환경 검사 결과](validation/current_host.json)에 차단 조건을 기록했다. 이 변경의 기본 launch는 이전 7.48kg 모델 대신 Pi 4 모델을 사용한다.
+
 기존 저장소: `../bigspot`, 커밋 `d8db47790a6dd9cec28b197f240ba787c3a5a504`. 기존 조이스틱·춤·서보 보정 코드는 이 커밋에 보존했다. 새 프로젝트에서 검증한 동작은 바닥에서 일어서기, 보행, 카메라 장애물 회피다. 기존 고난도 동작이 새 모터에서도 검증됐다는 뜻은 아니다.
 
 ## Raspberry Pi 4 설계 변경 — 진행 중
@@ -46,7 +52,7 @@ Pi 4에는 Ubuntu 22.04 arm64 / ROS 2 Humble CPU 구성을 계획한다. Isaac R
 - 최초 27개 후보는 무게 +15% 시험까지 통과한 구성이 없었다. 발 위치를 바꾸어 18개 후보를 추가 비교했다. 전 세계 제품과 모든 설계에서 최적임을 증명한 것은 아니다.
 - 선정안을 다시 검증해 바닥에서 일어서기, 보행, 마찰 0.55·무게 +15% 시험을 통과했다.
 - 깊이 카메라로 두 장애물을 측정하고 A* 경로를 만들어 3m 목표까지 이동했다.
-- 로컬 Ubuntu/ROS 2 Humble에서 실제 DDS 토픽으로 카메라→경로→보행을 연결한 폐루프 시험을 통과했다.
+- 이전 브랜치에는 Ubuntu/ROS 2 Humble DDS 시험 결과가 있다. 해당 경로는 내부 물리 제어기를 사용하므로 새 외부 제어기 경로의 검증을 뜻하지 않는다.
 - IMU·관절 피드백 단절 시 0.15초 후 토크 차단, 카메라 단절 시 이동 정지를 시험했다. 토크 차단 이후 몸체가 바닥으로 내려가는 것은 정상 정지 자세와 구분한다.
 
 카메라 시험의 위치 정보는 **시뮬레이터 정답**이다. 실제 VSLAM, 사람·계단·야외 이동, 장시간 발열, 낙하·충격 시험, 강화학습 정책은 검증하지 않았다. 보행만으로 직선 위치가 정확히 유지되지는 않아 위치 피드백이 필요하다. 열 모델은 정격의 60%를 연속 한도로 가정했으며 실측 온도 모델이 아니다. 모터 무부하 속도와 최대 토크를 동시에 낼 수 있다고 가정하지 않고 선형 토크–속도 한도를 사용했다. 구리 손실·배터리 지속 시간은 아직 계산하지 않았다.
@@ -90,9 +96,9 @@ CAD 재생성은 `pip install cadquery-ocp` 후 `python tools/generate_design.py
 
 ## Isaac ROS 5.0
 
-`ros/launch/isaac.launch.py`, `ros/config/isaac.yaml`, `ros/config/nav2.yaml`, `isaac_ros.repos`를 준비했다. **GPU·실제 카메라에서 실행하지 않은 배포 초안**이다.
+`isaac/run_sim.py`와 `ros/launch/isaac.launch.py`를 연결했다. `camera_source:=sim`(기본), `realsense`, `external`로 카메라 공급자를 선택한다. **GPU·실제 카메라에서 실행하지 않은 구현**이다. [상세 실행 절차](docs/isaac_integration.md)를 따른다.
 
-Isaac ROS 5.0은 ROS 2 Lyrical을 사용한다. x86은 Ubuntu 24.04·NVIDIA Ampere 이상·VRAM 8GB 이상·드라이버 595 이상·CUDA 13.2 이상, Jetson은 JetPack 7.2 환경을 확인해야 한다. 현재 Windows/AMD PC에서 CUDA 스택을 실행할 수 없다. [NVIDIA 공식 요구 사항](https://nvidia-isaac-ros.github.io/v/release-5.0/getting_started/index.html).
+Isaac ROS 5.0은 ROS 2 Lyrical을 사용한다. x86은 Ubuntu 24.04·NVIDIA Ampere 이상·VRAM 8GB 이상·드라이버 595 이상·CUDA 13.2 이상, Jetson은 JetPack 7.2 환경을 확인해야 한다. 현재 Windows/NVIDIA PC는 이 ROS 실행 환경이 구성되지 않았다. Isaac Sim 6.0.1 공식 최소 VRAM은 16GB이며 현재 8GB 장치의 작은 장면 실행은 미검증이다. [Isaac ROS 요구 사항](https://nvidia-isaac-ros.github.io/v/release-5.0/getting_started/index.html), [Isaac Sim 요구 사항](https://docs.isaacsim.omniverse.nvidia.com/6.0.1/installation/requirements.html).
 
 GPU 환경에서 공식 Isaac ROS 5.0 설치 절차를 완료한 뒤:
 

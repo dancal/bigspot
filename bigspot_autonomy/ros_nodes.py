@@ -10,12 +10,14 @@ from geometry_msgs.msg import TwistStamped,TransformStamped
 from nav_msgs.msg import Odometry
 from rosgraph_msgs.msg import Clock
 from std_msgs.msg import String,Bool
+from std_srvs.srv import SetBool
 from tf2_ros import TransformBroadcaster,StaticTransformBroadcaster,Buffer,TransformListener
 from ament_index_python.packages import get_package_share_directory
 from .design import load_design,LEGS,motor_names
 from .gait import Gait
 from .safety import Supervisor
 from .can_protocol import control
+from .control_core import ControlCore, JOINT_NAMES, attitude
 
 def design_for(node):
     default=Path(get_package_share_directory('bigspot_autonomy'))/'config/selected_design.json'
@@ -124,32 +126,62 @@ def navigation_main():
 
 class ControllerNode(Node):
     def __init__(self):
-        super().__init__('bigspot_controller');self.design=design_for(self);self.gait=Gait(self.design);self.safety=Supervisor();self.velocity=np.zeros(3);self.tilt=np.zeros(2);self.positions=None;self.temperatures=25.
+        super().__init__('bigspot_controller');self.design=design_for(self)
+        self.core=ControlCore(self.design,self.declare_parameter('autonomous',False).value)
+        self.auto_arm=self.declare_parameter('simulation_auto_arm',False).value
+        self.safety=self.core.supervisor
         self.targets=self.create_publisher(JointState,'/joint_targets',10);self.status=self.create_publisher(String,'/controller/status',10);self.frames=self.create_publisher(String,'/can/dry_run_frames',10)
         self.create_subscription(TwistStamped,'/cmd_vel',self.cmd,10);self.create_subscription(Imu,'/imu/data',self.imu,qos_profile_sensor_data);self.create_subscription(JointState,'/joint_states',self.joints,10);self.create_subscription(Bool,'/estop',lambda m:setattr(self.safety,'estop',m.data),10)
-        self.output_q=None;self.create_timer(.005,self.tick)
+        self.create_subscription(Image,'/camera/aligned_depth_to_color/image_raw',lambda m:self.health('camera',m),qos_profile_sensor_data)
+        self.create_subscription(Odometry,'/visual_slam/tracking/odometry',lambda m:self.health('odom',m),10)
+        self.create_service(SetBool,'/controller/enable',self.enable)
+        self.last_tick=None;self.auto_attempted=False;self.create_timer(.005,self.tick)
     def now(self):return time.monotonic()
-    def cmd(self,m):self.velocity[:]=[m.twist.linear.x,m.twist.linear.y,m.twist.angular.z];self.safety.update('command',self.now())
+    def valid_stamp(self,source,m):
+        t=m.header.stamp.sec+m.header.stamp.nanosec/1e9
+        return self.core.accept_stamp(source,t,self.get_clock().now().nanoseconds/1e9)
+    def health(self,source,m):
+        if source=='camera':
+            itemsize={'32FC1':4,'16UC1':2}.get(m.encoding)
+            if not itemsize or m.width<=0 or m.height<=0 or m.step<m.width*itemsize or len(m.data)!=m.step*m.height:return
+        elif source=='odom':
+            p,q=m.pose.pose.position,m.pose.pose.orientation
+            if not np.isfinite([p.x,p.y,p.z]).all():return
+            try:attitude([q.x,q.y,q.z,q.w])
+            except ValueError:return
+        if self.valid_stamp(source,m):self.safety.update(source,self.now())
+    def cmd(self,m):
+        if not self.valid_stamp('command',m):return
+        try:self.core.command([m.twist.linear.x,m.twist.linear.y,m.twist.angular.z],self.now())
+        except ValueError:return
     def imu(self,m):
-        r=quat_matrix(m.orientation);self.tilt[:]=[math.atan2(r[2,1],r[2,2]),math.atan2(-r[2,0],math.hypot(r[2,1],r[2,2]))];self.safety.update('imu',self.now())
+        if not self.valid_stamp('imu',m) or m.orientation_covariance[0]==-1 or m.angular_velocity_covariance[0]==-1:return
+        q,g=m.orientation,m.angular_velocity
+        try:self.core.imu([q.x,q.y,q.z,q.w],[g.x,g.y,g.z],self.now())
+        except ValueError:return
     def joints(self,m):
-        expected=[f'{leg}_{a}' for leg,_,_ in LEGS for a in ('abad','hip','knee')]
-        if len(m.name)!=12 or set(m.name)!=set(expected) or len(m.position)!=12:return
-        self.positions=[m.position[m.name.index(name)] for name in expected]
-        if np.isfinite(self.positions).all():self.safety.update('joints',self.now())
+        if not self.valid_stamp('joints',m):return
+        try:self.core.joints(m.name,m.position,m.velocity,self.now())
+        except ValueError:return
+    def enable(self,request,response):
+        response.success=self.core.enable(request.data,self.now())
+        response.message=self.core.state if response.success else 'Fresh sensors and a fault-free disarmed controller required'
+        return response
     def tick(self):
-        result=self.safety.evaluate(self.now(),tilt=float(max(abs(self.tilt))))
-        velocity=self.velocity if result.motion_enabled else np.zeros(3)
-        q=self.gait.targets(.005,velocity,roll=self.tilt[0]*.5,pitch=self.tilt[1]*.5)
-        if self.output_q is None and self.positions is not None:self.output_q=np.asarray(self.positions).copy()
-        if self.output_q is not None:
-            self.output_q+=np.clip(q-self.output_q,-.004,.004);q=self.output_q.copy()
-        msg=JointState();msg.header.stamp=self.get_clock().now().to_msg();msg.name=[f'{leg}_{a}' for leg,_,_ in LEGS for a in ('abad','hip','knee')];msg.position=q.tolist();self.targets.publish(msg)
+        stamp=self.get_clock().now();t=stamp.nanoseconds/1e9
+        if t<=0:return
+        dt=.005 if self.last_tick is None else t-self.last_tick
+        if dt==0:return
+        self.last_tick=t
+        if self.auto_arm and not self.auto_attempted and t>=1. and self.core.q is not None:
+            self.auto_attempted=self.core.enable(True,self.now())
+        result=self.core.step(dt,self.now());q=result.positions
+        msg=JointState();msg.header.stamp=stamp.to_msg();msg.name=list(JOINT_NAMES);msg.position=q.tolist();msg.effort=result.efforts.tolist() if result.torque_enabled else [];self.targets.publish(msg)
         packets=[]
         if result.torque_enabled:
             for i,(model,p) in enumerate(zip(motor_names(self.design),q)):
                 f=control(model,i%6+1,float(p),0.,self.design['control']['kp'],self.design['control']['kd']);packets.append({'bus':i//6,'id':f.arbitration_id,'data':f.data.hex()})
-        self.frames.publish(String(data=json.dumps(packets)));self.status.publish(String(data=json.dumps({'reason':result.reason,'torque_enabled':result.torque_enabled,'hardware_output':False})))
+        self.frames.publish(String(data=json.dumps(packets)));self.status.publish(String(data=json.dumps({'state':result.state,'reason':result.reason,'torque_enabled':result.torque_enabled,'hardware_output':False})))
 
 def controller_main():
     rclpy.init();node=ControllerNode()

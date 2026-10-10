@@ -1,0 +1,238 @@
+{
+  "reports": [
+    {
+      "case": "startup",
+      "engine": "MuJoCo 3.15.0",
+      "design": "pi4",
+      "controller": "ControlCore targets with local motor PD",
+      "ready_reached": true,
+      "final_state": "READY",
+      "final_xyz_m": [
+        -0.06112057735868621,
+        -2.642721713037254e-05,
+        0.261190395317465
+      ],
+      "max_tilt_deg": 0.09818382883729042,
+      "thermal_margin_ratio": 0.28812975592398243,
+      "fault_detection_s": null,
+      "fault_efforts_zero": true,
+      "actuator_watchdog_latched": false,
+      "obstacle_collision_impulse_ns": 0.0,
+      "hardware_tested": false,
+      "ros_executed": false,
+      "isaac_executed": false,
+      "passed": true
+    },
+    {
+      "case": "walk",
+      "engine": "MuJoCo 3.15.0",
+      "design": "pi4",
+      "controller": "ControlCore targets with local motor PD",
+      "ready_reached": true,
+      "final_state": "READY",
+      "final_xyz_m": [
+        0.8596529584135589,
+        -0.003863966650124698,
+        0.26158762949175146
+      ],
+      "max_tilt_deg": 3.1962121201632834,
+      "thermal_margin_ratio": 0.6401253863316959,
+      "fault_detection_s": null,
+      "fault_efforts_zero": true,
+      "actuator_watchdog_latched": false,
+      "obstacle_collision_impulse_ns": 0.0,
+      "hardware_tested": false,
+      "ros_executed": false,
+      "isaac_executed": false,
+      "passed": true
+    },
+    {
+      "case": "holdout",
+      "engine": "MuJoCo 3.15.0",
+      "design": "pi4",
+      "controller": "ControlCore targets with local motor PD",
+      "ready_reached": true,
+      "final_state": "READY",
+      "final_xyz_m": [
+        0.9591655798900716,
+        -0.016808906388829595,
+        0.26129040464023634
+      ],
+      "max_tilt_deg": 2.877831776310292,
+      "thermal_margin_ratio": 0.757566941710002,
+      "fault_detection_s": null,
+      "fault_efforts_zero": true,
+      "actuator_watchdog_latched": false,
+      "obstacle_collision_impulse_ns": 0.0,
+      "hardware_tested": false,
+      "ros_executed": false,
+      "isaac_executed": false,
+      "passed": true
+    },
+    {
+      "case": "imu_dropout",
+      "engine": "MuJoCo 3.15.0",
+      "design": "pi4",
+      "controller": "ControlCore targets with local motor PD",
+      "ready_reached": true,
+      "final_state": "FAULT",
+      "final_xyz_m": [
+        0.16570959170205724,
+        0.031928871286861324,
+        0.06922985348136855
+      ],
+      "max_tilt_deg": 0.0,
+      "thermal_margin_ratio": 0.31478462688471254,
+      "fault_detection_s": 0.14999999999972502,
+      "fault_efforts_zero": true,
+      "actuator_watchdog_latched": false,
+      "obstacle_collision_impulse_ns": 0.0,
+      "hardware_tested": false,
+      "ros_executed": false,
+      "isaac_executed": false,
+      "passed": true
+    },
+    {
+      "case": "joint_dropout",
+      "engine": "MuJoCo 3.15.0",
+      "design": "pi4",
+      "controller": "ControlCore targets with local motor PD",
+      "ready_reached": true,
+      "final_state": "FAULT",
+      "final_xyz_m": [
+        0.1734802025929119,
+        0.01759136641792325,
+        0.06875361562505904
+      ],
+      "max_tilt_deg": 0.0,
+      "thermal_margin_ratio": 0.31509574545680386,
+      "fault_detection_s": 0.14999999999972502,
+      "fault_efforts_zero": true,
+      "actuator_watchdog_latched": false,
+      "obstacle_collision_impulse_ns": 0.0,
+      "hardware_tested": false,
+      "ros_executed": false,
+      "isaac_executed": false,
+      "passed": true
+    },
+    {
+      "case": "controller_dropout",
+      "engine": "MuJoCo 3.15.0",
+      "design": "pi4",
+      "controller": "ControlCore targets with local motor PD",
+      "ready_reached": true,
+      "final_state": "READY",
+      "final_xyz_m": [
+        0.12421502444479406,
+        -0.0023369903905848446,
+        0.06650300326091975
+      ],
+      "max_tilt_deg": 0.0,
+      "thermal_margin_ratio": 0.3046868391118579,
+      "fault_detection_s": null,
+      "fault_efforts_zero": true,
+      "actuator_watchdog_latched": true,
+      "obstacle_collision_impulse_ns": 0.0,
+      "hardware_tested": false,
+      "ros_executed": false,
+      "isaac_executed": false,
+      "passed": true
+    },
+    {
+      "case": "command_dropout",
+      "engine": "MuJoCo 3.15.0",
+      "design": "pi4",
+      "controller": "ControlCore targets with local motor PD",
+      "ready_reached": true,
+      "final_state": "READY",
+      "final_xyz_m": [
+        0.16456429142909904,
+        -0.003077712503906297,
+        0.261204650087483
+      ],
+      "max_tilt_deg": 3.1962121201632834,
+      "thermal_margin_ratio": 0.40098818694634003,
+      "fault_detection_s": null,
+      "fault_efforts_zero": true,
+      "actuator_watchdog_latched": false,
+      "obstacle_collision_impulse_ns": 0.0,
+      "hardware_tested": false,
+      "ros_executed": false,
+      "isaac_executed": false,
+      "passed": true
+    },
+    {
+      "case": "navigation",
+      "engine": "MuJoCo 3.15.0",
+      "design": "pi4",
+      "controller": "ControlCore targets with local motor PD",
+      "ready_reached": true,
+      "final_state": "READY",
+      "final_xyz_m": [
+        2.8449777332620205,
+        -0.012565482740829826,
+        0.26119869051598277
+      ],
+      "max_tilt_deg": 3.1828421243128058,
+      "thermal_margin_ratio": 0.6308548192747084,
+      "fault_detection_s": null,
+      "fault_efforts_zero": true,
+      "actuator_watchdog_latched": false,
+      "obstacle_collision_impulse_ns": 0.0,
+      "hardware_tested": false,
+      "ros_executed": false,
+      "isaac_executed": false,
+      "navigation": {
+        "goal_xy_m": [
+          3.0,
+          0.0
+        ],
+        "goal_distance_m": 0.15553068681482554,
+        "goal_reached": true,
+        "depth_frames": 221,
+        "obstacle_cells": 19,
+        "perception": "pinhole depth raycasting; floor and robot excluded",
+        "odometry": "MuJoCo ground truth; cuVSLAM NOT executed",
+        "unknown_cells": "assumed free; bounded test course"
+      },
+      "passed": true
+    },
+    {
+      "case": "camera_dropout",
+      "engine": "MuJoCo 3.15.0",
+      "design": "pi4",
+      "controller": "ControlCore targets with local motor PD",
+      "ready_reached": true,
+      "final_state": "READY",
+      "final_xyz_m": [
+        0.2661574433387738,
+        -0.36277678187409734,
+        0.26120009462138877
+      ],
+      "max_tilt_deg": 3.1684142743977413,
+      "thermal_margin_ratio": 0.4671685402836452,
+      "fault_detection_s": null,
+      "fault_efforts_zero": true,
+      "actuator_watchdog_latched": false,
+      "obstacle_collision_impulse_ns": 0.0,
+      "hardware_tested": false,
+      "ros_executed": false,
+      "isaac_executed": false,
+      "navigation": {
+        "goal_xy_m": [
+          3.0,
+          0.0
+        ],
+        "goal_distance_m": 2.7578074838681026,
+        "goal_reached": false,
+        "depth_frames": 45,
+        "obstacle_cells": 15,
+        "perception": "pinhole depth raycasting; floor and robot excluded",
+        "odometry": "MuJoCo ground truth; cuVSLAM NOT executed",
+        "unknown_cells": "assumed free; bounded test course"
+      },
+      "passed": true
+    }
+  ],
+  "passed": true
+}
