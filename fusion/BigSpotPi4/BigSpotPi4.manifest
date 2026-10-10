@@ -1,0 +1,1 @@
+{"autodeskProduct":"Fusion360","type":"script","author":"BigSpot","description":{"":"Build the Pi4 articulated assembly and export a local F3D archive."},"supportedOS":"windows|mac","runOnStartup":false}

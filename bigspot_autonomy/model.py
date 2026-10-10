@@ -64,4 +64,14 @@ def make_mjcf(d, obstacles=()):
     for leg, _, _ in LEGS:
         ET.SubElement(contact, "exclude", body1="base_link", body2=f"{leg}_upper_link")
         ET.SubElement(contact, "exclude", body1=f"{leg}_abduction_link", body2=f"{leg}_lower_link")
+    # A detailed assembly carries measured/vendor mass estimates and CAD-derived
+    # centres/inertias. Collision shapes remain simplified analytic proxies.
+    if d.get('link_inertials'):
+        for body in root.findall('.//body'):
+            mass=d['link_inertials'].get(body.get('name'))
+            if mass is None: continue
+            for geom in body.findall('geom'): geom.set('mass','0')
+            inertia=mass['inertia_kg_m2']
+            ET.SubElement(body,'inertial',pos=vec(mass['com_m']),mass=str(mass['mass_kg']),
+                          fullinertia=vec([inertia[0][0],inertia[1][1],inertia[2][2],inertia[0][1],inertia[0][2],inertia[1][2]]))
     return ET.tostring(root, encoding="unicode")

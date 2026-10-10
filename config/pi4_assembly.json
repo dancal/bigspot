@@ -1,0 +1,414 @@
+{
+  "revision": "pi4-r1",
+  "units": "mm",
+  "manufacturing_released": false,
+  "computer": "Raspberry Pi 4 Model B",
+  "ram_gb": null,
+  "software": {
+    "onboard": "Ubuntu 22.04 arm64 / ROS 2 Humble, CPU",
+    "isaac_ros_5_onboard_supported": false,
+    "realtime_controller": "ESP32-S3-CAN-2CH, custom firmware required"
+  },
+  "frame": {
+    "length": 380,
+    "width": 190,
+    "plate_thickness": 2,
+    "bottom_z": -43,
+    "top_z": 43,
+    "material": "6061-T6 aluminium",
+    "density_kg_mm3": 2.7e-06
+  },
+  "battery": {
+    "cell": "Molicel INR21700-P42A",
+    "series": 12,
+    "parallel": 1,
+    "nominal_voltage_v": 43.2,
+    "full_voltage_v": 50.4,
+    "capacity_ah": 4.2,
+    "cell_diameter": 21.55,
+    "cell_length": 70.15,
+    "cell_mass_kg": 0.07,
+    "pack_envelope": [
+      146,
+      82,
+      55
+    ],
+    "position": [
+      7,
+      0,
+      -13
+    ],
+    "pack_assembly_by_supplier_required": true
+  },
+  "motor_mounts": {
+    "RS00": {
+      "diameter": 57,
+      "length": 51,
+      "rear_pcd": 38,
+      "rear_holes": 4,
+      "rear_thread": "M3",
+      "rear_max_engagement": 4,
+      "output_pcd": 27,
+      "output_holes": 6,
+      "output_thread": "M3",
+      "output_max_engagement": 5
+    },
+    "RS02": {
+      "diameter": 78.5,
+      "length": 45.5,
+      "front_stator_pcd": 73,
+      "front_stator_holes": 9,
+      "front_stator_thread": "M3",
+      "front_stator_max_engagement": 8,
+      "output_pcd": 24,
+      "output_holes": 6,
+      "output_thread": "M4",
+      "output_max_engagement": 7,
+      "length_envelope_conservative": true
+    },
+    "vendor_revision_and_thread_depth_must_be_measured": true
+  },
+  "electronics": [
+    {
+      "id": "pi4",
+      "name": "Raspberry_Pi_4B",
+      "size": [
+        85,
+        56,
+        1.6
+      ],
+      "xyz": [
+        104,
+        0,
+        19
+      ],
+      "mass_kg": 0.046,
+      "color": [
+        0.1,
+        0.55,
+        0.23
+      ],
+      "footprint": "official",
+      "mount_pitch": [
+        58,
+        49
+      ],
+      "mount_radius": 1.35,
+      "source": "https://pip.raspberrypi.com/documents/RP-008343-DS"
+    },
+    {
+      "id": "mcu",
+      "name": "Waveshare_ESP32_S3_Dual_Isolated_CAN",
+      "size": [
+        91.6,
+        23.3,
+        58.7
+      ],
+      "xyz": [
+        0,
+        64,
+        -8
+      ],
+      "mass_kg": 0.1,
+      "color": [
+        0.2,
+        0.25,
+        0.29
+      ],
+      "footprint": "official_envelope_strap_mount",
+      "source": "https://docs.waveshare.com/ESP32-S3-CAN-2CH"
+    },
+    {
+      "id": "dcdc",
+      "name": "MeanWell_RSD_30L_5_18_72V_to_5V_6A",
+      "size": [
+        113,
+        60,
+        25
+      ],
+      "xyz": [
+        -126,
+        0,
+        -14
+      ],
+      "mass_kg": 0.23,
+      "color": [
+        0.62,
+        0.64,
+        0.67
+      ],
+      "footprint": "official_envelope_slot_mount",
+      "source": "https://www.meanwell.com/Upload/PDF/RSD-30/RSD-30-SPEC.PDF"
+    },
+    {
+      "id": "imu",
+      "name": "Body_IMU_BNO085_SPI_candidate",
+      "size": [
+        25.6,
+        22.7,
+        4.6
+      ],
+      "xyz": [
+        36,
+        0,
+        23
+      ],
+      "mass_kg": 0.0025,
+      "color": [
+        0.42,
+        0.16,
+        0.6
+      ],
+      "footprint": "official_envelope_replaceable_clamp",
+      "source": "https://www.adafruit.com/product/4754"
+    },
+    {
+      "id": "bms",
+      "name": "BMS_12S_NMC_30A_SUPPLIER_REQUIRED",
+      "size": [
+        72,
+        35,
+        12
+      ],
+      "xyz": [
+        -10,
+        -65,
+        -23
+      ],
+      "mass_kg": 0.06,
+      "color": [
+        0.95,
+        0.48,
+        0.06
+      ],
+      "footprint": "reservation_only",
+      "requires": "12S NMC, 30A discharge, temperature sensors, >=4.2A charge; regen compatibility must be tested"
+    },
+    {
+      "id": "switch",
+      "name": "Motor_Disconnect_and_Precharge_SUPPLIER_REQUIRED",
+      "size": [
+        58.4,
+        45.7,
+        28
+      ],
+      "xyz": [
+        145,
+        0,
+        -20
+      ],
+      "mass_kg": 0.1,
+      "color": [
+        0.95,
+        0.48,
+        0.06
+      ],
+      "footprint": "reservation_only",
+      "requires": ">=80V DC bidirectional 30A contactor/back-to-back MOSFET disconnect, normally off, independent NC E-stop, measured precharge capacitance"
+    },
+    {
+      "id": "fuses",
+      "name": "80VDC_Main25A_and_4Leg5A_Fuses_SUPPLIER_REQUIRED",
+      "size": [
+        100,
+        25,
+        20
+      ],
+      "xyz": [
+        101,
+        65,
+        -24
+      ],
+      "mass_kg": 0.06,
+      "color": [
+        0.95,
+        0.48,
+        0.06
+      ],
+      "footprint": "reservation_only",
+      "requires": "DC interrupt rating >=80V; branch fuse curves to be bench verified"
+    },
+    {
+      "id": "regen",
+      "name": "Independent_Regen_Clamp_100V_MOSFET_SUPPLIER_REQUIRED",
+      "size": [
+        65,
+        28,
+        16
+      ],
+      "xyz": [
+        -120,
+        -64,
+        1
+      ],
+      "mass_kg": 0.035,
+      "color": [
+        0.95,
+        0.48,
+        0.06
+      ],
+      "footprint": "reservation_only",
+      "requires": "analogue clamp 54V target, hysteresis, 100V MOSFET and resistor pulse-energy verification"
+    },
+    {
+      "id": "current",
+      "name": "Bidirectional_Hall_Current_50A_SUPPLIER_REQUIRED",
+      "size": [
+        40,
+        24,
+        16
+      ],
+      "xyz": [
+        95,
+        -65,
+        -21
+      ],
+      "mass_kg": 0.025,
+      "color": [
+        0.95,
+        0.48,
+        0.06
+      ],
+      "footprint": "reservation_only",
+      "requires": "50A DC bipolar measurement, insulation and transient ratings"
+    },
+    {
+      "id": "watchdog",
+      "name": "Independent_Watchdog_and_5V_Enable_SUPPLIER_REQUIRED",
+      "size": [
+        44,
+        22,
+        10
+      ],
+      "xyz": [
+        75,
+        -65,
+        15
+      ],
+      "mass_kg": 0.015,
+      "color": [
+        0.95,
+        0.48,
+        0.06
+      ],
+      "footprint": "reservation_only",
+      "requires": "hardware heartbeat timeout <=150ms, default output off; GPIO must not switch motor supply directly"
+    },
+    {
+      "id": "fan",
+      "name": "Pi4_5V_Fan_30mm_and_Heatsink",
+      "size": [
+        30,
+        30,
+        10
+      ],
+      "xyz": [
+        113,
+        0,
+        38
+      ],
+      "mass_kg": 0.015,
+      "color": [
+        0.13,
+        0.16,
+        0.2
+      ],
+      "footprint": "standard_30mm_fan_24mm_pitch"
+    },
+    {
+      "id": "ultrasound",
+      "name": "Front_Ultrasonic_HCSR04_COMPATIBILITY_REQUIRED",
+      "size": [
+        15,
+        45,
+        20
+      ],
+      "xyz": [
+        205,
+        0,
+        -10
+      ],
+      "mass_kg": 0.012,
+      "color": [
+        0.95,
+        0.48,
+        0.06
+      ],
+      "footprint": "reservation_only",
+      "requires": "existing sensor SKU needed; HC-SR04 5V echo requires resistor divider/level shifter for 3.3V MCU"
+    },
+    {
+      "id": "level",
+      "name": "Ultrasonic_3V3_Level_Shifter",
+      "size": [
+        20,
+        15,
+        8
+      ],
+      "xyz": [
+        157,
+        -65,
+        10
+      ],
+      "mass_kg": 0.003,
+      "color": [
+        0.95,
+        0.48,
+        0.06
+      ],
+      "footprint": "reservation_only"
+    },
+    {
+      "id": "sd",
+      "name": "MicroSD_64GB_A2",
+      "size": [
+        15,
+        11,
+        1
+      ],
+      "xyz": [
+        61,
+        0,
+        7
+      ],
+      "mass_kg": 0.001,
+      "color": [
+        0.12,
+        0.12,
+        0.12
+      ],
+      "footprint": "standard"
+    }
+  ],
+  "external_parts": [
+    {
+      "name": "50.4V_2A_CC_CV_Charger_for_12S_NMC",
+      "quantity": 1,
+      "onboard": false,
+      "sku_verified": false
+    },
+    {
+      "name": "USB_Bluetooth_Joystick_existing",
+      "quantity": 1,
+      "onboard": false,
+      "sku_verified": false
+    }
+  ],
+  "non_geometric_mass_allowance_kg": 0.24,
+  "allowance_covers": [
+    "wiring",
+    "connectors",
+    "fasteners",
+    "battery insulation",
+    "microSD",
+    "sensor readout"
+  ],
+  "sources": {
+    "rs00": "https://github.com/RobStride/Product_Information/blob/main/Product%20Literature/RS00/RS00User%20Manual260713.pdf",
+    "rs02": "https://github.com/RobStride/Product_Information/blob/main/Product%20Literature/RS02/RS02User%20Manual260713.pdf",
+    "cells": "https://www.molicel.com/wp-content/uploads/INR21700P42A_1.7_Product-Data-Sheet-of-INR-21700-P42A-80092.pdf",
+    "camera": "https://www.realsenseai.com/products/depth-camera-d435i/"
+  },
+  "standing_leg_height_mm": 245,
+  "neutral_foot_x_mm": 45
+}

@@ -1,0 +1,24 @@
+{
+  "revision": "pi4-r1",
+  "valid_breps": 170,
+  "kinematic_revolute_joints": 12,
+  "purchased_envelope_overlaps": [],
+  "static_electronics_clearance_passed": true,
+  "estimated_mass_kg": 9.21372225809047,
+  "unverified_part_reservations": [
+    "bms",
+    "switch",
+    "fuses",
+    "regen",
+    "current",
+    "watchdog",
+    "ultrasound",
+    "level"
+  ],
+  "motor_mount_patterns_from_manufacturer": true,
+  "thread_revision_measured": false,
+  "mount_bearing_load_fea_tested": false,
+  "wire_bend_clearance_tested": false,
+  "hardware_function_verified": false,
+  "manufacturing_released": false
+}

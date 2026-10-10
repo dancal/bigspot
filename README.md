@@ -4,7 +4,23 @@
 
 기존 저장소: `../bigspot`, 커밋 `d8db47790a6dd9cec28b197f240ba787c3a5a504`. 기존 조이스틱·춤·서보 보정 코드는 이 커밋에 보존했다. 새 프로젝트에서 검증한 동작은 바닥에서 일어서기, 보행, 카메라 장애물 회피다. 기존 고난도 동작이 새 모터에서도 검증됐다는 뜻은 아니다.
 
-## 선정안
+## Raspberry Pi 4 설계 변경 — 진행 중
+
+현재 사용자 보드는 **Raspberry Pi 4 Model B**다. 아래의 7.48kg 선정안과 자율 이동 결과는 이전 기준 모델이다. Pi 4 부품을 추가한 별도 설계는 `config/pi4_assembly.json`, `config/pi4_design.json`, `design/pi4/`에 보존했다. 이전 기준 모델을 덮어쓰지 않았다.
+
+Pi 4 설계는 170개 유효 입체, 13개 관절 그룹, 12개 회전 관절 정의를 포함한다. CAD 질량·관성을 사용한 추정 무게는 **9.214kg**이다. 서기 높이 245mm, 발 중심 전방 45mm로 조정했다. `validation/pi4_dynamics.json`의 일어서기·보행·무게 +15%/마찰 0.55 시험 세 가지는 통과했다. 이 시험의 충돌 형상은 단순화한 물리 모델이며, 상세 CAD의 전체 간섭 검증을 뜻하지 않는다.
+
+`design/pi4/BigSpot_Pi4_assembly.step`는 Fusion에서 열 수 있는 조립 배치 모델이다. `fusion/BigSpotPi4`에는 관절을 만드는 Fusion 스크립트가 있지만 **Fusion 내부 실행과 F3D 저장은 아직 검증하지 않았다**. 실물 제작 도면이 아니다. [현재 구성과 남은 문제](docs/pi4_design_status.md)를 먼저 확인한다.
+
+```sh
+pip install cadquery-ocp
+python tools/build_pi4_assembly.py
+python tools/validate_pi4.py
+```
+
+Pi 4에는 Ubuntu 22.04 arm64 / ROS 2 Humble CPU 구성을 계획한다. Isaac ROS 5.0 GPU 스택은 Pi 4에서 실행할 수 없다. 실물 모터 출력용 MCU 펌웨어와 전원 보호 회로는 아직 구현·검증하지 않았다.
+
+## 이전 기준 모델의 선정안
 
 | 항목 | 구성 | 확인 상태 |
 |---|---|---|
