@@ -1,0 +1,9 @@
+{
+  "autodeskProduct": "Fusion360",
+  "type": "script",
+  "author": "BigSpot",
+  "description": {"": "Reconstruct 13 STL reference components and 12 URDF-derived revolute joints locally."},
+  "version": "0.2.0",
+  "runOnStartup": false,
+  "supportedOS": "windows|mac"
+}

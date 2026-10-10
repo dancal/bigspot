@@ -1,0 +1,14 @@
+{
+  "method": "Sensor-gated multi-action physics validation",
+  "parameters": {
+    "gait_mode": "trot", "static_crawl": false, "center_stance": true,
+    "stance_center_x": -0.02, "period": 0.6, "standing_height": 0.28,
+    "lift": 0.02, "balance_kp": 0.5, "balance_kd": 0.025,
+    "joint_rate": 4.0, "trot_duty": 0.65,
+    "max_forward_speed": 0.22, "max_lateral_speed": 0.08,
+    "max_yaw_rate": 0.6, "acceleration": 0.2,
+    "speed_scale": 1.15, "support_shift": 0.0
+  },
+  "hardware_validated": false,
+  "experimental_actions_default_enabled": false
+}

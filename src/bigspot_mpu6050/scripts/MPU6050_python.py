@@ -6,6 +6,8 @@ import rospy
 import tf
 import numpy as np
 from sensor_msgs.msg import Imu
+from MPUConstants import MPUConstants as C
+from imu_units import raw_to_si, remap_mount
 #from tf.transformations import *
 
 class Kalman():
@@ -65,16 +67,15 @@ class Kalman():
 if __name__ == "__main__":
     rospy.init_node("bigspot_mpu6050")
     pub         = rospy.Publisher("bigspot_imu/base_link_orientation", Imu,queue_size=10)
+    mount_rpy=np.deg2rad(rospy.get_param('~sensor_mount_rpy_deg',[0.,0.,0.]))
+    mount_quaternion=tf.transformations.quaternion_from_euler(*mount_rpy)
 
     i2c_bus = 1
     device_address = 0x68
 
-    x_accel_offset = int(-1947.1937499999988)
-    y_accel_offset = int(-3587.76125)
-    z_accel_offset = int(-517.7015000000005)
-    x_gyro_offset = int(-146.4505625)
-    y_gyro_offset = int(-32.14981249999992)
-    z_gyro_offset = int(21.907249999999973)
+    # Biases belong to the individual IMU. Do not reuse the original author's calibration.
+    x_accel_offset,y_accel_offset,z_accel_offset=map(int,rospy.get_param('~accel_offsets',[0,0,0]))
+    x_gyro_offset,y_gyro_offset,z_gyro_offset=map(int,rospy.get_param('~gyro_offsets',[0,0,0]))
 
     #x_avg_read: 684.76 x_avg_offset: -1628.91225
     #y_avg_read: 1436.4 y_avg_offset: -3390.4574999999995
@@ -97,6 +98,8 @@ if __name__ == "__main__":
     mpu = MPU6050(i2c_bus, device_address, x_accel_offset, y_accel_offset,z_accel_offset, x_gyro_offset, y_gyro_offset, z_gyro_offset,enable_debug_output)
 
     mpu.dmp_initialize()
+    gyro_fs=mpu.read_bits(C.MPU6050_RA_GYRO_CONFIG,C.MPU6050_GCONFIG_FS_SEL_BIT,C.MPU6050_GCONFIG_FS_SEL_LENGTH)
+    accel_fs=mpu.read_bits(C.MPU6050_RA_ACCEL_CONFIG,C.MPU6050_ACONFIG_AFS_SEL_BIT,C.MPU6050_ACONFIG_AFS_SEL_LENGTH)
     mpu.set_DMP_enabled(True)
     mpu_int_status = mpu.get_int_status()
     print(hex(mpu_int_status))
@@ -117,7 +120,8 @@ if __name__ == "__main__":
     #Yaw.setKalmanAngle(0.)
 
     FIFO_buffer = [0]*64
-    rate = rospy.Rate(10)
+    rate = rospy.Rate(100)
+    warmup_until=time.monotonic()+2.
     #make initial guesses
     #time_pre = time.time()
 
@@ -132,7 +136,9 @@ if __name__ == "__main__":
             try:
                 FIFO_count = mpu.get_FIFO_count()
                 mpu_int_status = mpu.get_int_status()
-            except:
+            except OSError as error:
+                rospy.logwarn_throttle(2.,'IMU read failed: '+str(error))
+                rate.sleep()
                 continue
 
             # If overflow is detected by status or fifo count we want to reset
@@ -143,12 +149,20 @@ if __name__ == "__main__":
             elif (mpu_int_status & 0x02):
                 # Wait until packet_size number of bytes are ready for reading, default
                 # is 42 bytes
-                while FIFO_count < packet_size:
+                deadline=time.monotonic()+.05
+                while FIFO_count < packet_size and time.monotonic()<deadline and not rospy.is_shutdown():
                     FIFO_count = mpu.get_FIFO_count()
+                    time.sleep(.001)
+                if FIFO_count < packet_size:
+                    rate.sleep()
+                    continue
 
-                FIFO_buffer     = mpu.get_FIFO_bytes(packet_size)
+                # Discard old complete packets; control must receive the newest orientation.
+                while FIFO_count >= packet_size:
+                    FIFO_buffer=mpu.get_FIFO_bytes(packet_size)
+                    FIFO_count-=packet_size
                 #accel           = mpu.DMP_get_acceleration_int16(FIFO_buffer)
-                quat            = mpu.DMP_get_quaternion_int16(FIFO_buffer)
+                quat            = mpu.DMP_get_quaternion(FIFO_buffer)
                 grav            = mpu.DMP_get_gravity(quat)
                 roll_pitch_yaw  = mpu.DMP_get_euler_roll_pitch_yaw(quat, grav)
                 #acc             = mpu.get_acceleration()
@@ -160,20 +174,35 @@ if __name__ == "__main__":
                 #gryoVal         = [gyro[0]/16.384, gyro[1]/16.384, gyro[2]/16.384]
                 
                 #roll_pitch_yaw.z    -= 5.01
-                roll_pitch_yaw.x    = round(roll_pitch_yaw.x * 0.01, 1)
-                roll_pitch_yaw.y    = round(roll_pitch_yaw.y * 0.01, 1)
-                roll_pitch_yaw.z    = round(roll_pitch_yaw.z * 0.01, 1)
 
-                if Count < 200:
-                    time.sleep(0.1)
+                if time.monotonic()<warmup_until:
+                    rate.sleep()
                     continue
 
                 # covariance matrix
                 imu_data                        = Imu()
                 imu_data.header.stamp           = rospy.Time.now()
 
-                imu_data.orientation.x          = roll_pitch_yaw.x
-                imu_data.orientation.y          = roll_pitch_yaw.y
+                imu_data.header.frame_id = 'base_link'
+                values = np.array([quat.x, quat.y, quat.z, quat.w], dtype=float)
+                norm = np.linalg.norm(values)
+                if not np.isfinite(values).all() or norm < .5:
+                    continue
+                values /= norm
+                imu_data.orientation.x, imu_data.orientation.y, imu_data.orientation.z, imu_data.orientation.w = values
+                imu_data.orientation_covariance = [0.]*9
+                try:
+                    angular,acceleration=raw_to_si(mpu.get_rotation(),mpu.get_acceleration(),gyro_fs,accel_fs)
+                    values,angular,acceleration=remap_mount(values,angular,acceleration,mount_quaternion)
+                except (OSError,ValueError) as error:
+                    rospy.logwarn_throttle(2.,'IMU sample rejected: '+str(error))
+                    rate.sleep()
+                    continue
+                imu_data.angular_velocity.x,imu_data.angular_velocity.y,imu_data.angular_velocity.z=angular
+                imu_data.orientation.x,imu_data.orientation.y,imu_data.orientation.z,imu_data.orientation.w=values
+                imu_data.linear_acceleration.x,imu_data.linear_acceleration.y,imu_data.linear_acceleration.z=acceleration
+                # All-zero covariance means unknown, not perfect measurement.
+                # Sensor mounting must align x forward, y left, z up before motor use.
                 #imu_data.orientation.z          = quaternion[2]
                 #imu_data.orientation.w          = quaternion[3]
 
@@ -182,6 +211,8 @@ if __name__ == "__main__":
                 #time_pre = time.time()
                 rate.sleep()
                 #rospy.loginfo(roll_pitch_yaw.x)
+            else:
+                rate.sleep()
 
     except KeyboardInterrupt:
         print('\n Ctrl + C QUIT')

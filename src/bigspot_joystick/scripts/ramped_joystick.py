@@ -38,6 +38,7 @@ class PS4_controller(object):
         self.last_joy.axes = [0.,0.,1.,0.,0.,1.,0.,0.]
         self.last_joy.buttons = [0,0,0,0,0,0,0,0,0,0,0]
         self.last_send_time = rospy.Time.now()
+        self.last_received = time.monotonic()
 
         self.use_button = True
 
@@ -59,6 +60,9 @@ class PS4_controller(object):
     #    self.publish_joy()
 
     def callback(self, msg):
+        if len(msg.axes) < 8 or len(msg.buttons) < 8:
+            return
+        self.last_received = time.monotonic()
         if self.use_button:
             if msg.buttons[4]:
                 self.speed_index -= 1
@@ -99,6 +103,9 @@ class PS4_controller(object):
 
     def publish_joy(self):
         t_now = rospy.Time.now()
+        if time.monotonic() - self.last_received > .5:
+            self.target_joy.axes = [0.,0.,1.,0.,0.,1.,0.,0.]
+            self.target_joy.buttons = [0]*11
 
         # determine changes in state
         buttons_change = array_equal(self.last_joy.buttons, self.target_joy.buttons)
@@ -121,7 +128,8 @@ class PS4_controller(object):
 
             joy.buttons = self.target_joy.buttons
             self.last_joy = joy
-            self.publisher_joy.publish(self.last_joy)
+        # Heartbeat allows the actuator-side watchdog to detect publisher loss.
+        self.publisher_joy.publish(self.last_joy)
             
         self.last_send_time = t_now
 

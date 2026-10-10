@@ -5,7 +5,7 @@ from xmlrpc.client import FastMarshaller
 import rospy
 import time
 
-from sensor_msgs.msg import Joy,Imu
+from sensor_msgs.msg import Joy,Imu,Range
 from RobotController import RobotController
 from InverseKinematics import robot_IK
 from RobotHardwares import RobotHardwares 
@@ -14,7 +14,7 @@ from std_msgs.msg import Float64
 import numpy as np
 #import pygame
 
-USE_IMU = False
+USE_IMU = True
 RATE = 60
 
 rospy.init_node("Robot_Controller")
@@ -24,6 +24,7 @@ body = [0.4, 0.13]
 legs = [0.0, 0.04, 0.183, 0.2] 
 
 bigspot_robot       = RobotController.Robot(body, legs, USE_IMU)
+bigspot_robot.require_ultrasonic=rospy.get_param('~require_ultrasonic',True)
 inverseKinematics   = robot_IK.InverseKinematics(body, legs)
 servoControllers    = RobotHardwares.ServoController()
 
@@ -47,6 +48,7 @@ for i in range(len(command_topics)):
 if USE_IMU:
     rospy.Subscriber("bigspot_imu/base_link_orientation",Imu,bigspot_robot.imu_orientation)
 rospy.Subscriber("bigspot_joy/joy_ramped",Joy,bigspot_robot.joystick_command)
+rospy.Subscriber('bigspot_ultrasonic/sonic_dist',Range,bigspot_robot.ultrasonic_command)
 
 rate = rospy.Rate(RATE)
 
@@ -72,13 +74,15 @@ while not rospy.is_shutdown():
     pitch   = bigspot_robot.state.body_local_orientation[1]
     yaw     = bigspot_robot.state.body_local_orientation[2]
 
+    joint_angles = None
     try:
         # FR, FL, RR, RL
         joint_angles    = inverseKinematics.inverse_kinematics(leg_positions, dx, dy, dz, roll, pitch, yaw)
         #print(joint_angles)
     except Exception as e:
         print('inverseKinematics = ', e)
-        pass
+        rate.sleep()
+        continue
 
     try:
         for i in range(len(joint_angles)):

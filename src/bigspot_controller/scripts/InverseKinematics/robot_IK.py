@@ -54,12 +54,9 @@ class InverseKinematics(object):
 
     @staticmethod
     def check_domain(domain):
-        if domain > 1 or domain < -1:
-            if domain > 1:
-                domain = 0.99
-            else:
-                domain = -0.99
-        return domain
+        if not np.isfinite(domain) or abs(domain) > 1.0 + 1e-9:
+            raise ValueError("Foot target is outside the leg workspace")
+        return float(np.clip(domain, -1.0, 1.0))
 
     def inverse_kinematics(self,leg_positions,dx,dy,dz,roll,pitch,yaw):
         """
@@ -88,7 +85,7 @@ class InverseKinematics(object):
 
             theta1 = atan2(y,x) + atan2(F,self.l2 * (-1)**i)
  
-            D = self.check_domain((H**2 - self.l3**2 + self.l4**2)/(2*self.l3*self.l4))
+            D = self.check_domain((H**2 - self.l3**2 - self.l4**2)/(2*self.l3*self.l4))
             try:
                 theta4 = -atan2((sqrt(1-D**2)),D)
             except Exception as e:
@@ -132,11 +129,7 @@ class InverseKinematics(object):
 
             theta1 = atan2(y,x) + atan2(F,self.l2 * (-1)**i)
  
-            D = ((H**2 - self.l3**2 + self.l4**2)/(2*self.l3*self.l4))
-            if D >= 1.0:
-                D = 1.0
-            if D <= -1.0:
-                D = -1.0
+            D = self.check_domain((H**2 - self.l3**2 - self.l4**2)/(2*self.l3*self.l4))
 
             try:
                 theta4 = atan2((sqrt(1-D**2)),D)

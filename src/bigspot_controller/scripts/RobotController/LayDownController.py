@@ -5,6 +5,7 @@
 import rospy
 import numpy as np
 import time
+from RobotHardwares.calibration import CROUCH_HEIGHT_M, STANDING_HEIGHT_M
 
 class LayDownController(object):
     """
@@ -59,29 +60,9 @@ class LayDownController(object):
         """
         temp = self.default_stance
         
-        # Initialize on first call
-        if state.ticks == 0:
-            state.ticks = 1
-        
-        # Calculate animation progress (0.0 to 1.0)
-        progress = min(state.ticks / self.STEP_MAX, 1.0)
-        
-        # Apply easing function for smooth animation
-        eased_progress = self.smoothstep_easing(progress)
-        
-        # Interpolate from lying position (0) to standing position (command.robot_height)
-        target_height = command.robot_height * eased_progress
-        temp[2] = [target_height] * 4
-        
-        # Increment animation progress
-        state.ticks += self.STEP
-        
-        # Clamp to maximum
-        if state.ticks > self.STEP_MAX:
-            state.ticks = self.STEP_MAX
-        else:
-            # Optional: add small sleep for smooth visual animation
-            time.sleep(0.02)
+        # Hold a reachable crouch until an explicit start command. This height
+        # requires physical calibration; zero height is not an initial foot pose.
+        temp[2] = [command.robot_height * (CROUCH_HEIGHT_M/STANDING_HEIGHT_M)] * 4
         
         state.foot_locations = temp
         return state.foot_locations

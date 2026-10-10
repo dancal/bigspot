@@ -11,6 +11,7 @@ from numpy import array_equal, sin, cos, pi
 import numpy as np
 import math
 import time
+from .calibration import SERVO_SPECS, WIRED_NAMES
 
 class ServoItem:
     posName     = None
@@ -37,10 +38,6 @@ class ServoItem:
 
     def rad2deg(self, rad):
         deg = rad * 180.0 / np.pi
-        if deg > 90:
-            deg = 90
-        elif deg < -90:
-            deg = -90
         return deg
 
     def posChange(self, currentPos):
@@ -76,8 +73,8 @@ class ServoItem:
 
         if ( self.currentPos > 180 ):
             self.currentPos     = 180
-        if ( self.currentPos < -180 ):
-            self.currentPos     = -180
+        if ( self.currentPos < 0 ):
+            raise ValueError('Servo pulse angle below zero; verify joint calibration')
 
         self.pca9685.servo[self.servoPin].angle         = self.currentPos
 
@@ -90,8 +87,8 @@ class ServoItem:
 
         if ( self.currentPos > 180 ):
             self.currentPos     = 180
-        if ( self.currentPos < -180 ):
-            self.currentPos     = -180
+        if ( self.currentPos < 0 ):
+            raise ValueError('Servo pulse angle below zero; verify joint calibration')
 
         if self.posChange(self.currentPos) == True:
             try:
@@ -119,6 +116,7 @@ class ServoController:
 
     def __init__(self):
         print("servo Moter init")
+        self.servoMoters = []
         
         self.ServoKitB          = ServoKit(channels=16, address=0x40)
         self.ServoKitF          = ServoKit(channels=16, address=0x41)
@@ -143,23 +141,9 @@ class ServoController:
         ##self.servoMoters.append( ServoItem('RRL', self.ServoKitB, 4, 48,  1, -32))     # 10
         ##self.servoMoters.append( ServoItem('RRF', self.ServoKitB, 5, 22,  -1, -30))     # 11
 
-        # FRONT
-        self.servoMoters.append( ServoItem('FLS', self.ServoKitF, 0, 90,   1, 5))     # 0
-        self.servoMoters.append( ServoItem('FLL', self.ServoKitF, 1, 60,   1, 40))     # 1
-        self.servoMoters.append( ServoItem('FLF', self.ServoKitF, 2, 160,  1, 15))     # 2
-
-        self.servoMoters.append( ServoItem('FRS', self.ServoKitF, 3, 90,  1, -10))     # 3
-        self.servoMoters.append( ServoItem('FRL', self.ServoKitF, 4, 122, -1, -35))     # 4
-        self.servoMoters.append( ServoItem('FRF', self.ServoKitF, 5, 22,  1, -35))     # 5
-
-        # REAR
-        self.servoMoters.append( ServoItem('RLS', self.ServoKitB, 0, 90,  1, -5))     # 6
-        self.servoMoters.append( ServoItem('RLL', self.ServoKitB, 1, 48,  -1, 35))     # 7
-        self.servoMoters.append( ServoItem('RLF', self.ServoKitB, 2, 158,  1, 10))     # 8
-
-        self.servoMoters.append( ServoItem('RRS', self.ServoKitB, 3, 90,  1, -3))     # 9
-        self.servoMoters.append( ServoItem('RRL', self.ServoKitB, 4, 136,  1, -12))     # 10
-        self.servoMoters.append( ServoItem('RRF', self.ServoKitB, 5, 22,  1, -35))     # 11
+        boards={0x41:self.ServoKitF,0x40:self.ServoKitB}
+        for name,address,pin,zero,direction,trim in SERVO_SPECS:
+            self.servoMoters.append(ServoItem(name,boards[address],pin,zero,direction,trim))
 
         #self.moveFirst()
         
@@ -172,8 +156,18 @@ class ServoController:
         time.sleep(2)
 
     def move(self, joint_angles, state):
-        for i in range(len(self.servoMoters)):
-            self.servoMoters[i].moveAngle(joint_angles[i])
+        angles = np.asarray(joint_angles,dtype=float)
+        if angles.shape != (12,) or not np.isfinite(angles).all():
+            raise ValueError('Expected 12 finite joint angles')
+        # Preserve original IK-slot -> wired-servo correspondence. Sorting by
+        # matching names alone makes FRF/RRF pulses negative with these trims.
+        lookup = {s.posName:s for s in self.servoMoters}
+        ordered = [lookup[n] for n in WIRED_NAMES]
+        pulse_angles = [math.ceil(s.rad2deg(a)*s.direction+s.defAngle)+s.restPos for s,a in zip(ordered,angles)]
+        if any(a < 0 or a > 180 for a in pulse_angles):
+            raise ValueError('Joint command outside calibrated servo range; batch rejected')
+        for servo_item, angle in zip(ordered, angles):
+            servo_item.moveAngle(angle)
             #time.sleep(0.1)
         
 if __name__ == "__main__":

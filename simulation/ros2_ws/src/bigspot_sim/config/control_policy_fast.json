@@ -1,0 +1,26 @@
+{
+  "method": "Controlled physics parameter sweep",
+  "parameters": {
+    "gait_mode": "trot",
+    "static_crawl": false,
+    "center_stance": true,
+    "stance_center_x": -0.02,
+    "period": 0.6,
+    "standing_height": 0.28,
+    "lift": 0.02,
+    "balance_kp": 0.5,
+    "balance_kd": 0.0,
+    "joint_rate": 4.0,
+    "trot_duty": 0.65,
+    "max_forward_speed": 0.15,
+    "acceleration": 0.2,
+    "speed_scale": 1.15,
+    "support_shift": 0.0
+  },
+  "target_forward_speed_m_s": 0.1,
+  "reference_forward_speed_m_s": 0.01,
+  "hardware_validated": false,
+  "neural_policy": false,
+  "validated_motion": "straight diagonal trot; independent ROS/holdout tests recorded separately",
+  "motor_torque_limit_nm_assumed": 6.0
+}

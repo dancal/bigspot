@@ -5,13 +5,16 @@
 import numpy as np
 from . GaitController import GaitController
 from . PIDController import PID_controller
-from RoboticsUtilities.Transformations import rotz
+from RoboticsUtilities.Transformations import rotz, rotxyz
 import time
 
 class TrotGaitController(GaitController):
     def __init__(self, default_stance, stance_time, swing_time, time_step, use_imu):
-        contact_phases = np.array([[1, 0, 1, 0],
-                                   [0, 1, 0, 1]])
+        # Rows are FR, FL, RR, RL; columns are double support / diagonal swing.
+        contact_phases = np.array([[1, 0, 1, 1],
+                                   [1, 1, 1, 0],
+                                   [1, 1, 1, 0],
+                                   [1, 0, 1, 1]])
 
         super().__init__(stance_time, swing_time, time_step, contact_phases, default_stance)
 
@@ -63,8 +66,8 @@ class TrotGaitController(GaitController):
 
         if self.use_imu:
             imu_comp = self.pid_controller.run(state.imu_roll, state.imu_pitch)
-            rot_mat = np.eye(4)
-            # TODO: Apply imu_comp to foot locations
+            compensation = np.clip(-imu_comp,-.1,.1)
+            state.foot_locations = rotxyz(compensation[0],compensation[1],0) @ state.foot_locations
 
         state.robot_height = command.robot_height
         return state.foot_locations
@@ -101,7 +104,7 @@ class TrotSwingController(object):
         swing_height_ = self.swing_height(swing_prop)
         touchdown_location = self.raibert_touchdown_location(leg_index, command)
 
-        time_left = self.time_step * self.swing_ticks * (1.0 - swing_prop)
+        time_left = max(self.time_step, self.time_step * self.swing_ticks * (1.0 - swing_prop))
         velocity = (touchdown_location - foot_location) / float(time_left) * np.array([1, 1, 0])
 
         delta_foot_location = velocity * self.time_step
@@ -122,7 +125,7 @@ class TrotStanceController(object):
 
         time_left = self.time_step * self.stance_ticks
         
-        velocity = (command.velocity / self.stance_ticks) * np.array([1, 1, 0])
+        velocity = np.array([-command.velocity[0], -command.velocity[1], 0.0])
         delta_foot_location = velocity * self.time_step
 
         z_velocity = 1.0 / self.z_error_constant * (state.robot_height - foot_location[2])

@@ -1,101 +1,60 @@
 #!/usr/bin/env python3
-
-# sudo pip3 install adafruit-circuitpython-rgbled
-# https://github.com/mmabey/CircuitPython_HCSR04
-import RPi.GPIO as GPIO
+"""ROS 1 dual HC-SR04P acquisition, metres, alternating pings, explicit faults."""
+import math
 import time
-import sys
-import signal
 import rospy
 import board
-import numpy as np
-
 import adafruit_hcsr04
-#from hcsr04 import HCSR04
-
-from sensor_msgs.msg import Joy
-from std_msgs.msg import String
 from sensor_msgs.msg import Range
 
+
 class UltraSonic:
+    def __init__(self,rate=8):
+        rospy.init_node('ultrasonic_node')
+        self.sensors=[adafruit_hcsr04.HCSR04(trigger_pin=board.D16,echo_pin=board.D19,timeout=.05),
+                      adafruit_hcsr04.HCSR04(trigger_pin=board.D20,echo_pin=board.D21,timeout=.05)]
+        self.publishers=[rospy.Publisher('bigspot_ultrasonic/'+name,Range,queue_size=1)
+                         for name in ('left','right')]
+        self.combined=rospy.Publisher('bigspot_ultrasonic/sonic_dist',Range,queue_size=1)
+        self.values=[float('nan')]*2
+        self.times=[float('-inf')]*2
+        self.rate=rospy.Rate(min(16.,2*rate))
 
-    sonar   = None
-    trig = 27 # 7th
-    echo = 17 # 6th
-    
-    rate    = 10
-    distance_publisher  = None
-
-    rgb_led     = None
-    setdistance = 0 
-
-    def led_on(self, pin):
-        gpio.setmode(gpio.BOARD)
-        gpio.setup(pin, gpio.OUT)
-
-        gpio.output(pin, True)
-
-    def led_off(pin):
-        gpio.setmode(gpio.BOARD)
-        gpio.setup(pin, gpio.OUT)
-
-        gpio.cleanup(pin)
-
-    def __init__(self, rate):
-
-        rospy.init_node('ultrasonic_node', anonymous=True)
-        rospy.loginfo(f"UltraSonic Sensor Init")
-
-        self.sonarL             = adafruit_hcsr04.HCSR04(trigger_pin=board.D16, echo_pin=board.D19)
-        self.sonarR             = adafruit_hcsr04.HCSR04(trigger_pin=board.D20, echo_pin=board.D21)
-
-        self.rgb_publisher      = rospy.Publisher('bigspot_rgb/rgb_dist', String, queue_size=1)
-        self.distance_publisher = rospy.Publisher('bigspot_ultrasonic/sonic_dist', Joy, queue_size=1)
-        
-        self.rate               = rospy.Rate(rate)
-
-    def hex_to_rgb(self, hex):
-        return tuple(int(hex[i:i+2], 16) for i in (0, 2, 4))
+    def message(self,side,distance):
+        result=Range()
+        result.header.stamp=rospy.Time.now()
+        result.header.frame_id='ultrasonic_'+side
+        result.radiation_type=Range.ULTRASOUND
+        result.field_of_view=.26
+        result.min_range,result.max_range=.02,4.
+        result.range=distance
+        return result
 
     def run(self):
-
-        # LEFT SONA
+        side=0
+        last_ping=float('-inf')
         try:
-            distance            = 100
-            Mode                = False
             while not rospy.is_shutdown():
-
+                wait=.06-(time.monotonic()-last_ping)
+                if wait>0:
+                    time.sleep(wait)
+                last_ping=time.monotonic()
                 try:
-                    distance1   = self.sonarL.distance
-                    distance2   = self.sonarR.distance
-                    distance    = np.min([distance1, distance2])
-                except:
-                    pass
-                    
-                range       = Range()
-                range.distance  = distance
-                self.distance_publisher.publish(range)
-
-                #if distance <= 10:
-                #    self.rgb_publisher.publish('FF0000')
-                #elif distance <= 20:
-                #    self.rgb_publisher.publish('0000FF')
-                #elif distance <= 30:
-                #    self.rgb_publisher.publish('00FF00')
-                #elif distance <= 40:
-                #    self.rgb_publisher.publish('FFFF00')
-                #elif distance <= 50:
-                #    self.rgb_publisher.publish('00BFFF')
-                #elif distance <= 60:
-                #    self.rgb_publisher.publish('FF9900')
-                #else:
-                #    self.rgb_publisher.publish('FFFFFF')
-
+                    distance=float(self.sensors[side].distance)/100.
+                    if not math.isfinite(distance) or not .02<=distance<=4.:
+                        distance=float('nan')
+                except (RuntimeError,OSError):
+                    distance=float('nan')
+                self.values[side],self.times[side]=distance,time.monotonic()
+                self.publishers[side].publish(self.message('left' if side==0 else 'right',distance))
+                valid=all(math.isfinite(v) for v in self.values) and min(self.times)>time.monotonic()-.35
+                self.combined.publish(self.message('front',min(self.values) if valid else float('nan')))
+                side=1-side
                 self.rate.sleep()
+        finally:
+            for sensor in self.sensors:
+                sensor.deinit()
 
-        except KeyboardInterrupt:
-            pass
 
-if __name__ == "__main__":
-    sonic = UltraSonic(rate = 60)
-    sonic.run()
+if __name__=='__main__':
+    UltraSonic().run()

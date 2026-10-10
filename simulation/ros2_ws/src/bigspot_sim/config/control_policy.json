@@ -1,0 +1,24 @@
+{
+  "method": "CEM static wave crawl parameter search",
+  "seed": 43,
+  "training_episodes": 30,
+  "parameters": {
+    "balance_kd": 0.0,
+    "center_stance": true,
+    "stance_center_x": -0.02,
+    "com_x": -0.02,
+    "static_crawl": true,
+    "wave_sequence": true,
+    "balance_kp": 0.4377884460178671,
+    "support_margin": 0.02518179635124742,
+    "transfer_fraction": 0.42365098751029684,
+    "lift": 0.026763895643738572,
+    "speed_scale": 0.9662640021784511,
+    "period": 5.593662488982069
+  },
+  "selection": "Best quality score across 30 trials in the same nominal model",
+  "objective": "Final distance, body velocity, support contacts, all-foot clearance and tilt",
+  "neural_policy": false,
+  "hardware_validated": false,
+  "validated_motion": "straight slow crawl"
+}

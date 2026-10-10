@@ -8,6 +8,7 @@ import time
 import threading
 
 from RoboticsUtilities.Transformations import rotxyz
+from RobotHardwares.calibration import CROUCH_HEIGHT_M, STANDING_HEIGHT_M, RISE_SECONDS
 
 class StandUpController(object):
     """
@@ -28,6 +29,13 @@ class StandUpController(object):
         self.STEP       = 0.05  # Reduced from 0.15 for finer control
         self.STEP_MAX   = 30    # Increased from 10 for smoother animation (3x more frames)
         self.ISDOWN     = False
+        self.started = None
+        self.duration = RISE_SECONDS
+        self.done = False
+
+    def reset(self):
+        self.started = time.monotonic()
+        self.done = False
 
     def updateStateCommand(self, msg, state, command):
         """Handle joystick input during stand-up animation"""
@@ -69,25 +77,19 @@ class StandUpController(object):
         """
 
         temp        = self.default_stance
-        if state.ticks == 0:
-            state.ticks = 1
-
-        # Calculate animation progress (0.0 to 1.0)
-        progress = min(state.ticks / self.STEP_MAX, 1.0)
+        if self.started is None:
+            self.reset()
+        progress = min((time.monotonic()-self.started)/self.duration, 1.0)
         
         # Apply easing function for smooth animation
         eased_progress = self.smoothstep_easing(progress)
         
         # Interpolate height from 0 to command.robot_height
-        temp[2] = [(command.robot_height * eased_progress)] * 4
+        ratio=CROUCH_HEIGHT_M/STANDING_HEIGHT_M
+        temp[2] = [command.robot_height * (ratio+(1.-ratio)*eased_progress)] * 4
         
         # Increment animation counter
-        state.ticks  += self.STEP
-        if state.ticks > self.STEP_MAX:
-            state.ticks  = self.STEP_MAX
-        else:
-            # Small sleep for visual smoothness (non-blocking alternative to time.sleep recommended)
-            time.sleep(0.02)
+        self.done = progress >= 1.0
 
         state.foot_locations = temp
         return state.foot_locations

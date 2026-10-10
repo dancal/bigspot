@@ -1,2 +1,11 @@
-__pycache__/*
+__pycache__/
 *.pyc
+build/
+install/
+log/
+.venv/
+tools/*.exe
+simulation/generated/
+*.usd
+*.usda
+*.usdc

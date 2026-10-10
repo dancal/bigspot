@@ -1,0 +1,657 @@
+{
+  "units": "mm",
+  "source": "STL geometry and original URDF zero pose; axes not measured from CAD",
+  "weld_tolerance_mm": 1e-05,
+  "meshes": [
+    {
+      "link": "base_link",
+      "file": "base_link.stl",
+      "triangles": 29034,
+      "unique_vertices": 14215,
+      "connected_vertex_sets": 11,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 1,
+      "nonmanifold_edge_points_mm": [
+        [
+          [
+            -194.43784000000002,
+            64.92687000000001,
+            357.33856000000003
+          ],
+          [
+            -193.94424,
+            64.92234,
+            355.46893000000006
+          ]
+        ]
+      ],
+      "nonmanifold_edge_face_counts": [
+        4
+      ],
+      "inconsistent_shared_edge_directions": 0,
+      "degenerate_triangles": 0,
+      "duplicate_triangles": 0,
+      "bounds_min_mm": [
+        -213.17340087890628,
+        -70.25231933593751,
+        279.2849426269531
+      ],
+      "bounds_max_mm": [
+        188.50721740722656,
+        69.57892608642578,
+        383.9291076660156
+      ],
+      "extent_mm": [
+        401.6806182861328,
+        139.83124542236328,
+        104.6441650390625
+      ],
+      "surface_area_mm2": 485447.0980805503,
+      "signed_volume_mm3": 926515.722168542,
+      "closed_oriented_edge_topology": false,
+      "self_intersections_checked": false
+    },
+    {
+      "link": "FRS_1",
+      "file": "FRS_1.stl",
+      "triangles": 8880,
+      "unique_vertices": 4394,
+      "connected_vertex_sets": 2,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "nonmanifold_edge_points_mm": [],
+      "nonmanifold_edge_face_counts": [],
+      "inconsistent_shared_edge_directions": 0,
+      "degenerate_triangles": 0,
+      "duplicate_triangles": 0,
+      "bounds_min_mm": [
+        85.95257568359375,
+        -94.9514617919922,
+        281.73333740234375
+      ],
+      "bounds_max_mm": [
+        154.49034118652344,
+        -33.48509979248047,
+        370.2935791015625
+      ],
+      "extent_mm": [
+        68.53776550292969,
+        61.46636199951173,
+        88.56024169921875
+      ],
+      "surface_area_mm2": 40572.71999605202,
+      "signed_volume_mm3": 165059.54765165944,
+      "closed_oriented_edge_topology": true,
+      "self_intersections_checked": false
+    },
+    {
+      "link": "FRL_1",
+      "file": "FRL_1.stl",
+      "triangles": 7760,
+      "unique_vertices": 3868,
+      "connected_vertex_sets": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "nonmanifold_edge_points_mm": [],
+      "nonmanifold_edge_face_counts": [],
+      "inconsistent_shared_edge_directions": 0,
+      "degenerate_triangles": 0,
+      "duplicate_triangles": 0,
+      "bounds_min_mm": [
+        106.43253326416016,
+        -165.76577758789062,
+        163.89256286621094
+      ],
+      "bounds_max_mm": [
+        164.1383056640625,
+        -88.40263366699219,
+        351.51910400390625
+      ],
+      "extent_mm": [
+        57.705772399902344,
+        77.36314392089844,
+        187.6265411376953
+      ],
+      "surface_area_mm2": 43465.4217973578,
+      "signed_volume_mm3": 191673.20500272233,
+      "closed_oriented_edge_topology": true,
+      "self_intersections_checked": false
+    },
+    {
+      "link": "FRF_1",
+      "file": "FRF_1.stl",
+      "triangles": 4934,
+      "unique_vertices": 2429,
+      "connected_vertex_sets": 2,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "nonmanifold_edge_points_mm": [],
+      "nonmanifold_edge_face_counts": [],
+      "inconsistent_shared_edge_directions": 0,
+      "degenerate_triangles": 0,
+      "duplicate_triangles": 0,
+      "bounds_min_mm": [
+        125.5339813232422,
+        -165.8684234619141,
+        0.1926044374704361
+      ],
+      "bounds_max_mm": [
+        162.63156127929688,
+        -96.42436981201172,
+        204.32566833496094
+      ],
+      "extent_mm": [
+        37.09757995605467,
+        69.44405364990237,
+        204.1330638974905
+      ],
+      "surface_area_mm2": 47221.98042576688,
+      "signed_volume_mm3": 189163.30329674485,
+      "closed_oriented_edge_topology": true,
+      "self_intersections_checked": false
+    },
+    {
+      "link": "FLS_1",
+      "file": "FLS_1.stl",
+      "triangles": 8878,
+      "unique_vertices": 4393,
+      "connected_vertex_sets": 2,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "nonmanifold_edge_points_mm": [],
+      "nonmanifold_edge_face_counts": [],
+      "inconsistent_shared_edge_directions": 0,
+      "degenerate_triangles": 0,
+      "duplicate_triangles": 0,
+      "bounds_min_mm": [
+        85.95545196533205,
+        33.92314147949219,
+        281.6857604980469
+      ],
+      "bounds_max_mm": [
+        154.49322509765625,
+        95.5169677734375,
+        370.2725830078125
+      ],
+      "extent_mm": [
+        68.5377731323242,
+        61.59382629394531,
+        88.58682250976562
+      ],
+      "surface_area_mm2": 40572.677626506054,
+      "signed_volume_mm3": 165059.23795111623,
+      "closed_oriented_edge_topology": true,
+      "self_intersections_checked": false
+    },
+    {
+      "link": "FLL_1",
+      "file": "FLL_1.stl",
+      "triangles": 7760,
+      "unique_vertices": 3868,
+      "connected_vertex_sets": 1,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "nonmanifold_edge_points_mm": [],
+      "nonmanifold_edge_face_counts": [],
+      "inconsistent_shared_edge_directions": 0,
+      "degenerate_triangles": 0,
+      "duplicate_triangles": 0,
+      "bounds_min_mm": [
+        106.43954467773438,
+        88.65274810791016,
+        164.0361480712891
+      ],
+      "bounds_max_mm": [
+        164.14456176757812,
+        166.55718994140625,
+        351.7941589355469
+      ],
+      "extent_mm": [
+        57.70501708984375,
+        77.9044418334961,
+        187.75801086425778
+      ],
+      "surface_area_mm2": 43465.473781152956,
+      "signed_volume_mm3": 191674.0381337955,
+      "closed_oriented_edge_topology": true,
+      "self_intersections_checked": false
+    },
+    {
+      "link": "FLF_1",
+      "file": "FLF_1.stl",
+      "triangles": 4934,
+      "unique_vertices": 2429,
+      "connected_vertex_sets": 2,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "nonmanifold_edge_points_mm": [],
+      "nonmanifold_edge_face_counts": [],
+      "inconsistent_shared_edge_directions": 0,
+      "degenerate_triangles": 0,
+      "duplicate_triangles": 0,
+      "bounds_min_mm": [
+        125.54194641113281,
+        97.15042877197266,
+        0.41071513295173645
+      ],
+      "bounds_max_mm": [
+        162.6413269042969,
+        166.6326446533203,
+        204.54910278320312
+      ],
+      "extent_mm": [
+        37.09938049316409,
+        69.48221588134766,
+        204.1383876502514
+      ],
+      "surface_area_mm2": 47222.16306353284,
+      "signed_volume_mm3": 189163.2395379219,
+      "closed_oriented_edge_topology": true,
+      "self_intersections_checked": false
+    },
+    {
+      "link": "RRS_1",
+      "file": "RRS_1.stl",
+      "triangles": 8870,
+      "unique_vertices": 4389,
+      "connected_vertex_sets": 2,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "nonmanifold_edge_points_mm": [],
+      "nonmanifold_edge_face_counts": [],
+      "inconsistent_shared_edge_directions": 0,
+      "degenerate_triangles": 0,
+      "duplicate_triangles": 0,
+      "bounds_min_mm": [
+        -166.82908630371094,
+        -95.0695571899414,
+        281.6801147460938
+      ],
+      "bounds_max_mm": [
+        -96.79120635986328,
+        -33.504276275634766,
+        370.2572937011719
+      ],
+      "extent_mm": [
+        70.03787994384766,
+        61.56528091430664,
+        88.57717895507807
+      ],
+      "surface_area_mm2": 40561.48380630469,
+      "signed_volume_mm3": 164986.0004435341,
+      "closed_oriented_edge_topology": true,
+      "self_intersections_checked": false
+    },
+    {
+      "link": "RRL_1",
+      "file": "RRL_1.stl",
+      "triangles": 7860,
+      "unique_vertices": 3926,
+      "connected_vertex_sets": 5,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "nonmanifold_edge_points_mm": [],
+      "nonmanifold_edge_face_counts": [],
+      "inconsistent_shared_edge_directions": 0,
+      "degenerate_triangles": 0,
+      "duplicate_triangles": 0,
+      "bounds_min_mm": [
+        -154.0007781982422,
+        -165.84507751464844,
+        163.48016357421875
+      ],
+      "bounds_max_mm": [
+        -93.20878601074219,
+        -88.21819305419922,
+        351.72424316406256
+      ],
+      "extent_mm": [
+        60.7919921875,
+        77.62688446044922,
+        188.2440795898438
+      ],
+      "surface_area_mm2": 43473.147451463716,
+      "signed_volume_mm3": 192536.7684946119,
+      "closed_oriented_edge_topology": true,
+      "self_intersections_checked": false
+    },
+    {
+      "link": "RRF_1",
+      "file": "RRF_1.stl",
+      "triangles": 4934,
+      "unique_vertices": 2429,
+      "connected_vertex_sets": 2,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "nonmanifold_edge_points_mm": [],
+      "nonmanifold_edge_face_counts": [],
+      "inconsistent_shared_edge_directions": 0,
+      "degenerate_triangles": 0,
+      "duplicate_triangles": 0,
+      "bounds_min_mm": [
+        -131.99302673339844,
+        -165.92619323730472,
+        -0.20610569417476654
+      ],
+      "bounds_max_mm": [
+        -94.69615173339845,
+        -96.45233154296875,
+        203.90997314453125
+      ],
+      "extent_mm": [
+        37.296874999999986,
+        69.47386169433597,
+        204.11607883870602
+      ],
+      "surface_area_mm2": 47219.47776891006,
+      "signed_volume_mm3": 189142.53519785783,
+      "closed_oriented_edge_topology": true,
+      "self_intersections_checked": false
+    },
+    {
+      "link": "RLS_1",
+      "file": "RLS_1.stl",
+      "triangles": 8870,
+      "unique_vertices": 4389,
+      "connected_vertex_sets": 2,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "nonmanifold_edge_points_mm": [],
+      "nonmanifold_edge_face_counts": [],
+      "inconsistent_shared_edge_directions": 0,
+      "degenerate_triangles": 0,
+      "duplicate_triangles": 0,
+      "bounds_min_mm": [
+        -166.82836914062503,
+        33.91333770751953,
+        281.62399291992193
+      ],
+      "bounds_max_mm": [
+        -96.79049682617188,
+        95.56538391113281,
+        370.2380676269532
+      ],
+      "extent_mm": [
+        70.03787231445315,
+        61.65204620361328,
+        88.61407470703125
+      ],
+      "surface_area_mm2": 40561.50318337714,
+      "signed_volume_mm3": 164986.21903834323,
+      "closed_oriented_edge_topology": true,
+      "self_intersections_checked": false
+    },
+    {
+      "link": "RLL_1",
+      "file": "RLL_1.stl",
+      "triangles": 7860,
+      "unique_vertices": 3926,
+      "connected_vertex_sets": 5,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "nonmanifold_edge_points_mm": [],
+      "nonmanifold_edge_face_counts": [],
+      "inconsistent_shared_edge_directions": 0,
+      "degenerate_triangles": 0,
+      "duplicate_triangles": 0,
+      "bounds_min_mm": [
+        -153.9991912841797,
+        88.68868255615236,
+        163.57702636718753
+      ],
+      "bounds_max_mm": [
+        -93.20698547363281,
+        166.69322204589847,
+        351.9150695800781
+      ],
+      "extent_mm": [
+        60.792205810546875,
+        78.00453948974611,
+        188.3380432128906
+      ],
+      "surface_area_mm2": 43473.10159031751,
+      "signed_volume_mm3": 192535.81586397951,
+      "closed_oriented_edge_topology": true,
+      "self_intersections_checked": false
+    },
+    {
+      "link": "RLF_1",
+      "file": "RLF_1.stl",
+      "triangles": 4934,
+      "unique_vertices": 2429,
+      "connected_vertex_sets": 2,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0,
+      "nonmanifold_edge_points_mm": [],
+      "nonmanifold_edge_face_counts": [],
+      "inconsistent_shared_edge_directions": 0,
+      "degenerate_triangles": 0,
+      "duplicate_triangles": 0,
+      "bounds_min_mm": [
+        -131.99176025390625,
+        97.26920318603516,
+        -0.05584591627120972
+      ],
+      "bounds_max_mm": [
+        -94.6944351196289,
+        166.76075744628906,
+        204.06404113769534
+      ],
+      "extent_mm": [
+        37.297325134277344,
+        69.4915542602539,
+        204.11988705396655
+      ],
+      "surface_area_mm2": 47219.65604627443,
+      "signed_volume_mm3": 189142.47767668444,
+      "closed_oriented_edge_topology": true,
+      "self_intersections_checked": false
+    }
+  ],
+  "joints": [
+    {
+      "name": "FRS_Joint",
+      "parent": "base_link",
+      "child": "FRS_1",
+      "point_mm": [
+        152.485,
+        -48.774,
+        341.762
+      ],
+      "axis": [
+        -0.999998,
+        3e-05,
+        0.001745
+      ],
+      "lower_rad": -0.349066,
+      "upper_rad": 0.523599
+    },
+    {
+      "name": "FLS_Joint",
+      "parent": "base_link",
+      "child": "FLS_1",
+      "point_mm": [
+        152.48700000000002,
+        49.214,
+        341.737
+      ],
+      "axis": [
+        -0.999998,
+        3e-05,
+        0.001745
+      ],
+      "lower_rad": -0.523599,
+      "upper_rad": 0.349066
+    },
+    {
+      "name": "RRS_Joint",
+      "parent": "base_link",
+      "child": "RRS_1",
+      "point_mm": [
+        -164.823,
+        -48.791000000000004,
+        341.723
+      ],
+      "axis": [
+        -0.999998,
+        7e-06,
+        -0.001745
+      ],
+      "lower_rad": -0.349066,
+      "upper_rad": 0.523599
+    },
+    {
+      "name": "RLS_Joint",
+      "parent": "base_link",
+      "child": "RLS_1",
+      "point_mm": [
+        -164.822,
+        49.198,
+        341.698
+      ],
+      "axis": [
+        -0.999998,
+        7e-06,
+        -0.001745
+      ],
+      "lower_rad": -0.523599,
+      "upper_rad": 0.349066
+    },
+    {
+      "name": "FRL_Joint",
+      "parent": "FRS_1",
+      "child": "FRL_1",
+      "point_mm": [
+        121.43400000000001,
+        -92.66,
+        322.91900000000004
+      ],
+      "axis": [
+        2.6e-05,
+        0.999998,
+        -0.002125
+      ],
+      "lower_rad": -1.570796,
+      "upper_rad": 1.570796
+    },
+    {
+      "name": "FLL_Joint",
+      "parent": "FLS_1",
+      "child": "FLL_1",
+      "point_mm": [
+        121.44000000000001,
+        92.92200000000001,
+        323.041
+      ],
+      "axis": [
+        3.9e-05,
+        0.999985,
+        0.005513
+      ],
+      "lower_rad": -1.570796,
+      "upper_rad": 1.570796
+    },
+    {
+      "name": "RRL_Joint",
+      "parent": "RRS_1",
+      "child": "RRL_1",
+      "point_mm": [
+        -133.775,
+        -92.485,
+        323.0
+      ],
+      "axis": [
+        -1.5e-05,
+        -0.999988,
+        0.00488
+      ],
+      "lower_rad": -1.570796,
+      "upper_rad": 1.570796
+    },
+    {
+      "name": "RLL_Joint",
+      "parent": "RLS_1",
+      "child": "RLL_1",
+      "point_mm": [
+        -133.774,
+        92.96399999999998,
+        323.081
+      ],
+      "axis": [
+        6e-06,
+        -0.999973,
+        -0.007312
+      ],
+      "lower_rad": -1.570796,
+      "upper_rad": 1.570796
+    },
+    {
+      "name": "FRF_Joint",
+      "parent": "FRL_1",
+      "child": "FRF_1",
+      "point_mm": [
+        145.661,
+        -96.43099999999998,
+        182.30200000000002
+      ],
+      "axis": [
+        2.6e-05,
+        0.999998,
+        -0.002125
+      ],
+      "lower_rad": -2.617994,
+      "upper_rad": 0.0
+    },
+    {
+      "name": "FLF_Joint",
+      "parent": "FLL_1",
+      "child": "FLF_1",
+      "point_mm": [
+        145.667,
+        97.168,
+        182.437
+      ],
+      "axis": [
+        -3.9e-05,
+        -0.999985,
+        -0.005513
+      ],
+      "lower_rad": 0.0,
+      "upper_rad": 2.617994
+    },
+    {
+      "name": "RRF_Joint",
+      "parent": "RRL_1",
+      "child": "RRF_1",
+      "point_mm": [
+        -111.933,
+        -96.468,
+        181.88800000000003
+      ],
+      "axis": [
+        -0.004077,
+        0.999989,
+        -0.002405
+      ],
+      "lower_rad": -2.792527,
+      "upper_rad": 0.0
+    },
+    {
+      "name": "RLF_Joint",
+      "parent": "RLL_1",
+      "child": "RLF_1",
+      "point_mm": [
+        -111.932,
+        97.28999999999999,
+        181.979
+      ],
+      "axis": [
+        -0.004087,
+        -0.99998,
+        -0.004837
+      ],
+      "lower_rad": 0.0,
+      "upper_rad": 2.792527
+    }
+  ]
+}

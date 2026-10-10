@@ -1,0 +1,19 @@
+{
+  "method": "Jerk-limited velocity, forward sonar braking and sensor-settled poses",
+  "parameters": {
+    "gait_mode": "trot", "static_crawl": false, "center_stance": true,
+    "stance_center_x": -0.02, "period": 0.6, "standing_height": 0.28,
+    "lift": 0.02, "balance_kp": 0.5, "balance_kd": 0.025,
+    "joint_rate": 4.0, "trot_duty": 0.65,
+    "max_forward_speed": 0.22, "max_lateral_speed": 0.08,
+    "max_yaw_rate": 0.6, "acceleration": 0.20, "speed_scale": 1.15,
+    "support_shift": 0.0, "smooth_velocity": true,
+    "linear_jerk": 1.2, "yaw_acceleration": 0.6, "yaw_jerk": 3.0,
+    "require_ultrasonic": true, "require_joint_feedback": true, "obstacle_clearance": 0.22,
+    "obstacle_slow_distance": 0.60, "dance_bpm": 60.0, "rhythm_bpm": 90.0
+  },
+  "hardware_validated": false,
+  "ultrasonic_mount_measured": false,
+  "foot_contacts_and_joint_feedback_physical": false,
+  "experimental_actions_default_enabled": false
+}

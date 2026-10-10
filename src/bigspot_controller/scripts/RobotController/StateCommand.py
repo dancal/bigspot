@@ -11,6 +11,7 @@ class BehaviorState(Enum):
     STAND   = 3
     STANDUP = 4
     DANCE   = 5
+    LAYDOWN = 6
 
 class State(object):
     def __init__(self,default_height):

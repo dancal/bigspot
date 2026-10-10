@@ -31,6 +31,11 @@ class PID_controller(object):
         step = (t_now - self.last_time).to_sec()
 
         # I term update
+        if not np.isfinite(error).all():
+            raise ValueError('Non-finite IMU measurement')
+        if not np.isfinite(step) or step <= 0 or step > .2:
+            step = 0.
+            self.D_term[:] = 0.
         self.I_term = self.I_term + error * step
 
         # anti-windup
@@ -41,7 +46,7 @@ class PID_controller(object):
                 self.I_term[i] = self.max_I
 
         # approximate first derivate
-        if not np.isfinite(error).all() and not np.isfinite(self.last_error).all():
+        if step > 0:
             self.D_term = (error - self.last_error) / step
 
         # update last values 
@@ -61,6 +66,6 @@ class PID_controller(object):
         self.D_term = np.array([0.0,0.0])
         self.last_error = np.array([0.0,0.0])
 
-    def desired_RP_angles(des_roll, des_pitch):
+    def desired_RP_angles(self, des_roll, des_pitch):
         # set desired roll and pitch angles
         self.desired_roll_pitch = np.array([des_roll, des_pitch])

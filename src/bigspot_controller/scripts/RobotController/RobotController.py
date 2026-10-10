@@ -5,6 +5,7 @@
 import numpy as np
 import tf
 import rospy
+import time
 
 from sensor_msgs.msg import Range
 from sensor_msgs.msg import Joy
@@ -17,8 +18,10 @@ from . CrawlGaitController import CrawlGaitController
 from . DanceController import DanceController
 from . StandController import StandController
 from . StandUpController import StandUpController
+from RoboticsUtilities.Transformations import rotxyz
 
 from RobotSensors.RgbSensorController import RgbSensorController
+from RobotHardwares.calibration import STANDING_HEIGHT_M
 
 class Robot(object):
     def __init__(self, body, legs, imu):
@@ -29,7 +32,7 @@ class Robot(object):
         self.delta_y                = self.body[1] * 0.5 + self.legs[1]
         self.x_shift_front          = 0.024
         self.x_shift_back           = -0.06
-        self.default_height         = 0.2
+        self.default_height         = STANDING_HEIGHT_M
 
         self.rgbController          = RgbSensorController()
 
@@ -49,20 +52,34 @@ class Robot(object):
         self.state                  = State(self.default_height)
         self.state.foot_locations   = self.default_stance
         self.command                = Command(self.default_height)
+        self.state.behavior_state   = BehaviorState.LAYDOWN
+        self.restController.use_imu = imu
+        self.last_joy_time = self.last_imu_time = float('-inf')
+        self.imu_required = imu
+        self.stable_since = None
+        self.ready = False
         self.lastButtonMsg          = []
+        self.sonar_received=float('-inf')
+        self.sonar_distance=None
+        self.require_ultrasonic=False  # Hardware entry point explicitly enables it.
 
     def change_controller(self):
         """Handle state transitions between different controllers"""
         
         # Transition from LAYDOWN to REST or other states
         if self.state.behavior_state == BehaviorState.LAYDOWN:
-            # Wait until lying-down animation is complete
-            if self.state.ticks >= 30:  # STEP_MAX = 30
+            if self.command.standup_event and time.monotonic()-self.last_imu_time < .3:
+                self.state.behavior_state = BehaviorState.STANDUP
+                self.currentController = self.standUpController
+                self.standUpController.reset()
+            self.command.standup_event = False
+        elif self.state.behavior_state == BehaviorState.STANDUP:
+            if self.standUpController.done:
                 self.state.behavior_state = BehaviorState.REST
                 self.currentController = self.restController
-                self.currentController.pid_controller.reset()
-                self.state.ticks = 0
-                rospy.loginfo("Transitioned from LAYDOWN to REST")
+                self.restController.pid_controller.reset()
+                self.ready = False
+                self.stable_since = None
         
         # REST state transitions
         elif self.command.rest_event:
@@ -74,7 +91,7 @@ class Robot(object):
 
         # TROT gait transition
         elif self.command.trot_event:
-            if self.state.behavior_state == BehaviorState.REST:
+            if self.state.behavior_state == BehaviorState.REST and self.ready:
                 self.state.behavior_state = BehaviorState.TROT
                 self.currentController = self.trotGaitController
                 self.currentController.pid_controller.reset()
@@ -84,7 +101,7 @@ class Robot(object):
 
         # CRAWL gait transition
         elif self.command.crawl_event:
-            if self.state.behavior_state == BehaviorState.REST:
+            if self.state.behavior_state == BehaviorState.REST and self.ready:
                 self.state.behavior_state = BehaviorState.CRAWL
                 self.currentController = self.crawlGaitController
                 self.currentController.first_cycle = True
@@ -96,13 +113,10 @@ class Robot(object):
     def ultrasonic_command(self, msg):
         """Handle ultrasonic sensor input for obstacle avoidance"""
 
-        distance        = 100
-        try:
-            distance1   = msg.range * 100
-            distance2   = msg.range * 100
-            distance    = np.min([distance1, distance2])
-        except:
-            pass
+        value=float(msg.range)
+        self.sonar_received=time.monotonic()
+        self.sonar_distance=value if np.isfinite(value) and .02<=value<=4. else None
+        distance=100*value if self.sonar_distance is not None else 0.
 
         # Color feedback based on distance
         sColor          = 'FFFFFF'
@@ -121,7 +135,15 @@ class Robot(object):
 
     def joystick_command(self, msg):
         """Handle joystick input for robot control"""
-
+        if len(msg.buttons) < 8 or len(msg.axes) < 8 or not np.isfinite(msg.axes).all():
+            return
+        self.last_joy_time = time.monotonic()
+        if self.state.behavior_state == BehaviorState.LAYDOWN:
+            if msg.buttons[0]:
+                self.command.standup_event = True
+            return
+        if self.state.behavior_state == BehaviorState.STANDUP:
+            return
         if len(msg.buttons) > 0:
             
             if msg.buttons[0]:              # rest [PS2:A, PS3:X]
@@ -159,13 +181,51 @@ class Robot(object):
     def imu_orientation(self, msg):
         """Process IMU orientation data"""
         q = msg.orientation
-        rpy_angles = tf.transformations.euler_from_quaternion([q.x, q.y, q.z, q.w])
+        values = np.array([q.x,q.y,q.z,q.w])
+        norm = np.linalg.norm(values)
+        if not np.isfinite(values).all() or abs(norm-1.) > .05:
+            return
+        rpy_angles = tf.transformations.euler_from_quaternion(values/norm)
         self.state.imu_roll = rpy_angles[0]
         self.state.imu_pitch = rpy_angles[1]
+        self.last_imu_time = time.monotonic()
 
     def run(self):
         """Main control loop - run current controller"""
-        return self.currentController.run(self.state, self.command)
+        now = time.monotonic()
+        fresh = now-self.last_imu_time < .3
+        stable = fresh and max(abs(self.state.imu_roll),abs(self.state.imu_pitch)) < np.deg2rad(3)
+        if self.state.behavior_state == BehaviorState.REST:
+            self.stable_since = (self.stable_since or now) if stable else None
+            self.ready = self.stable_since is not None and now-self.stable_since >= 1.
+        if now-self.last_joy_time > .5 or (self.imu_required and not fresh):
+            self.command.velocity[:] = 0.
+            self.command.yaw_rate = 0.
+            self.command.trot_event = self.command.crawl_event = False
+            if self.state.behavior_state in (BehaviorState.CRAWL,BehaviorState.TROT):
+                self.state.behavior_state = BehaviorState.REST
+                self.currentController = self.restController
+                self.restController.pid_controller.reset()
+        if self.imu_required and not fresh and self.state.behavior_state != BehaviorState.LAYDOWN:
+            return self.state.foot_locations.copy()
+        saved_velocity=self.command.velocity.copy()
+        saved_yaw=self.command.yaw_rate
+        if self.require_ultrasonic and (now-self.sonar_received>.35 or self.sonar_distance is None):
+            self.command.velocity[0]=min(0.,self.command.velocity[0])
+        elif self.sonar_distance is not None:
+            cap=.10*np.clip((self.sonar_distance-.22)/.38,0.,1.)
+            self.command.velocity[0]=min(self.command.velocity[0],cap)
+            if self.sonar_distance<=.22:
+                self.command.yaw_rate=0.
+        try:
+            feet = self.currentController.run(self.state, self.command)
+        finally:
+            self.command.velocity[:]=saved_velocity
+            self.command.yaw_rate=saved_yaw
+        if self.imu_required and fresh and self.state.behavior_state == BehaviorState.CRAWL:
+            correction = np.clip(-self.restController.pid_controller.run(self.state.imu_roll,self.state.imu_pitch),-.1,.1)
+            feet = rotxyz(correction[0],correction[1],0) @ feet
+        return feet
 
     @property
     def default_stance(self):
