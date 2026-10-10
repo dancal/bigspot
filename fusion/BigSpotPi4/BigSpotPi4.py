@@ -22,12 +22,12 @@ def run(context):
     try:
         manifest=json.loads((OUT/'assembly_manifest.json').read_text(encoding='utf-8'))
         doc=app.documents.add(adsk.core.DocumentTypes.FusionDesignDocumentType)
-        doc.name='BigSpot Pi4 R1 - articulated engineering prototype'
+        doc.name='BigSpot '+manifest['revision']+' - articulated engineering prototype'
         design=adsk.fusion.Design.cast(app.activeProduct)
         if hasattr(design,'designIntent'):
             design.designIntent=adsk.fusion.DesignIntentTypes.HybridDesignIntentType
         design.designType=adsk.fusion.DesignTypes.DirectDesignType
-        root=design.rootComponent;root.name='BigSpot_Pi4_R1'
+        root=design.rootComponent;root.name='BigSpot_'+manifest['revision']
         occurrences={}
         for name,g in manifest['groups'].items():
             occ=root.occurrences.addNewComponent(adsk.core.Matrix3D.create());occ.component.name=name

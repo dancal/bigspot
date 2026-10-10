@@ -4,6 +4,7 @@ __pycache__/
 .venv-linux/
 *.egg-info/
 build/
+dist/
 install/
 log/
 generated/

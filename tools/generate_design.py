@@ -24,6 +24,7 @@ def urdf(model,d):
         for g in range(model.ngeom):
             if model.geom_bodyid[g]!=b:continue
             for kind in ('visual','collision'):
+                if kind=='collision' and not (model.geom_contype[g] or model.geom_conaffinity[g]):continue
                 node=ET.SubElement(link,kind);ET.SubElement(node,'origin',xyz=vec(model.geom_pos[g]),rpy=vec(rpy(rotation(model.geom_quat[g]))))
                 geometry=ET.SubElement(node,'geometry');typ=model.geom_type[g];s=model.geom_size[g]
                 if typ==mujoco.mjtGeom.mjGEOM_BOX:ET.SubElement(geometry,'box',size=vec(s*2))

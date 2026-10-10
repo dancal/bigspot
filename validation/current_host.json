@@ -1,0 +1,28 @@
+{
+  "checked_at": "2026-10-10T16:29:23.414294+00:00",
+  "host": "Windows",
+  "target": "Isaac ROS 5.0 / ROS 2 Lyrical / Isaac Sim 6.0.1",
+  "hardware_output": false,
+  "gpu": [
+    {
+      "name": "NVIDIA GeForce RTX 5070 Laptop GPU",
+      "driver": "573.22",
+      "memory_mib": 8151,
+      "compute_capability": 12.0,
+      "ros_gpu_requirements_met": false,
+      "sim_memory_driver_requirements_met": false
+    }
+  ],
+  "ros_distro": null,
+  "ubuntu_24_04": false,
+  "ros_ready": false,
+  "sim_requirements_met": false,
+  "gpu_query_error": "",
+  "passed": false,
+  "scope": "Host checks only; CUDA toolkit, RT cores, RAM, Isaac packages, ROS DDS and runtime are not certified by this inventory.",
+  "memory_note": "Reported usable VRAM may be below nominal capacity. Below-threshold results require the official compatibility checker; low-memory scenes may run but are unverified.",
+  "sources": [
+    "https://nvidia-isaac-ros.github.io/v/release-5.0/getting_started/index.html",
+    "https://docs.isaacsim.omniverse.nvidia.com/6.0.1/installation/requirements.html"
+  ]
+}

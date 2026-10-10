@@ -4,7 +4,7 @@ bt_navigator:
     robot_base_frame: base_link
     odom_topic: /visual_slam/tracking/odometry
     enable_stamped_cmd_vel: true
-    navigators: [navigate_to_pose, navigate_through_poses]
+    navigators: [navigate_to_pose]
     navigate_to_pose:
       plugin: nav2_bt_navigator::NavigateToPoseNavigator
     navigate_through_poses:

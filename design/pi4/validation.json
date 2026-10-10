@@ -1,10 +1,10 @@
 {
-  "revision": "pi4-r1",
-  "valid_breps": 170,
+  "revision": "pi4-r3",
+  "valid_breps": 164,
   "kinematic_revolute_joints": 12,
   "purchased_envelope_overlaps": [],
   "static_electronics_clearance_passed": true,
-  "estimated_mass_kg": 9.21372225809047,
+  "estimated_mass_kg": 9.833951591932166,
   "unverified_part_reservations": [
     "bms",
     "switch",

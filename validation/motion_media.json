@@ -1,0 +1,192 @@
+{
+  "revision": "pi4-r3",
+  "passed": true,
+  "videos": [
+    {
+      "file": "cad_orbit.mp4",
+      "frames": 360,
+      "duration_s": 12.0,
+      "full_decode_passed": true,
+      "range_delivery_passed": true,
+      "encoding": "H.264 Constrained Baseline / yuv420p / faststart",
+      "sha256": "44085364fa0d5b6adfb05de5012c8449e3b0accdb835dce6bbc4a7153932eeb8"
+    },
+    {
+      "file": "camera_dropout.mp4",
+      "frames": 541,
+      "duration_s": 18.03,
+      "full_decode_passed": true,
+      "range_delivery_passed": true,
+      "encoding": "H.264 Constrained Baseline / yuv420p / faststart",
+      "sha256": "e505524e7066cab3b8bcfe3f6f617d25b7bfbc10fa4fdfd172c909294314f46e"
+    },
+    {
+      "file": "command_dropout.mp4",
+      "frames": 541,
+      "duration_s": 18.03,
+      "full_decode_passed": true,
+      "range_delivery_passed": true,
+      "encoding": "H.264 Constrained Baseline / yuv420p / faststart",
+      "sha256": "4bc36760937c08b7f4d332d716965d6a9f39aa842a2ec4c6b91893cba82c7bc2"
+    },
+    {
+      "file": "controller_dropout.mp4",
+      "frames": 541,
+      "duration_s": 18.03,
+      "full_decode_passed": true,
+      "range_delivery_passed": true,
+      "encoding": "H.264 Constrained Baseline / yuv420p / faststart",
+      "sha256": "7bd2b5944a5aa17d7262ce8ec49a371304c46e8ef21f56b8ddb3e1cdbb99fea4"
+    },
+    {
+      "file": "holdout.mp4",
+      "frames": 541,
+      "duration_s": 18.03,
+      "full_decode_passed": true,
+      "range_delivery_passed": true,
+      "encoding": "H.264 Constrained Baseline / yuv420p / faststart",
+      "sha256": "d50674571cfcc7de9f131f4c9a8ab7afee0e2065cecc6ff87a35f033bb711cdb"
+    },
+    {
+      "file": "imu_dropout.mp4",
+      "frames": 541,
+      "duration_s": 18.03,
+      "full_decode_passed": true,
+      "range_delivery_passed": true,
+      "encoding": "H.264 Constrained Baseline / yuv420p / faststart",
+      "sha256": "d603dfde7d0a4ca96daa1ddc8c8800914147f2d6fca88bfec73124ae540e8ca1"
+    },
+    {
+      "file": "joint_dropout.mp4",
+      "frames": 541,
+      "duration_s": 18.03,
+      "full_decode_passed": true,
+      "range_delivery_passed": true,
+      "encoding": "H.264 Constrained Baseline / yuv420p / faststart",
+      "sha256": "c3b93cfe91124a62755293ac1d83fd9768e85453a7f454601e26935b1d9ef948"
+    },
+    {
+      "file": "lateral.mp4",
+      "frames": 541,
+      "duration_s": 18.03,
+      "full_decode_passed": true,
+      "range_delivery_passed": true,
+      "encoding": "H.264 Constrained Baseline / yuv420p / faststart",
+      "sha256": "757ac82a19267e84258563ce513f445a1ccc997972c9277888bed4174509e251"
+    },
+    {
+      "file": "navigation.mp4",
+      "frames": 1351,
+      "duration_s": 45.03,
+      "full_decode_passed": true,
+      "range_delivery_passed": true,
+      "encoding": "H.264 Constrained Baseline / yuv420p / faststart",
+      "sha256": "9d86aa40b06bfae081ec5165ae72d1d07f4853af015b98b56f787ed95ac70833"
+    },
+    {
+      "file": "startup.mp4",
+      "frames": 541,
+      "duration_s": 18.03,
+      "full_decode_passed": true,
+      "range_delivery_passed": true,
+      "encoding": "H.264 Constrained Baseline / yuv420p / faststart",
+      "sha256": "f3a791b83733cdd939e8119d88782e2e024e6c883879f7c6f6128787b2237351"
+    },
+    {
+      "file": "turn.mp4",
+      "frames": 541,
+      "duration_s": 18.03,
+      "full_decode_passed": true,
+      "range_delivery_passed": true,
+      "encoding": "H.264 Constrained Baseline / yuv420p / faststart",
+      "sha256": "d721ea1846cdd1151f68a5e6f80089ed3e8eef1afda2b14ebb9cba2395bc8a99"
+    },
+    {
+      "file": "walk.mp4",
+      "frames": 541,
+      "duration_s": 18.03,
+      "full_decode_passed": true,
+      "range_delivery_passed": true,
+      "encoding": "H.264 Constrained Baseline / yuv420p / faststart",
+      "sha256": "f513c97bad760cede641433ba3d77297c3290a7f649fdfea3db7a9480e5cf254"
+    }
+  ],
+  "browser_playback_tested": true,
+  "gallery_url": "http://127.0.0.1:59355/",
+  "cad_mesh_sha256": "e4ec5fd26a3654fc7e214e470ce3c1a7aed69186f022477d1b23832bc840bf71",
+  "browser_playback_method": "Codex in-app browser; each selection advances the playback clock with no media error. Full duration separately decoded by FFmpeg.",
+  "browser_checks": [
+    {
+      "file": "cad_orbit.mp4",
+      "start_s": 0.056836,
+      "end_s": 0.124627,
+      "passed": true
+    },
+    {
+      "file": "startup.mp4",
+      "start_s": 0,
+      "end_s": 0.06537,
+      "passed": true
+    },
+    {
+      "file": "walk.mp4",
+      "start_s": 0,
+      "end_s": 0.063922,
+      "passed": true
+    },
+    {
+      "file": "lateral.mp4",
+      "start_s": 0,
+      "end_s": 0.060047,
+      "passed": true
+    },
+    {
+      "file": "turn.mp4",
+      "start_s": 0,
+      "end_s": 0.063702,
+      "passed": true
+    },
+    {
+      "file": "holdout.mp4",
+      "start_s": 0,
+      "end_s": 0.060076,
+      "passed": true
+    },
+    {
+      "file": "imu_dropout.mp4",
+      "start_s": 0,
+      "end_s": 0.061982,
+      "passed": true
+    },
+    {
+      "file": "joint_dropout.mp4",
+      "start_s": 0,
+      "end_s": 0.05797,
+      "passed": true
+    },
+    {
+      "file": "controller_dropout.mp4",
+      "start_s": 0,
+      "end_s": 0.056572,
+      "passed": true
+    },
+    {
+      "file": "command_dropout.mp4",
+      "start_s": 0,
+      "end_s": 0.060448,
+      "passed": true
+    },
+    {
+      "file": "navigation.mp4",
+      "start_s": 0,
+      "end_s": 0.05769,
+      "passed": true
+    },
+    {
+      "file": "camera_dropout.mp4",
+      "start_s": 0,
+      "end_s": 0.054075,
+      "passed": true
+    }
+  ]
+}
