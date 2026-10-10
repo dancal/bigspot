@@ -1,6 +1,6 @@
 ﻿name,quantity,group,mass_kg,material,confirmation,notes
-Lower_Frame_380x190_t2,1,base_link,0.33224,6061-T6,custom_geometry,"Laser/waterjet blank; deburr, keep reinforced motor posts"
-Removable_Top_Service_Frame,1,base_link,0.29473,6061-T6,custom_geometry,"22mm NC E-stop opening; top access to battery, Pi4 and MCU"
+Lower_Frame_380x190_t2,1,base_link,0.33204,6061-T6,custom_geometry,"Laser/waterjet blank; deburr, keep reinforced motor posts"
+Removable_Top_Service_Frame,1,base_link,0.29042,6061-T6,custom_geometry,"22mm NC E-stop opening; top access to battery, Pi4 and MCU"
 Frame_M3_Standoff_-178_-85,1,base_link,0.01029,6061-T6,custom_geometry,
 Frame_M3_Standoff_-178_85,1,base_link,0.01029,6061-T6,custom_geometry,
 Frame_M3_Standoff_-92_-85,1,base_link,0.01029,6061-T6,custom_geometry,
@@ -9,20 +9,18 @@ Frame_M3_Standoff_92_-85,1,base_link,0.01029,6061-T6,custom_geometry,
 Frame_M3_Standoff_92_85,1,base_link,0.01029,6061-T6,custom_geometry,
 Frame_M3_Standoff_178_-85,1,base_link,0.01029,6061-T6,custom_geometry,
 Frame_M3_Standoff_178_85,1,base_link,0.01029,6061-T6,custom_geometry,
-Side_Web_-1,1,base_link,0.06739,6061-T6,custom_geometry,
-Side_Web_1,1,base_link,0.06739,6061-T6,custom_geometry,
 Belly_Ground_Skid,1,base_link,0.11194,UHMW-PE,custom_geometry,Bottom z=-65mm; body supports weight while unpowered
 Skid_Support_-130_-65,1,base_link,0.00486,6061-T6,custom_geometry,
 Skid_Support_-130_65,1,base_link,0.00486,6061-T6,custom_geometry,
 Skid_Support_130_-65,1,base_link,0.00486,6061-T6,custom_geometry,
 Skid_Support_130_65,1,base_link,0.00486,6061-T6,custom_geometry,
-Pi4_M2_5_Standoff_0,1,base_link,0.00058,6061-T6,custom_geometry,"Official 58x49mm pitch, asymmetric on 85x56mm PCB"
-Pi4_M2_5_Standoff_1,1,base_link,0.00058,6061-T6,custom_geometry,"Official 58x49mm pitch, asymmetric on 85x56mm PCB"
-Pi4_M2_5_Standoff_2,1,base_link,0.00058,6061-T6,custom_geometry,"Official 58x49mm pitch, asymmetric on 85x56mm PCB"
-Pi4_M2_5_Standoff_3,1,base_link,0.00058,6061-T6,custom_geometry,"Official 58x49mm pitch, asymmetric on 85x56mm PCB"
+Pi4_M2_5_Standoff_0,1,base_link,0.00062,6061-T6,custom_geometry,"Official 58x49mm pitch, asymmetric on 85x56mm PCB"
+Pi4_M2_5_Standoff_1,1,base_link,0.00062,6061-T6,custom_geometry,"Official 58x49mm pitch, asymmetric on 85x56mm PCB"
+Pi4_M2_5_Standoff_2,1,base_link,0.00062,6061-T6,custom_geometry,"Official 58x49mm pitch, asymmetric on 85x56mm PCB"
+Pi4_M2_5_Standoff_3,1,base_link,0.00062,6061-T6,custom_geometry,"Official 58x49mm pitch, asymmetric on 85x56mm PCB"
 Pi4_Replaceable_Tray,1,base_link,0.03098,6061-T6,custom_geometry,
-Pi4_Tray_Support_-31,1,base_link,0.01337,6061-T6,custom_geometry,
-Pi4_Tray_Support_31,1,base_link,0.01337,6061-T6,custom_geometry,
+Pi4_Tray_Support_-28,1,base_link,0.00994,6061-T6,custom_geometry,"Full 8x8mm tray footprint; lower-frame to tray load path, fastener/FEA pending"
+Pi4_Tray_Support_28,1,base_link,0.00994,6061-T6,custom_geometry,"Full 8x8mm tray footprint; lower-frame to tray load path, fastener/FEA pending"
 Pi4_USB_Ethernet_Port_0,1,base_link,0,purchased,connector_envelope,
 Pi4_USB_Ethernet_Port_1,1,base_link,0,purchased,connector_envelope,
 Pi4_USB_Ethernet_Port_2,1,base_link,0,purchased,connector_envelope,
@@ -30,26 +28,46 @@ Pi4_40_Pin_Header,1,base_link,0,purchased,custom_geometry,
 Raspberry_Pi_4B,1,base_link,0.046,purchased,official,
 Waveshare_ESP32_S3_Dual_Isolated_CAN,1,base_link,0.1,purchased,official_envelope_strap_mount,
 mcu_Slotted_Mounting_Plinth,1,base_link,0.01506,6061-T6,custom_geometry,Supplier-specific holes remain un-drilled; retention straps through slots
+mcu_Frame_Support_0,1,base_link,0.00026,6061-T6,custom_geometry,Compression support rests on lower plate; strap/fastener details unverified
+mcu_Frame_Support_1,1,base_link,0.00026,6061-T6,custom_geometry,Compression support rests on lower plate; strap/fastener details unverified
 MeanWell_RSD_30L_5_18_72V_to_5V_6A,1,base_link,0.23,purchased,official_envelope_slot_mount,
-dcdc_Slotted_Mounting_Plinth,1,base_link,0.04115,6061-T6,custom_geometry,Supplier-specific holes remain un-drilled; retention straps through slots
+dcdc_Slotted_Mounting_Plinth,1,base_link,0.0408,6061-T6,custom_geometry,Supplier-specific holes remain un-drilled; retention straps through slots
+dcdc_Frame_Support_0,1,base_link,0.00131,6061-T6,custom_geometry,Compression support rests on lower plate; strap/fastener details unverified
+dcdc_Frame_Support_1,1,base_link,0.00131,6061-T6,custom_geometry,Compression support rests on lower plate; strap/fastener details unverified
 Body_IMU_BNO085_SPI_candidate,1,base_link,0.0025,purchased,official_envelope_replaceable_clamp,
 BMS_12S_NMC_30A_SUPPLIER_REQUIRED,1,base_link,0.06,purchased,reservation_only,"12S NMC, 30A discharge, temperature sensors, >=4.2A charge; regen compatibility must be tested"
 bms_Slotted_Mounting_Plinth,1,base_link,0.01661,6061-T6,custom_geometry,Supplier-specific holes remain un-drilled; retention straps through slots
+bms_Frame_Support_0,1,base_link,0.00107,6061-T6,custom_geometry,Compression support rests on lower plate; strap/fastener details unverified
+bms_Frame_Support_1,1,base_link,0.00107,6061-T6,custom_geometry,Compression support rests on lower plate; strap/fastener details unverified
 Motor_Disconnect_and_Precharge_SUPPLIER_REQUIRED,1,base_link,0.1,purchased,reservation_only,">=80V DC bidirectional 30A contactor/back-to-back MOSFET disconnect, normally off, independent NC E-stop, measured precharge capacitance"
-switch_Slotted_Mounting_Plinth,1,base_link,0.01706,6061-T6,custom_geometry,Supplier-specific holes remain un-drilled; retention straps through slots
+switch_Slotted_Mounting_Plinth,1,base_link,0.01675,6061-T6,custom_geometry,Supplier-specific holes remain un-drilled; retention straps through slots
+switch_Frame_Support_0,1,base_link,0.00058,6061-T6,custom_geometry,Compression support rests on lower plate; strap/fastener details unverified
+switch_Frame_Support_1,1,base_link,0.00058,6061-T6,custom_geometry,Compression support rests on lower plate; strap/fastener details unverified
 80VDC_Main25A_and_4Leg5A_Fuses_SUPPLIER_REQUIRED,1,base_link,0.06,purchased,reservation_only,DC interrupt rating >=80V; branch fuse curves to be bench verified
 fuses_Slotted_Mounting_Plinth,1,base_link,0.01732,6061-T6,custom_geometry,Supplier-specific holes remain un-drilled; retention straps through slots
+fuses_Frame_Support_0,1,base_link,0.00535,6061-T6,custom_geometry,Compression support rests on lower plate; strap/fastener details unverified
+fuses_Frame_Support_1,1,base_link,0.00535,6061-T6,custom_geometry,Compression support rests on lower plate; strap/fastener details unverified
 Independent_Regen_Clamp_100V_MOSFET_SUPPLIER_REQUIRED,1,base_link,0.035,purchased,reservation_only,"analogue clamp 54V target, hysteresis, 100V MOSFET and resistor pulse-energy verification"
 regen_Slotted_Mounting_Plinth,1,base_link,0.01254,6061-T6,custom_geometry,Supplier-specific holes remain un-drilled; retention straps through slots
+regen_Frame_Support_0,1,base_link,0.00321,6061-T6,custom_geometry,Compression support rests on lower plate; strap/fastener details unverified
+regen_Frame_Support_1,1,base_link,0.00321,6061-T6,custom_geometry,Compression support rests on lower plate; strap/fastener details unverified
 Bidirectional_Hall_Current_50A_SUPPLIER_REQUIRED,1,base_link,0.025,purchased,reservation_only,"50A DC bipolar measurement, insulation and transient ratings"
 current_Slotted_Mounting_Plinth,1,base_link,0.00705,6061-T6,custom_geometry,Supplier-specific holes remain un-drilled; retention straps through slots
+current_Frame_Support_0,1,base_link,0.00107,6061-T6,custom_geometry,Compression support rests on lower plate; strap/fastener details unverified
+current_Frame_Support_1,1,base_link,0.00107,6061-T6,custom_geometry,Compression support rests on lower plate; strap/fastener details unverified
 Independent_Watchdog_and_5V_Enable_SUPPLIER_REQUIRED,1,base_link,0.015,purchased,reservation_only,"hardware heartbeat timeout <=150ms, default output off; GPIO must not switch motor supply directly"
 watchdog_Slotted_Mounting_Plinth,1,base_link,0.00721,6061-T6,custom_geometry,Supplier-specific holes remain un-drilled; retention straps through slots
+watchdog_Frame_Support_0,1,base_link,0.00282,6061-T6,custom_geometry,Compression support rests on lower plate; strap/fastener details unverified
+watchdog_Frame_Support_1,1,base_link,0.00282,6061-T6,custom_geometry,Compression support rests on lower plate; strap/fastener details unverified
 Pi4_5V_Fan_30mm_and_Heatsink,1,base_link,0.015,purchased,standard_30mm_fan_24mm_pitch,
 Front_Ultrasonic_HCSR04_COMPATIBILITY_REQUIRED,1,base_link,0.012,purchased,reservation_only,existing sensor SKU needed; HC-SR04 5V echo requires resistor divider/level shifter for 3.3V MCU
 Ultrasonic_3V3_Level_Shifter,1,base_link,0.003,purchased,reservation_only,
 MicroSD_64GB_A2,1,base_link,0.001,purchased,standard,
-12S_Battery_Insulated_Tray_and_Strap_Slots,1,base_link,0.0753,PETG,custom_geometry,
+12S_Battery_Insulated_Tray_and_Strap_Slots,1,base_link,0.07525,PETG,custom_geometry,
+Battery_Tray_Compression_Spacer_-60_-32,1,base_link,0.00017,6061-T6,custom_geometry,M3 through-bolt spacer; pack insulation and fastener retention require verification
+Battery_Tray_Compression_Spacer_-60_32,1,base_link,0.00017,6061-T6,custom_geometry,M3 through-bolt spacer; pack insulation and fastener retention require verification
+Battery_Tray_Compression_Spacer_60_-32,1,base_link,0.00017,6061-T6,custom_geometry,M3 through-bolt spacer; pack insulation and fastener retention require verification
+Battery_Tray_Compression_Spacer_60_32,1,base_link,0.00017,6061-T6,custom_geometry,M3 through-bolt spacer; pack insulation and fastener retention require verification
 P42A_21700_Cell_01,1,base_link,0.07,purchased,official_envelope,"12S1P supplier assembled/insulated pack, not a loose-cell assembly instruction"
 P42A_21700_Cell_02,1,base_link,0.07,purchased,official_envelope,"12S1P supplier assembled/insulated pack, not a loose-cell assembly instruction"
 P42A_21700_Cell_03,1,base_link,0.07,purchased,official_envelope,"12S1P supplier assembled/insulated pack, not a loose-cell assembly instruction"
@@ -62,112 +80,68 @@ P42A_21700_Cell_09,1,base_link,0.07,purchased,official_envelope,"12S1P supplier 
 P42A_21700_Cell_10,1,base_link,0.07,purchased,official_envelope,"12S1P supplier assembled/insulated pack, not a loose-cell assembly instruction"
 P42A_21700_Cell_11,1,base_link,0.07,purchased,official_envelope,"12S1P supplier assembled/insulated pack, not a loose-cell assembly instruction"
 P42A_21700_Cell_12,1,base_link,0.07,purchased,official_envelope,"12S1P supplier assembled/insulated pack, not a loose-cell assembly instruction"
+Pi4_CPU_Thermal_Interface_Reservation,1,base_link,0,6061-T6,reservation_only,
 Pi4_Heatsink,1,base_link,0.012,6061-T6,custom_geometry,
 EStop_22mm_NC_Contact_Block,1,base_link,0.02,6061-T6,reservation_only,
+EStop_Panel_Stem_Reservation,1,base_link,0,6061-T6,reservation_only,
 EStop_Red_Mushroom,1,base_link,0.013,6061-T6,reservation_only,
 Brake_Resistor_47ohm_100W_PulseRating_REQUIRED,1,base_link,0.09,6061-T6,reservation_only,54V clamp gives ~62W; pulse-energy and cooling require selected resistor datasheet
 RealSense_D435i_90x25x25,1,base_link,0.072,purchased,official_envelope,
-D435i_Edge_Clamp_Cradle,1,base_link,0.0121,6061-T6,custom_geometry,Edge clamp avoids unverified camera screw lengths; 12deg pitch in Fusion occurrence
-D435i_Front_Riser,1,base_link,0.02216,6061-T6,custom_geometry,
-Camera_Riser_Arm_-22,1,base_link,0.00238,6061-T6,custom_geometry,
-Camera_Riser_Arm_22,1,base_link,0.00238,6061-T6,custom_geometry,
-CAN_and_Power_Separated_Trunk_-1,1,base_link,0.012,purchased,route_envelope,
-CAN_and_Power_Separated_Trunk_1,1,base_link,0.012,purchased,route_envelope,
+D435i_Edge_Clamp_Cradle,1,base_link,0.02482,6061-T6,custom_geometry,CAD and optical mount both 12deg down; bottom rails and side lips support envelope; retention hardware pending
+Camera_Frame_Mount_-48,1,base_link,0.00453,6061-T6,custom_geometry,Base on top frame z44; sloped post face meets pitched cradle underside; M3 fastening/strength pending
+Camera_Frame_Mount_48,1,base_link,0.00453,6061-T6,custom_geometry,Base on top frame z44; sloped post face meets pitched cradle underside; M3 fastening/strength pending
+CAN_and_Power_Separated_Trunk_-1,1,base_link,0.012,purchased,route_envelope,Central route only; motor branches and bend radii not released
+CAN_and_Power_Separated_Trunk_1,1,base_link,0.012,purchased,route_envelope,Central route only; motor branches and bend radii not released
 USB3_Camera_Cable_Service_Route,1,base_link,0.012,purchased,route_envelope,
-Ultrasonic_Front_Mount_Plate,1,base_link,0.00891,6061-T6,custom_geometry,
-Ultrasonic_Body_Attachment_-23,1,base_link,0.00253,6061-T6,custom_geometry,
-Ultrasonic_Body_Attachment_23,1,base_link,0.00253,6061-T6,custom_geometry,
+Ultrasonic_Integrated_Frame_Bracket,1,base_link,0.01642,6061-T6,custom_geometry,Integrated bracket reaches lower frame z-42; retention/strength pending
 FL_RS00_Stator,1,base_link,0.31,purchased,official_envelope,
-FL_RS00_Rear_Bolt_Mount,1,base_link,0.02741,6061-T6,custom_geometry,4x M3 PCD38; engagement <=4mm in RS00; rear flange connected to both frame plates
-FL_Body_Motor_Thermal_Bridge_-32,1,base_link,0.01523,6061-T6,custom_geometry,
-FL_Body_Motor_Thermal_Bridge_32,1,base_link,0.01523,6061-T6,custom_geometry,
-FL_Abduction_Output_M3_PCD27,1,FL_abduction_link,0.01298,6061-T6,custom_geometry,6x M3 output bolts; <=5mm engagement; auxiliary support needed before impact motions
-FL_Abduction_Axial_Adapter,1,FL_abduction_link,0.02267,6061-T6,custom_geometry,
-FL_Abduction_Yoke_55mm,1,FL_abduction_link,0.01717,6061-T6,custom_geometry,
 FL_Hip_RS02_Stator,1,FL_abduction_link,0.405,purchased,official_envelope,
-FL_Hip_Stator_Ring_9M3_PCD73,1,FL_abduction_link,0.02033,6061-T6,custom_geometry,9x M3 PCD73; <=8mm thread engagement; current vendor drawing required
-FL_Hip_Output_6M4_PCD24,1,FL_upper_link,0.01343,6061-T6,custom_geometry,M4 clearance holes; screw engagement measured before assembly
-FL_Upper_Tube_26x12x1_5,1,FL_upper_link,0.03119,6061-T6,custom_geometry,
-FL_Upper_Tube_End_Adapter_-14,1,FL_upper_link,0.00928,6061-T6,custom_geometry,
 FL_Knee_RS02_Stator,1,FL_upper_link,0.405,purchased,official_envelope,
-FL_Knee_Stator_Ring_9M3_PCD73,1,FL_upper_link,0.02033,6061-T6,custom_geometry,9x M3 PCD73; <=8mm thread engagement; current vendor drawing required
-FL_Knee_Stator_Ring_Tab,1,FL_upper_link,0.02281,6061-T6,custom_geometry,
-FL_Knee_Output_6M4_PCD24,1,FL_lower_link,0.01343,6061-T6,custom_geometry,M4 clearance holes; screw engagement measured before assembly
-FL_Lower_Tube_26x12x1_5,1,FL_lower_link,0.03119,6061-T6,custom_geometry,
-FL_Lower_Tube_End_Adapter_-14,1,FL_lower_link,0.01208,6061-T6,custom_geometry,
-FL_Lower_Tube_End_Adapter_-126,1,FL_lower_link,0.01208,6061-T6,custom_geometry,
-FL_Foot_Return_Bracket,1,FL_lower_link,0.01229,6061-T6,custom_geometry,
 FL_FSR_402_Contact_Disc,1,FL_lower_link,0.002,purchased,reservation_only,Contact sensor only; force accuracy and overload bypass require bench calibration
-FL_Elastomer_Foot,1,FL_lower_link,0.033,purchased,custom_elastomer_foot,FSR pad is inside foot; mechanical overload stop prevents full impact on film
 FL_Cable_Service_Loop,1,FL_lower_link,0.008,purchased,route_envelope,Route reservation; 30mm minimum bend radius and strain relief to be measured
 FR_RS00_Stator,1,base_link,0.31,purchased,official_envelope,
-FR_RS00_Rear_Bolt_Mount,1,base_link,0.02741,6061-T6,custom_geometry,4x M3 PCD38; engagement <=4mm in RS00; rear flange connected to both frame plates
-FR_Body_Motor_Thermal_Bridge_-32,1,base_link,0.01523,6061-T6,custom_geometry,
-FR_Body_Motor_Thermal_Bridge_32,1,base_link,0.01523,6061-T6,custom_geometry,
-FR_Abduction_Output_M3_PCD27,1,FR_abduction_link,0.01298,6061-T6,custom_geometry,6x M3 output bolts; <=5mm engagement; auxiliary support needed before impact motions
-FR_Abduction_Axial_Adapter,1,FR_abduction_link,0.02267,6061-T6,custom_geometry,
-FR_Abduction_Yoke_55mm,1,FR_abduction_link,0.01717,6061-T6,custom_geometry,
 FR_Hip_RS02_Stator,1,FR_abduction_link,0.405,purchased,official_envelope,
-FR_Hip_Stator_Ring_9M3_PCD73,1,FR_abduction_link,0.02033,6061-T6,custom_geometry,9x M3 PCD73; <=8mm thread engagement; current vendor drawing required
-FR_Hip_Output_6M4_PCD24,1,FR_upper_link,0.01343,6061-T6,custom_geometry,M4 clearance holes; screw engagement measured before assembly
-FR_Upper_Tube_26x12x1_5,1,FR_upper_link,0.03119,6061-T6,custom_geometry,
-FR_Upper_Tube_End_Adapter_-14,1,FR_upper_link,0.00928,6061-T6,custom_geometry,
 FR_Knee_RS02_Stator,1,FR_upper_link,0.405,purchased,official_envelope,
-FR_Knee_Stator_Ring_9M3_PCD73,1,FR_upper_link,0.02033,6061-T6,custom_geometry,9x M3 PCD73; <=8mm thread engagement; current vendor drawing required
-FR_Knee_Stator_Ring_Tab,1,FR_upper_link,0.02281,6061-T6,custom_geometry,
-FR_Knee_Output_6M4_PCD24,1,FR_lower_link,0.01343,6061-T6,custom_geometry,M4 clearance holes; screw engagement measured before assembly
-FR_Lower_Tube_26x12x1_5,1,FR_lower_link,0.03119,6061-T6,custom_geometry,
-FR_Lower_Tube_End_Adapter_-14,1,FR_lower_link,0.01208,6061-T6,custom_geometry,
-FR_Lower_Tube_End_Adapter_-126,1,FR_lower_link,0.01208,6061-T6,custom_geometry,
-FR_Foot_Return_Bracket,1,FR_lower_link,0.01229,6061-T6,custom_geometry,
 FR_FSR_402_Contact_Disc,1,FR_lower_link,0.002,purchased,reservation_only,Contact sensor only; force accuracy and overload bypass require bench calibration
-FR_Elastomer_Foot,1,FR_lower_link,0.033,purchased,custom_elastomer_foot,FSR pad is inside foot; mechanical overload stop prevents full impact on film
 FR_Cable_Service_Loop,1,FR_lower_link,0.008,purchased,route_envelope,Route reservation; 30mm minimum bend radius and strain relief to be measured
 RL_RS00_Stator,1,base_link,0.31,purchased,official_envelope,
-RL_RS00_Rear_Bolt_Mount,1,base_link,0.02741,6061-T6,custom_geometry,4x M3 PCD38; engagement <=4mm in RS00; rear flange connected to both frame plates
-RL_Body_Motor_Thermal_Bridge_-32,1,base_link,0.01523,6061-T6,custom_geometry,
-RL_Body_Motor_Thermal_Bridge_32,1,base_link,0.01523,6061-T6,custom_geometry,
-RL_Abduction_Output_M3_PCD27,1,RL_abduction_link,0.01298,6061-T6,custom_geometry,6x M3 output bolts; <=5mm engagement; auxiliary support needed before impact motions
-RL_Abduction_Axial_Adapter,1,RL_abduction_link,0.02267,6061-T6,custom_geometry,
-RL_Abduction_Yoke_55mm,1,RL_abduction_link,0.01717,6061-T6,custom_geometry,
 RL_Hip_RS02_Stator,1,RL_abduction_link,0.405,purchased,official_envelope,
-RL_Hip_Stator_Ring_9M3_PCD73,1,RL_abduction_link,0.02033,6061-T6,custom_geometry,9x M3 PCD73; <=8mm thread engagement; current vendor drawing required
-RL_Hip_Output_6M4_PCD24,1,RL_upper_link,0.01343,6061-T6,custom_geometry,M4 clearance holes; screw engagement measured before assembly
-RL_Upper_Tube_26x12x1_5,1,RL_upper_link,0.03119,6061-T6,custom_geometry,
-RL_Upper_Tube_End_Adapter_-14,1,RL_upper_link,0.00928,6061-T6,custom_geometry,
 RL_Knee_RS02_Stator,1,RL_upper_link,0.405,purchased,official_envelope,
-RL_Knee_Stator_Ring_9M3_PCD73,1,RL_upper_link,0.02033,6061-T6,custom_geometry,9x M3 PCD73; <=8mm thread engagement; current vendor drawing required
-RL_Knee_Stator_Ring_Tab,1,RL_upper_link,0.02281,6061-T6,custom_geometry,
-RL_Knee_Output_6M4_PCD24,1,RL_lower_link,0.01343,6061-T6,custom_geometry,M4 clearance holes; screw engagement measured before assembly
-RL_Lower_Tube_26x12x1_5,1,RL_lower_link,0.03119,6061-T6,custom_geometry,
-RL_Lower_Tube_End_Adapter_-14,1,RL_lower_link,0.01208,6061-T6,custom_geometry,
-RL_Lower_Tube_End_Adapter_-126,1,RL_lower_link,0.01208,6061-T6,custom_geometry,
-RL_Foot_Return_Bracket,1,RL_lower_link,0.01229,6061-T6,custom_geometry,
 RL_FSR_402_Contact_Disc,1,RL_lower_link,0.002,purchased,reservation_only,Contact sensor only; force accuracy and overload bypass require bench calibration
-RL_Elastomer_Foot,1,RL_lower_link,0.033,purchased,custom_elastomer_foot,FSR pad is inside foot; mechanical overload stop prevents full impact on film
 RL_Cable_Service_Loop,1,RL_lower_link,0.008,purchased,route_envelope,Route reservation; 30mm minimum bend radius and strain relief to be measured
 RR_RS00_Stator,1,base_link,0.31,purchased,official_envelope,
-RR_RS00_Rear_Bolt_Mount,1,base_link,0.02741,6061-T6,custom_geometry,4x M3 PCD38; engagement <=4mm in RS00; rear flange connected to both frame plates
-RR_Body_Motor_Thermal_Bridge_-32,1,base_link,0.01523,6061-T6,custom_geometry,
-RR_Body_Motor_Thermal_Bridge_32,1,base_link,0.01523,6061-T6,custom_geometry,
-RR_Abduction_Output_M3_PCD27,1,RR_abduction_link,0.01298,6061-T6,custom_geometry,6x M3 output bolts; <=5mm engagement; auxiliary support needed before impact motions
-RR_Abduction_Axial_Adapter,1,RR_abduction_link,0.02267,6061-T6,custom_geometry,
-RR_Abduction_Yoke_55mm,1,RR_abduction_link,0.01717,6061-T6,custom_geometry,
 RR_Hip_RS02_Stator,1,RR_abduction_link,0.405,purchased,official_envelope,
-RR_Hip_Stator_Ring_9M3_PCD73,1,RR_abduction_link,0.02033,6061-T6,custom_geometry,9x M3 PCD73; <=8mm thread engagement; current vendor drawing required
-RR_Hip_Output_6M4_PCD24,1,RR_upper_link,0.01343,6061-T6,custom_geometry,M4 clearance holes; screw engagement measured before assembly
-RR_Upper_Tube_26x12x1_5,1,RR_upper_link,0.03119,6061-T6,custom_geometry,
-RR_Upper_Tube_End_Adapter_-14,1,RR_upper_link,0.00928,6061-T6,custom_geometry,
 RR_Knee_RS02_Stator,1,RR_upper_link,0.405,purchased,official_envelope,
-RR_Knee_Stator_Ring_9M3_PCD73,1,RR_upper_link,0.02033,6061-T6,custom_geometry,9x M3 PCD73; <=8mm thread engagement; current vendor drawing required
-RR_Knee_Stator_Ring_Tab,1,RR_upper_link,0.02281,6061-T6,custom_geometry,
-RR_Knee_Output_6M4_PCD24,1,RR_lower_link,0.01343,6061-T6,custom_geometry,M4 clearance holes; screw engagement measured before assembly
-RR_Lower_Tube_26x12x1_5,1,RR_lower_link,0.03119,6061-T6,custom_geometry,
-RR_Lower_Tube_End_Adapter_-14,1,RR_lower_link,0.01208,6061-T6,custom_geometry,
-RR_Lower_Tube_End_Adapter_-126,1,RR_lower_link,0.01208,6061-T6,custom_geometry,
-RR_Foot_Return_Bracket,1,RR_lower_link,0.01229,6061-T6,custom_geometry,
 RR_FSR_402_Contact_Disc,1,RR_lower_link,0.002,purchased,reservation_only,Contact sensor only; force accuracy and overload bypass require bench calibration
-RR_Elastomer_Foot,1,RR_lower_link,0.033,purchased,custom_elastomer_foot,FSR pad is inside foot; mechanical overload stop prevents full impact on film
 RR_Cable_Service_Loop,1,RR_lower_link,0.008,purchased,route_envelope,Route reservation; 30mm minimum bend radius and strain relief to be measured
+FL_abduction_link_Integrated_Structure,1,FL_abduction_link,0.0903,6061-T6,custom_geometry,"Integrated prototype geometry from FL_Abduction_Output_M3_PCD27, FL_Abduction_Axial_Adapter, FL_Abduction_Yoke_55mm, FL_Hip_Stator_Ring_9M3_PCD73; machining process, retained fasteners and strength unverified"
+FL_upper_link_Integrated_Structure,1,FL_upper_link,0.09355,6061-T6,custom_geometry,"Integrated prototype geometry from FL_Hip_Output_6M4_PCD24, FL_Upper_Tube_26x12x1_5, FL_Upper_Tube_End_Adapter_-20, FL_Knee_Stator_Ring_9M3_PCD73, FL_Knee_Stator_Ring_Tab; machining process, retained fasteners and strength unverified"
+FL_lower_link_Integrated_Structure,1,FL_lower_link,0.10395,6061-T6,custom_geometry,"Integrated prototype geometry from FL_Knee_Output_6M4_PCD24, FL_Lower_Tube_26x12x1_5, FL_Lower_Tube_End_Adapter_-9, FL_Lower_Tube_End_Adapter_-126, FL_Foot_Return_Bracket, FL_Foot_Load_Path_Neck; machining process, retained fasteners and strength unverified"
+FL_Elastomer_Foot,1,FL_lower_link,0.033,purchased,custom_elastomer_foot,Rubber pocket clears integrated carrier and sensor; retention and force transfer require bench tests
+FL_RS00_Rear_Bolt_Mount,1,base_link,0.05608,6061-T6,custom_geometry,4x M3 PCD38; engagement <=4mm in RS00; rear flange connected to both frame plates; thermal bridges integrated into bracket
+FR_abduction_link_Integrated_Structure,1,FR_abduction_link,0.0903,6061-T6,custom_geometry,"Integrated prototype geometry from FR_Abduction_Output_M3_PCD27, FR_Abduction_Axial_Adapter, FR_Abduction_Yoke_55mm, FR_Hip_Stator_Ring_9M3_PCD73; machining process, retained fasteners and strength unverified"
+FR_upper_link_Integrated_Structure,1,FR_upper_link,0.09355,6061-T6,custom_geometry,"Integrated prototype geometry from FR_Hip_Output_6M4_PCD24, FR_Upper_Tube_26x12x1_5, FR_Upper_Tube_End_Adapter_-20, FR_Knee_Stator_Ring_9M3_PCD73, FR_Knee_Stator_Ring_Tab; machining process, retained fasteners and strength unverified"
+FR_lower_link_Integrated_Structure,1,FR_lower_link,0.10395,6061-T6,custom_geometry,"Integrated prototype geometry from FR_Knee_Output_6M4_PCD24, FR_Lower_Tube_26x12x1_5, FR_Lower_Tube_End_Adapter_-9, FR_Lower_Tube_End_Adapter_-126, FR_Foot_Return_Bracket, FR_Foot_Load_Path_Neck; machining process, retained fasteners and strength unverified"
+FR_Elastomer_Foot,1,FR_lower_link,0.033,purchased,custom_elastomer_foot,Rubber pocket clears integrated carrier and sensor; retention and force transfer require bench tests
+FR_RS00_Rear_Bolt_Mount,1,base_link,0.05608,6061-T6,custom_geometry,4x M3 PCD38; engagement <=4mm in RS00; rear flange connected to both frame plates; thermal bridges integrated into bracket
+RL_abduction_link_Integrated_Structure,1,RL_abduction_link,0.0903,6061-T6,custom_geometry,"Integrated prototype geometry from RL_Abduction_Output_M3_PCD27, RL_Abduction_Axial_Adapter, RL_Abduction_Yoke_55mm, RL_Hip_Stator_Ring_9M3_PCD73; machining process, retained fasteners and strength unverified"
+RL_upper_link_Integrated_Structure,1,RL_upper_link,0.09355,6061-T6,custom_geometry,"Integrated prototype geometry from RL_Hip_Output_6M4_PCD24, RL_Upper_Tube_26x12x1_5, RL_Upper_Tube_End_Adapter_-20, RL_Knee_Stator_Ring_9M3_PCD73, RL_Knee_Stator_Ring_Tab; machining process, retained fasteners and strength unverified"
+RL_lower_link_Integrated_Structure,1,RL_lower_link,0.10395,6061-T6,custom_geometry,"Integrated prototype geometry from RL_Knee_Output_6M4_PCD24, RL_Lower_Tube_26x12x1_5, RL_Lower_Tube_End_Adapter_-9, RL_Lower_Tube_End_Adapter_-126, RL_Foot_Return_Bracket, RL_Foot_Load_Path_Neck; machining process, retained fasteners and strength unverified"
+RL_Elastomer_Foot,1,RL_lower_link,0.033,purchased,custom_elastomer_foot,Rubber pocket clears integrated carrier and sensor; retention and force transfer require bench tests
+RL_RS00_Rear_Bolt_Mount,1,base_link,0.05608,6061-T6,custom_geometry,4x M3 PCD38; engagement <=4mm in RS00; rear flange connected to both frame plates; thermal bridges integrated into bracket
+RR_abduction_link_Integrated_Structure,1,RR_abduction_link,0.0903,6061-T6,custom_geometry,"Integrated prototype geometry from RR_Abduction_Output_M3_PCD27, RR_Abduction_Axial_Adapter, RR_Abduction_Yoke_55mm, RR_Hip_Stator_Ring_9M3_PCD73; machining process, retained fasteners and strength unverified"
+RR_upper_link_Integrated_Structure,1,RR_upper_link,0.09355,6061-T6,custom_geometry,"Integrated prototype geometry from RR_Hip_Output_6M4_PCD24, RR_Upper_Tube_26x12x1_5, RR_Upper_Tube_End_Adapter_-20, RR_Knee_Stator_Ring_9M3_PCD73, RR_Knee_Stator_Ring_Tab; machining process, retained fasteners and strength unverified"
+RR_lower_link_Integrated_Structure,1,RR_lower_link,0.10395,6061-T6,custom_geometry,"Integrated prototype geometry from RR_Knee_Output_6M4_PCD24, RR_Lower_Tube_26x12x1_5, RR_Lower_Tube_End_Adapter_-9, RR_Lower_Tube_End_Adapter_-126, RR_Foot_Return_Bracket, RR_Foot_Load_Path_Neck; machining process, retained fasteners and strength unverified"
+RR_Elastomer_Foot,1,RR_lower_link,0.033,purchased,custom_elastomer_foot,Rubber pocket clears integrated carrier and sensor; retention and force transfer require bench tests
+RR_RS00_Rear_Bolt_Mount,1,base_link,0.05608,6061-T6,custom_geometry,4x M3 PCD38; engagement <=4mm in RS00; rear flange connected to both frame plates; thermal bridges integrated into bracket
+Side_Web_-1,1,base_link,0.04867,6061-T6,custom_geometry,Web relief matches integrated motor bracket; interface fasteners/strength pending
+Side_Web_1,1,base_link,0.04867,6061-T6,custom_geometry,Web relief matches integrated motor bracket; interface fasteners/strength pending
+Graphite_Vented_Service_Cover,1,base_link,0.13139,PETG,custom_geometry,"Removable visual cover; fan vent and E-stop access, not weather sealed"
+Cover_M3_Spacer_-92_-85,1,base_link,0.00058,6061-T6,custom_geometry,Connects top frame z44 to cover underside z53.25
+Cover_M3_Spacer_-92_85,1,base_link,0.00058,6061-T6,custom_geometry,Connects top frame z44 to cover underside z53.25
+Cover_M3_Spacer_92_-85,1,base_link,0.00058,6061-T6,custom_geometry,Connects top frame z44 to cover underside z53.25
+Cover_M3_Spacer_92_85,1,base_link,0.00058,6061-T6,custom_geometry,Connects top frame z44 to cover underside z53.25
+Teal_Cover_Accent_-74,1,base_link,0.00078,PETG,custom_geometry,"Non-powered trim, touches cover top"
+Teal_Cover_Accent_74,1,base_link,0.00078,PETG,custom_geometry,"Non-powered trim, touches cover top"
 50.4V_2A_CC_CV_Charger_for_12S_NMC,1,external,0,purchased,supplier_required,Not carried on robot
 USB_Bluetooth_Joystick_existing,1,external,0,purchased,supplier_required,Not carried on robot

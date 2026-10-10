@@ -1,5 +1,5 @@
 {
-  "revision": "pi4-r1",
+  "revision": "pi4-r2",
   "units": "mm",
   "manufacturing_released": false,
   "computer": "Raspberry Pi 4 Model B",
@@ -80,7 +80,7 @@
       "xyz": [
         104,
         0,
-        19
+        28
       ],
       "mass_kg": 0.046,
       "color": [
@@ -216,8 +216,8 @@
       ],
       "xyz": [
         101,
-        65,
-        -24
+        57,
+        25
       ],
       "mass_kg": 0.06,
       "color": [
@@ -238,7 +238,7 @@
       ],
       "xyz": [
         -120,
-        -64,
+        -55,
         1
       ],
       "mass_kg": 0.035,
@@ -260,7 +260,7 @@
       ],
       "xyz": [
         95,
-        -65,
+        -57,
         -21
       ],
       "mass_kg": 0.025,
@@ -281,9 +281,9 @@
         10
       ],
       "xyz": [
-        75,
-        -65,
-        15
+        165,
+        -64,
+        -6
       ],
       "mass_kg": 0.015,
       "color": [
@@ -305,7 +305,7 @@
       "xyz": [
         113,
         0,
-        38
+        44
       ],
       "mass_kg": 0.015,
       "color": [
@@ -367,9 +367,9 @@
         1
       ],
       "xyz": [
-        61,
+        58,
         0,
-        7
+        25
       ],
       "mass_kg": 0.001,
       "color": [
@@ -410,5 +410,11 @@
     "camera": "https://www.realsenseai.com/products/depth-camera-d435i/"
   },
   "standing_leg_height_mm": 245,
-  "neutral_foot_x_mm": 45
+  "neutral_foot_x_mm": 45,
+  "startup_joint_angles_rad": [
+    0,
+    -2.0,
+    2.5
+  ],
+  "knee_operating_max_rad": 2.55
 }

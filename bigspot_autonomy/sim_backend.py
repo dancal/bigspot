@@ -1,7 +1,7 @@
 """CPU plant driven by external targets and motor PD, with its own watchdog."""
 import math
 import numpy as np
-from .control_core import JOINT_NAMES, JOINT_LOWER, JOINT_UPPER, limited_effort
+from .control_core import JOINT_NAMES, joint_bounds, limited_effort
 from .design import motor_names
 from .model import make_mjcf
 
@@ -14,6 +14,7 @@ class EffortWatchdog:
         self.value = np.zeros(12)
         self.expired = False
         self.design = design
+        self.lower,self.upper=joint_bounds(design)
         self.target = None
         self.enabled = False
 
@@ -38,7 +39,7 @@ class EffortWatchdog:
         if len(positions)!=12 or len(efforts) not in (0,12):return False
         if len(names)!=12 or len(set(names))!=12 or set(names)!=set(JOINT_NAMES):return False
         q=np.asarray(positions,float)[[list(names).index(n) for n in JOINT_NAMES]]
-        if not np.isfinite(q).all() or np.any(q<JOINT_LOWER) or np.any(q>JOINT_UPPER):return False
+        if not np.isfinite(q).all() or np.any(q<self.lower) or np.any(q>self.upper):return False
         if not self.receive(names,efforts if efforts else [0.]*12,stamp,sim_now,wall_now):return False
         self.target=q;self.enabled=bool(efforts)
         return True
@@ -51,11 +52,12 @@ class EffortWatchdog:
 
 
 class CpuPlant:
-    def __init__(self, design, friction=.8, mass_scale=1., obstacles=True):
+    def __init__(self, design, friction=.8, mass_scale=1., obstacles=True, model_transform=None):
         import mujoco
         self.mj = mujoco
         blocks = ((1.1,0.,.18,.25,.5),(2.1,.65,.2,.18,.5)) if obstacles else ()
-        self.model = mujoco.MjModel.from_xml_string(make_mjcf(design, blocks))
+        xml=make_mjcf(design, blocks)
+        self.model = mujoco.MjModel.from_xml_string(model_transform(xml) if model_transform else xml)
         self.model.geom_friction[:,0] = friction
         self.model.body_mass[:] *= mass_scale
         self.model.body_inertia[:] *= mass_scale
@@ -63,7 +65,7 @@ class CpuPlant:
         mujoco.mj_setConst(self.model, self.data)
         ids = [mujoco.mj_name2id(self.model,mujoco.mjtObj.mjOBJ_JOINT,n) for n in JOINT_NAMES]
         self.qadr, self.vadr = self.model.jnt_qposadr[ids], self.model.jnt_dofadr[ids]
-        self.data.qpos[self.qadr] = np.tile([0.,-1.43,2.86],4)
+        self.data.qpos[self.qadr] = np.tile(design.get('startup_joint_angles_rad',[0.,-1.43,2.86]),4)
         self.data.qpos[2] = .12
         mujoco.mj_forward(self.model,self.data)
         floor = mujoco.mj_name2id(self.model,mujoco.mjtObj.mjOBJ_GEOM,'floor')

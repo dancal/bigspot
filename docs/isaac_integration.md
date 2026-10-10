@@ -1,12 +1,12 @@
 # Pi 4 QDD: ROS 및 Isaac 연동 상태
 
-여기서 ROS5는 **Isaac ROS 5.0**을 뜻한다. ROS 배포판은 **ROS 2 Lyrical**이다. 현재 구현은 Pi 4 CAD 질량·관성 기준 9.213722kg, 12축 RS00/RS02 모델을 사용한다.
+여기서 ROS5는 **Isaac ROS 5.0**을 뜻한다. ROS 배포판은 **ROS 2 Lyrical**이다. 현재 구현은 Pi 4 CAD 질량·관성 기준 9.468016kg, 12축 RS00/RS02 모델을 사용한다.
 
 ## 검증 범위
 
-- `validation/control_loop.json`: 외부 ControlCore 목표 → 모터 로컬 PD → 자유 부유 MuJoCo 물리 모델. 9개 시험 통과. 바닥에서 일어서기, 보행, 질량 +15%/마찰 0.55, IMU·관절·제어기·명령 단절, 장애물 회피, 카메라 단절이다.
-- CPU 장애물 회피는 3m 목표에 약 0.156m까지 도달했고 장애물 접촉 충격량은 0이다. CPU 실험은 시뮬레이터 정답 odometry와 저해상도 raycast 깊이를 사용한다. 실제 VSLAM/Nav2 성능을 증명하지 않는다.
-- `tests/test_control_transport.py`와 기존 시험 총 22개 통과. 중복·지연·미래 timestamp, 센서 오류, 시계 역행, odometry 단절, 실제 시간 watchdog 및 원자적 출력 해제를 확인한다.
+- `validation/control_loop.json`: 외부 ControlCore 목표 → 모터 로컬 PD → 자유 부유 MuJoCo 물리 모델. 11개 시험 통과. 낮은 자세에서 일어서기, 보행, 옆 이동, 회전, 질량 +15%/마찰 0.55, IMU·관절·제어기·명령 단절, 장애물 회피, 카메라 단절이다.
+- CPU 장애물 회피는 3m 목표에 약 0.152m까지 도달했고 장애물 접촉 충격량은 0이다. CPU 실험은 시뮬레이터 정답 odometry와 저해상도 raycast 깊이를 사용한다. 실제 VSLAM/Nav2 성능을 증명하지 않는다.
+- `tests/test_control_transport.py`와 기존 시험 총 24개 통과. 중복·지연·미래 timestamp, 센서 오류, 시계 역행, odometry 단절, 실제 시간 watchdog 및 원자적 출력 해제를 확인한다.
 - 실제 ROS DDS 실행, Isaac GPU 실행, 실물 모터 시험은 이번 환경에서 수행하지 않았다. 기존 브랜치의 ROS 결과는 새 제어기 전달 경로의 검증으로 사용할 수 없다.
 
 ## 현재 PC
@@ -87,3 +87,7 @@ PhysX self-collision은 꺼져 있고 충돌 형상은 해석용 proxy다. STEP 
 ## 제작 전에 남은 작업
 
 Pi 4 보드와 GPU PC 사이 배치·ROS 배포판 호환성, 실제 CAN 응답과 발열, E-stop 전원 경로, 배터리 보호, 상세 CAD 간섭·체결·케이블·강도, 실제 camera 12° 장착 및 Fusion 네이티브 조립 실행은 미검증이다. [기구 설계 현황](pi4_design_status.md)을 함께 확인한다. 본 변경은 실물 제작 승인이나 완성품 인증이 아니다.
+
+## R2 CAD 동작 영상
+
+상세 CAD 외형과 수정된 충돌 프록시를 사용하는 영상 11개와 CAD 회전 영상 1개는 generated/motion_videos/index.html에서 재생한다. 재생성 절차는 README에 있다. URDF 내 비접촉 외형은 collision에서 제외하고, 프레임·커버·모터 후면 지지·하부 어댑터 충돌 형상을 내보낸다. Isaac importer의 self collision은 활성화 설정했으며 실제 GPU 접촉 동작은 아직 검증하지 않았다.

@@ -29,7 +29,7 @@ def rollout(d, speed=0.25, seconds=12.0, friction=0.8, mass_scale=1.0, startup=F
     hold = np.array([d["actuators"][name]["stall_rated_torque_nm"] for name in names])*d["control"]["thermal_derating"]
     no_load = np.array([d["actuators"][name]["no_load_rpm"] for name in names])*math.pi/30
     stand_q = gait.stand()
-    data.qpos[qadr] = np.tile([0.,-1.43,2.86],4) if startup else stand_q
+    data.qpos[qadr] = np.tile(d.get('startup_joint_angles_rad',[0.,-1.43,2.86]),4) if startup else stand_q
     if startup:
         data.qpos[2] = 0.12
         mujoco.mj_forward(model,data)
@@ -155,6 +155,7 @@ def rollout(d, speed=0.25, seconds=12.0, friction=0.8, mass_scale=1.0, startup=F
     fall=bool(min_height<d["standing_leg_height_m"]*0.55 or tilt>35)
     report={**mass_and_cost(d),"engine":f"MuJoCo {mujoco.__version__}","floating_base":True,"external_lifting_forces":False,"pose_writes_after_initialization":False,"hardware_tested":False,"isaac_tested":False,"seconds":seconds,"mass_scale":mass_scale,"friction":friction,"requested_speed_m_s":speed,"net_x_m":float(final[1]-initial[0]),"net_y_m":float(final[2]-initial[1]),"max_tilt_deg":tilt,"minimum_height_m":min_height,"fallen":fall,"joint_torque_rms_nm":rms.tolist(),"derated_hold_limits_nm":hold.tolist(),"thermal_margin_ratio":float(np.max(rms/hold)),"peak_joint_torque_nm":float(np.abs(torques).max()),"motor_mechanical_power_peak_w":float(rows[:,8].max()*0.8),"power_budget_scale_min":budget_scale_min,"self_collision_impulse_ns":float(self_impulses),"obstacle_collision_impulse_ns":float(obstacle_impulses),"max_joint_tracking_error_rad":max(errors),"off_torque_max_nm":off_torque_max,"fault":fault,"fault_detection_time_s":fault_detection_time,"fault_torque_max_nm":fault_torque_max,"motor_speed_envelope":"unmeasured linear envelope","continuous_torque_derating_assumed":d["control"]["thermal_derating"],"navigation_odometry":"simulator ground truth; VSLAM not executed" if navigator else None}
     report["passed"]=not fall and report["thermal_margin_ratio"]<=1.0 and self_impulses<0.5 and obstacle_impulses<0.5 and (speed==0 or report["net_x_m"]>0.3)
+    report['passed']=bool(report['passed'])
     report['last_safety_reason']=supervisor.latched or 'OK'
     report['off_belly_contact_steps']=off_belly_contact_steps
     if startup:report['passed']=report['passed'] and off_belly_contact_steps>0 and off_torque_max==0

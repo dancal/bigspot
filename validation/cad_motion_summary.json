@@ -1,0 +1,96 @@
+{
+  "revision": "pi4-r2",
+  "estimated_mass_kg": 9.468016207317424,
+  "unit_tests_passed": 24,
+  "external_controller_cases_passed": 11,
+  "cad_sampled_poses": 114,
+  "cad_sampled_interference_passed": true,
+  "cad_threshold_mm3": 1,
+  "continuous_sweep_certified": false,
+  "legacy_internal_controller_cases_passed": 2,
+  "legacy_internal_controller_cases_failed": [
+    "startup"
+  ],
+  "ros_executed": false,
+  "isaac_executed": false,
+  "hardware_tested": false,
+  "source_sha256": {
+    "design/pi4/BigSpot_Pi4_assembly.step": "a12332d1a14758033e6d5dae0a7231441b2f4c993001dbcb28ce7ad504cd42ef",
+    "config/pi4_design.json": "f690404792c3cba2e57c4c3d388d9c9fb551248ac4d2bafe1c0f53d716884bd7",
+    "design/pi4/bigspot.xml": "f10a9f0d4a7c801895d27d6699fbbe7a5bc530fa17169824d2ad73f5485f64cd"
+  },
+  "videos": [
+    {
+      "file": "cad_orbit.mp4",
+      "frames": 360,
+      "duration_s": 12.0,
+      "sha256": "e3cf3b98ad01a4c8bf618aae475e1ac13c207b68d684c6f7cc080f8f0147c7d6"
+    },
+    {
+      "file": "camera_dropout.mp4",
+      "frames": 541,
+      "duration_s": 18.03,
+      "sha256": "dfe10a0d5d82ef6e7227d931baf9f916079fa565adcd2240f7c7128de3e6c1c9"
+    },
+    {
+      "file": "command_dropout.mp4",
+      "frames": 541,
+      "duration_s": 18.03,
+      "sha256": "fb2c98e219b95c7f20c99c5591d08b84283fc826ce6d46d9d4aceca986227a3f"
+    },
+    {
+      "file": "controller_dropout.mp4",
+      "frames": 541,
+      "duration_s": 18.03,
+      "sha256": "46ec119f52169c6d30d1d74d41689bc55dc66f73bff32c770c3119a6c4be4748"
+    },
+    {
+      "file": "holdout.mp4",
+      "frames": 541,
+      "duration_s": 18.03,
+      "sha256": "8c2adeee70498387a8d4ae7866c6564fe410690ef1a4763e7c78f8b3f517bdaa"
+    },
+    {
+      "file": "imu_dropout.mp4",
+      "frames": 541,
+      "duration_s": 18.03,
+      "sha256": "f7a739308a486810f078f7dd9943436eca6b6f082ef60602a0139c3e10cf2e54"
+    },
+    {
+      "file": "joint_dropout.mp4",
+      "frames": 541,
+      "duration_s": 18.03,
+      "sha256": "7474b7221bcbf9b723fb90b874205e6c8f219e9163b7704cdc3906b1b83bc847"
+    },
+    {
+      "file": "lateral.mp4",
+      "frames": 541,
+      "duration_s": 18.03,
+      "sha256": "24f86fbf9af38c4f84ef461e988662b953011003a2af279c2977a0bd40238d9c"
+    },
+    {
+      "file": "navigation.mp4",
+      "frames": 1351,
+      "duration_s": 45.03,
+      "sha256": "c8c817ace156f27b1bec6c40ab2963bbfa77d0352ec7cc8e9daf42a71583c282"
+    },
+    {
+      "file": "startup.mp4",
+      "frames": 541,
+      "duration_s": 18.03,
+      "sha256": "5a1653794e1f314a267aa599f539f5c0b972d1feb7a242f307e325effb0fcbaf"
+    },
+    {
+      "file": "turn.mp4",
+      "frames": 541,
+      "duration_s": 18.03,
+      "sha256": "ab54efc29f777e9bd8958492b754e93ac53c1d995f0e1697174249f376c6e71d"
+    },
+    {
+      "file": "walk.mp4",
+      "frames": 541,
+      "duration_s": 18.03,
+      "sha256": "4c115a5a57660cfcbc2bf2044322d7bfba17c801caed38073b06734bedad944c"
+    }
+  ]
+}

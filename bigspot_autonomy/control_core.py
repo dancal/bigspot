@@ -12,7 +12,12 @@ JOINT_LOWER = np.tile([-.65, -2.1, .10], 4)
 JOINT_UPPER = np.tile([.65, 1.25, 3.0], 4)
 
 
-def ordered_joints(names, positions, velocities):
+def joint_bounds(design):
+    limits=design.get('joint_limits_rad',{'abad':[-.65,.65],'hip':[-2.1,1.25],'knee':[.1,3.]})
+    return tuple(np.tile([limits[axis][i] for axis in ('abad','hip','knee')],4) for i in (0,1))
+
+
+def ordered_joints(names, positions, velocities, lower=JOINT_LOWER, upper=JOINT_UPPER):
     if len(names) != 12 or len(set(names)) != 12 or set(names) != set(JOINT_NAMES):
         raise ValueError('Expected twelve unique named joints')
     if len(positions) != 12 or len(velocities) != 12:
@@ -21,7 +26,7 @@ def ordered_joints(names, positions, velocities):
     q, v = np.asarray(positions, float)[order], np.asarray(velocities, float)[order]
     if not np.isfinite(q).all() or not np.isfinite(v).all():
         raise ValueError('Non-finite joint state')
-    if np.any(q < JOINT_LOWER-.05) or np.any(q > JOINT_UPPER+.05):
+    if np.any(q < lower-.05) or np.any(q > upper+.05):
         raise ValueError('Measured joint outside model limits')
     return q, v
 
@@ -59,6 +64,7 @@ class Output:
 class ControlCore:
     def __init__(self, design, autonomous=False):
         self.design, self.autonomous = design, autonomous
+        self.lower,self.upper=joint_bounds(design)
         cfg = design['control']
         self.supervisor = Supervisor(cfg['sensor_timeout_s'], cfg['command_timeout_s'])
         self.gait = Gait(design)
@@ -80,7 +86,7 @@ class ControlCore:
         return True
 
     def joints(self, names, positions, velocities, now):
-        self.q, self.v = ordered_joints(list(names), positions, velocities)
+        self.q, self.v = ordered_joints(list(names), positions, velocities,self.lower,self.upper)
         self.supervisor.update('joints', now)
 
     def imu(self, quaternion, gyro, now):
@@ -107,8 +113,8 @@ class ControlCore:
             return False
         if not self.supervisor.evaluate(now, tilt=max(abs(self.rp))).torque_enabled:
             return False
-        self.rise_seed = self.q.copy()
-        self.target = self.q.copy()
+        self.rise_seed = np.clip(self.q,self.lower,self.upper)
+        self.target = self.rise_seed.copy()
         self.elapsed = self.settled = 0.
         self.state = 'RISING'
         return True
@@ -116,6 +122,7 @@ class ControlCore:
     def step(self, dt, now):
         target = self.q.copy() if self.target is None and self.q is not None else (
             self.gait.stand() if self.target is None else self.target.copy())
+        target = np.clip(target,self.lower,self.upper)
         if not math.isfinite(dt) or not 0 < dt <= .05:
             self.supervisor.latched = 'CLOCK_DISCONTINUITY'
         decision = self.supervisor.evaluate(now, autonomous=self.autonomous, tilt=max(abs(self.rp)))
@@ -144,7 +151,7 @@ class ControlCore:
                 moving = decision.motion_enabled
                 target = self.gait.targets(dt, self.velocity if moving else np.zeros(3),
                                            roll=self.rp[0]*.5, pitch=self.rp[1]*.5)
-            if not np.isfinite(target).all() or np.any(target < JOINT_LOWER) or np.any(target > JOINT_UPPER):
+            if not np.isfinite(target).all() or np.any(target < self.lower) or np.any(target > self.upper):
                 raise ValueError('Joint target outside limits')
             self.target = target
             effort = limited_effort(self.design, target, self.q, self.v)

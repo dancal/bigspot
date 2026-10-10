@@ -12,14 +12,22 @@ from bigspot_autonomy.sim_backend import CpuPlant
 from bigspot_autonomy.navigation import Navigator
 
 
-def run(case,seconds=18.):
+def run(case,seconds=18.,render=False):
     d=load_design(ROOT/'config/pi4_design.json')
     holdout=case=='holdout'
     nav=Navigator(camera_dropout_at=9. if case=='camera_dropout' else None) if case in ('navigation','camera_dropout') else None
-    plant=CpuPlant(d,friction=.55 if holdout else .8,mass_scale=1.15 if holdout else 1.,obstacles=bool(nav))
+    visual=None
+    if render:
+        from bigspot_autonomy.cad_visual import CadVisuals
+        visual=CadVisuals(ROOT/'design/pi4/cad_meshes.json',ROOT/'generated/motion_videos/meshes')
+    plant=CpuPlant(d,friction=.55 if holdout else .8,mass_scale=1.15 if holdout else 1.,obstacles=bool(nav),model_transform=visual.decorate if visual else None)
+    recorder=None
+    if render:
+        from bigspot_autonomy.video import VideoRecorder
+        recorder=VideoRecorder(plant,case,ROOT/'generated/motion_videos'/case)
     core=ControlCore(d,autonomous=bool(nav))
     dt=plant.dt;armed=False;ready=False;fault_at=9.;fault_time=None
-    tilt=[];torques=[];states=[];collision=0.;zero_after_fault=True;camera_stopped=False
+    tilt=[];torques=[];states=[];collision=0.;zero_after_fault=True;camera_stopped=False;cad_samples=[]
     for i in range(round(seconds/dt)):
         t=float(plant.data.time)
         if i%5==0:
@@ -31,18 +39,24 @@ def run(case,seconds=18.):
             if not armed and t>=1.:armed=core.enable(True,t)
         if i%3==0:
             velocity=np.array([.24 if t>7. and t<seconds-2. and case!='startup' else 0.,0.,0.])
+            if case in ('lateral','turn'):
+                velocity=np.array([0.,.15 if case=='lateral' else 0.,.3 if case=='turn' else 0.]) if 7.<t<seconds-2. else np.zeros(3)
             if nav:
                 velocity=nav(plant.model,plant.data,t)
                 if math.isfinite(nav.last_capture):core.supervisor.update('camera',nav.last_capture)
                 core.supervisor.update('odom',t)
             if case!='command_dropout' or t<fault_at:core.command(velocity,t)
             result=core.step(dt*3,t)
+            core.step_reason=result.reason
             ready=ready or result.state=='READY'
             if case!='controller_dropout' or t<fault_at:
                 plant.watchdog.receive_target(list(JOINT_NAMES),result.positions.tolist(),result.efforts.tolist() if result.torque_enabled else [],t,t,t)
             if result.state=='FAULT' and fault_time is None:fault_time=t
             if nav and t>9.31 and result.reason=='STALE_CAMERA':camera_stopped=True
         plant.step(t)
+        if recorder:recorder.capture(core)
+        if (t<6. and i%250==0) or i in (4750,5000,8500):
+            cad_samples.append({'time_s':float(plant.data.time),'joints_rad':plant.data.qpos[plant.qadr].tolist()})
         if t>fault_at+.16 and case in ('imu_dropout','joint_dropout','controller_dropout'):
             zero_after_fault=zero_after_fault and max(abs(plant.data.ctrl))==0.
         if t>6. and case not in ('imu_dropout','joint_dropout','controller_dropout'):
@@ -67,18 +81,25 @@ def run(case,seconds=18.):
     else:
         report['passed']=ready and core.state!='FAULT' and report['max_tilt_deg']<35 and plant.data.qpos[2]>.16 and collision<.5 and report['thermal_margin_ratio']<=1.
         if case in ('walk','holdout'):report['passed'] &= plant.data.qpos[0]>.3
+        if case=='lateral':report['passed'] &= plant.data.qpos[1]>.25
+        if case=='turn':
+            w,x,y,z=plant.data.qpos[3:7];report['yaw_rad']=float(math.atan2(2*(w*z+x*y),1-2*(y*y+z*z)))
+            report['passed'] &= abs(report['yaw_rad'])>.3
         if case=='navigation':report['passed'] &= nav.reached
         if case=='camera_dropout':report['passed'] &= camera_stopped and np.linalg.norm(core.gait.velocity)<.006
         if case=='command_dropout':report['passed'] &= np.linalg.norm(core.gait.velocity)<.006
     report['passed']=bool(report['passed'])
     report['fault_efforts_zero']=bool(report['fault_efforts_zero'])
+    report['cad_pose_samples']=cad_samples
+    if recorder:report['video']=recorder.close()
     return report
 
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('--cases',nargs='+',default=['startup','walk','holdout','imu_dropout','joint_dropout','controller_dropout','command_dropout','navigation','camera_dropout'])
+    parser=argparse.ArgumentParser();parser.add_argument('--render',action='store_true');parser.add_argument('--cases',nargs='+',default=['startup','walk','lateral','turn','holdout','imu_dropout','joint_dropout','controller_dropout','command_dropout','navigation','camera_dropout'])
     args=parser.parse_args();reports=[]
     for case in args.cases:
-        r=run(case,seconds=45. if case=='navigation' else 18.);reports.append(r);print(json.dumps(r),flush=True)
+        r=run(case,seconds=45. if case=='navigation' else 18.,render=args.render);reports.append(r)
+        print(json.dumps({k:v for k,v in r.items() if k!='cad_pose_samples'}),flush=True)
     output=ROOT/'validation/control_loop.json';output.write_text(json.dumps({'reports':reports,'passed':all(r['passed'] for r in reports)},indent=2)+'\n')
     raise SystemExit(0 if all(r['passed'] for r in reports) else 2)

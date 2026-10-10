@@ -60,13 +60,14 @@ def main():
 
         generated=ROOT/'generated/isaac';generated.mkdir(parents=True,exist_ok=True)
         usd=URDFImporter(URDFImporterConfig(urdf_path=str(args.urdf),usd_path=str(generated/'usd'),
-            fix_base=False,merge_fixed_joints=False,merge_mesh=False,allow_self_collision=False,
+            fix_base=False,merge_fixed_joints=False,merge_mesh=False,allow_self_collision=True,
             joint_drive_type='force',joint_target_type='position',override_joint_stiffness=0.,
             override_joint_damping=0.)).import_urdf()
         stage_utils.set_stage_units(meters_per_unit=1.)
         stage_utils.add_reference_to_stage(usd,'/World/BigSpot')
         stage=omni.usd.get_context().get_stage()
-        UsdGeom.XformCommonAPI(stage.GetPrimAtPath('/World/BigSpot')).SetTranslate(Gf.Vec3d(0,0,.067))
+        initial_height=design.get('startup_base_height_m',.067)
+        UsdGeom.XformCommonAPI(stage.GetPrimAtPath('/World/BigSpot')).SetTranslate(Gf.Vec3d(0,0,initial_height))
         scene=UsdPhysics.Scene.Define(stage,'/World/PhysicsScene')
         scene.CreateGravityDirectionAttr().Set(Gf.Vec3f(0,0,-1));scene.CreateGravityMagnitudeAttr().Set(9.81)
         material=UsdShade.Material.Define(stage,'/World/FloorMaterial')
@@ -166,8 +167,8 @@ def main():
         app_utils.play();app.update()
         articulation=Articulation(str(roots[0].GetPath()));indices=articulation.get_dof_indices(list(JOINT_NAMES))
         articulation.set_dof_gains(stiffnesses=0.,dampings=0.)
-        articulation.set_dof_positions(np.tile([0.,-1.43,2.86],4),dof_indices=indices)
-        articulation.set_world_poses(positions=np.array([[0.,0.,.067]]),orientations=np.array([[1.,0.,0.,0.]]))
+        articulation.set_dof_positions(np.tile(design.get('startup_joint_angles_rad',[0.,-1.43,2.86]),4),dof_indices=indices)
+        articulation.set_world_poses(positions=np.array([[0.,0.,initial_height]]),orientations=np.array([[1.,0.,0.,0.]]))
         base=RigidPrim(base_path)
         def before(dt,context):
             node.t=SimulationManager.get_simulation_time();rclpy.spin_once(node,timeout_sec=0)
@@ -202,7 +203,7 @@ def main():
         args.report.write_text(json.dumps({'engine':'Isaac Sim 6.0.1','counts':node.counts,
             'sim_seconds':node.t,'watchdog_latched':node.watchdog.expired,'hardware_tested':False,
             'navigation_success_verified':False,'ground_truth_used_for_navigation':False,
-            'self_collision_enabled':False},indent=2)+'\n')
+            'self_collision_enabled':True},indent=2)+'\n')
     finally:
         if node is not None:node.destroy_node();rclpy.shutdown()
         if callbacks:

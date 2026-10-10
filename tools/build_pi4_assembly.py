@@ -23,7 +23,7 @@ from OCP.IFSelect import IFSelect_RetDone
 from OCP.BRepMesh import BRepMesh_IncrementalMesh
 from OCP.StlAPI import StlAPI_Writer
 from OCP.TopExp import TopExp_Explorer
-from OCP.TopAbs import TopAbs_FACE
+from OCP.TopAbs import TopAbs_FACE, TopAbs_REVERSED, TopAbs_SOLID
 from OCP.TopoDS import TopoDS
 from OCP.BRep import BRep_Tool
 from OCP.TopLoc import TopLoc_Location
@@ -55,6 +55,21 @@ def fuse(a,b):
     op=BRepAlgoAPI_Fuse(a,b);op.Build()
     if not op.IsDone():raise RuntimeError('Boolean fuse failed')
     return op.Shape()
+
+def rounded_plate(size,xyz,radius):
+    length,width,t=size;x,y,z=xyz;r=radius
+    shape=box((length-2*r,width,t),xyz)
+    if width>2*r:shape=fuse(shape,box((length,width-2*r,t),xyz))
+    for sx in (-1,1):
+        for sy in (-1,1):shape=fuse(shape,cylinder(r,t,(x+sx*(length/2-r),y+sy*(width/2-r),z)))
+    return shape
+
+def camera_rotation():
+    angle=math.radians(D['camera_downward_pitch_deg']);c,s=math.cos(angle),math.sin(angle)
+    origin=np.asarray(D['camera_xyz_m'])*1000
+    matrix=np.eye(4);matrix[:3,:3]=[[c,0,s],[0,1,0],[-s,0,c]]
+    matrix[:3,3]=origin-matrix[:3,:3]@origin
+    return matrix
 
 def holes(shape, points, radius, length, axis=(0,0,1)):
     for xyz in points: shape=cut(shape,cylinder(radius,length,xyz,axis))
@@ -98,14 +113,17 @@ def frame():
     for x in (-150,-58,48,152):
         for y in (-58,58):bottom=cut(bottom,box((43,29,6),(x,y,f['bottom_z'])))
     bottom=holes(bottom,[(x,y,f['bottom_z']) for x,y,_ in mountpts],1.7,6)
+    bx,by,_=C['battery']['position']
+    bottom=holes(bottom,[(bx+x,by+y,f['bottom_z']) for x in (-60,60) for y in (-32,32)],1.7,6)
     # General slot grid, including battery straps and interchangeable power modules.
     for x in (-120,-20,60,120):
         for y in (-36,36):bottom=cut(bottom,box((23,3.4,6),(x,y,f['bottom_z'])))
     add('Lower_Frame_380x190_t2',bottom,notes='Laser/waterjet blank; deburr, keep reinforced motor posts')
     top=box((length,width,t),(0,0,f['top_z']))
-    for x in (-120,-10,105):top=cut(top,box((88,65,6),(x,0,f['top_z'])))
+    for x in (-120,-10,105):top=cut(top,box((100 if x==105 else 88,65,6),(x,0,f['top_z'])))
     top=holes(top,[(x,y,f['top_z']) for x,y,_ in mountpts],1.7,6)
-    top=holes(top,[(100,-65,f['top_z'])],11.1,6)
+    top=holes(top,[(100,-55,f['top_z'])],11.1,6)
+    top=holes(top,[(182,y,f['top_z']) for y in (-48,48)],1.7,6)
     add('Removable_Top_Service_Frame',top,notes='22mm NC E-stop opening; top access to battery, Pi4 and MCU')
     for x,y,_ in mountpts:
         post=cylinder(4,84,(x,y,0));post=holes(post,[(x,y,0)],1.25,90)
@@ -113,7 +131,11 @@ def frame():
     for side in (-1,1):
         wall=box((300,2,68),(0,side*92,0))
         for x in (-95,0,95):wall=cut(wall,box((66,6,40),(x,side*92,0)))
-        add(f'Side_Web_{side}',wall)
+        # The side webs previously intruded into the four fixed motor casings.
+        for front in (-1,1):
+            mx=front*D['hip_x_m']*1000-front*27.5
+            wall=cut(wall,cylinder(29.5,53,(mx,side*105,0),(1,0,0)))
+        add(f'Side_Web_{side}',wall,color=(.10,.51,.49))
     # Ground support sits below all body electronics; the robot settles on this when OFF.
     skid=box((300,160,3),(0,0,-63.5))
     for x in (-90,0,90):skid=cut(skid,box((55,110,8),(x,0,-63.5)))
@@ -130,15 +152,16 @@ def electronics():
             pts=[(px+dx,cy-28+3.5+dy,z) for dx in (0,58) for dy in (0,49)]
             shape=holes(shape,pts,1.35,6)
             for i,(x,y,z) in enumerate(pts):
-                p=cylinder(3,9,(x,y,z-5.3));p=holes(p,[(x,y,z-5.3)],1.2,12)
+                p=cylinder(3,9.7,(x,y,z-5.65));p=holes(p,[(x,y,z-5.65)],1.2,12)
                 add(f'Pi4_M2_5_Standoff_{i}',p,notes='Official 58x49mm pitch, asymmetric on 85x56mm PCB')
             trayz=z-11.5
             tray=box((90,64,2),(cx-8,0,trayz))
             tray=holes(tray,[(x,y,trayz) for x,y,_ in pts],1.35,6)
             add('Pi4_Replaceable_Tray',tray)
-            for hy in (-31,31):
+            for hy in (-28,28):
                 # Feet stay forward of the battery; tray bridges backwards over it.
-                add(f'Pi4_Tray_Support_{hy}',box((10,10,trayz+42),(145,hy,(trayz-42)/2)))
+                height=trayz-1+42
+                add(f'Pi4_Tray_Support_{hy}',box((8,8,height),(134,hy,(-42+trayz-1)/2)),notes='Full 8x8mm tray footprint; lower-frame to tray load path, fastener/FEA pending')
             for i,y in enumerate((-15,3,20)):
                 size=(18,15,15) if i else (21,17,13)
                 add(f'Pi4_USB_Ethernet_Port_{i}',box(size,(cx+37,y,z+8.5)),mass=0,status='connector_envelope',material='purchased',color=(.68,.70,.74))
@@ -147,38 +170,75 @@ def electronics():
         if e['id'] in ('dcdc','mcu','bms','switch','fuses','regen','current','watchdog'):
             sx,sy,sz=e['size'];x,y,z=e['xyz']
             # Slotted strap-mount plinths do not invent an unverified supplier hole pattern.
-            base=box((sx+8,sy+6,2),(x,y,z-sz/2-2))
-            for hx in (-sx/2+8,sx/2-8):base=cut(base,box((3.2,sy-3,6),(x+hx,y,z-sz/2-2)))
+            plinthz=z-sz/2-1
+            base=box((sx+8,sy+6,2),(x,y,plinthz))
+            if e['id']=='dcdc':base=cut(base,box((147,83,58),C['battery']['position']))
+            if e['id']=='switch':
+                for hy in (-28,28):base=cut(base,box((10,10,6),(134,hy,plinthz)))
+            for hx in (-sx/2+8,sx/2-8):base=cut(base,box((3.2,sy-3,6),(x+hx,y,plinthz)))
             add(e['id']+'_Slotted_Mounting_Plinth',base,notes='Supplier-specific holes remain un-drilled; retention straps through slots')
+            top=plinthz-1;bottom=-42
+            feet=[(x,y-min(6,sy/4)),(x,y+min(6,sy/4))]
+            if e['id']=='watchdog':feet=[(x-6,-76),(x+6,-76)]
+            for index,(fx,fy) in enumerate(feet):
+                add(e['id']+f'_Frame_Support_{index}',box((6,6,top-bottom),(fx,fy,(top+bottom)/2)),notes='Compression support rests on lower plate; strap/fastener details unverified')
     # Actual cells are visible independently; insulating tray encloses a supplier-built pack.
     b=C['battery'];x,y,z=b['position'];tray=box(b['pack_envelope'],(x,y,z))
     inner=np.asarray(b['pack_envelope'])-np.array([4,4,2]);inner[2]+=6
     tray=cut(tray,box(inner,(x,y,z+3)))
     for hx in (-45,45):
         for hy in (-37,37):tray=cut(tray,box((10,3,65),(x+hx,y+hy,z)))
+    tray=holes(tray,[(x+dx,y+dy,z-27.5) for dx in (-60,60) for dy in (-32,32)],1.7,6)
     add('12S_Battery_Insulated_Tray_and_Strap_Slots',tray,material='PETG',color=(.18,.23,.3))
+    for dx in (-60,60):
+        for dy in (-32,32):
+            support=cylinder(4,1.5,(x+dx,y+dy,-41.25));support=holes(support,[(x+dx,y+dy,-41.25)],1.7,5)
+            add(f'Battery_Tray_Compression_Spacer_{dx}_{dy}',support,notes='M3 through-bolt spacer; pack insulation and fastener retention require verification')
     for col in range(6):
         for row in range(2):
             xyz=(x+(col-2.5)*23,y,z+(row-.5)*23)
             add(f'P42A_21700_Cell_{col*2+row+1:02}',cylinder(b['cell_diameter']/2,b['cell_length'],xyz,(0,1,0)),mass=b['cell_mass_kg'],material='purchased',color=(.21,.42,.69),status='official_envelope',notes='12S1P supplier assembled/insulated pack, not a loose-cell assembly instruction')
-    add('Pi4_Heatsink',box((20,20,8),(113,0,29)),mass=.012,color=(.6,.63,.65))
-    add('EStop_22mm_NC_Contact_Block',cylinder(10,20,(100,-65,33)),mass=.020,color=(.25,.25,.28),status='reservation_only')
-    add('EStop_Red_Mushroom',cylinder(15,11,(100,-65,51)),mass=.013,color=(.85,.1,.08),status='reservation_only')
-    add('Brake_Resistor_47ohm_100W_PulseRating_REQUIRED',box((100,20,20),(-119,64,2)),mass=.09,color=(.9,.57,.13),status='reservation_only',notes='54V clamp gives ~62W; pulse-energy and cooling require selected resistor datasheet')
+    add('Pi4_CPU_Thermal_Interface_Reservation',box((20,20,2),(113,0,29.8)),mass=0,status='reservation_only',color=(.6,.63,.65))
+    add('Pi4_Heatsink',box((20,20,8),(113,0,34.8)),mass=.012,color=(.6,.63,.65))
+    add('EStop_22mm_NC_Contact_Block',cylinder(10,20,(100,-55,33)),mass=.020,color=(.25,.25,.28),status='reservation_only')
+    add('EStop_Panel_Stem_Reservation',cylinder(10,14.5,(100,-55,50.25)),mass=0,status='reservation_only',color=(.25,.25,.28))
+    add('EStop_Red_Mushroom',cylinder(15,11,(100,-55,63)),mass=.013,color=(.85,.1,.08),status='reservation_only')
+    add('Brake_Resistor_47ohm_100W_PulseRating_REQUIRED',box((100,20,20),(-119,55,2)),mass=.09,color=(.9,.57,.13),status='reservation_only',notes='54V clamp gives ~62W; pulse-energy and cooling require selected resistor datasheet')
     camera=np.asarray(D['camera_xyz_m'])*1000
-    add('RealSense_D435i_90x25x25',box((25,90,25),camera),mass=.072,material='purchased',color=(.17,.18,.21),status='official_envelope')
-    cradle=box((39,102,3),(camera[0],0,camera[2]-16))
-    cradle=cut(cradle,box((27,92,6),(camera[0],0,camera[2]-16)))
-    add('D435i_Edge_Clamp_Cradle',cradle,notes='Edge clamp avoids unverified camera screw lengths; 12deg pitch in Fusion occurrence')
-    add('D435i_Front_Riser',box((12,18,38),(182,0,56)))
-    for y in (-22,22):
-        add(f'Camera_Riser_Arm_{y}',box((42,7,3),(197,y,61)))
+    rotate=camera_rotation()
+    add('RealSense_D435i_90x25x25',transformed(box((25,90,25),camera),rotate),mass=.072,material='purchased',color=(.17,.18,.21),status='official_envelope')
+    cradle=box((39,102,3),(camera[0],0,camera[2]-14))
+    cradle=cut(cradle,box((27,92,6),(camera[0],0,camera[2]-14)))
+    for dx in (-7,7):cradle=fuse(cradle,box((6,102,3),(camera[0]+dx,0,camera[2]-14)))
+    for sy in (-1,1):cradle=fuse(cradle,box((16,3,15),(camera[0],sy*46.5,69.5)))
+    add('D435i_Edge_Clamp_Cradle',transformed(cradle,rotate),notes='CAD and optical mount both 12deg down; bottom rails and side lips support envelope; retention hardware pending')
+    upper_halfspace=transformed(box((1000,1000,1000),(205,0,559.5)),rotate)
+    for y in (-48,48):
+        beam=box((30,8,4),(191,y,46));beam=holes(beam,[(182,y,46)],1.7,8)
+        post=cut(box((8,8,25),(202,y,60.5)),upper_halfspace)
+        add(f'Camera_Frame_Mount_{y}',fuse(beam,post),notes='Base on top frame z44; sloped post face meets pitched cradle underside; M3 fastening/strength pending')
     # Cable routes are visible separate objects and are excluded from moving-part collision tests.
     for side in (-1,1):
-        add(f'CAN_and_Power_Separated_Trunk_{side}',cylinder(3,260,(0,side*82,-32),(1,0,0)),mass=.012,material='purchased',color=(.85,.3,.12),status='route_envelope')
-    add('USB3_Camera_Cable_Service_Route',cylinder(3,58,(167,0,30),(1,0,0)),mass=.012,material='purchased',color=(.1,.12,.16),status='route_envelope')
-    add('Ultrasonic_Front_Mount_Plate',box((2,55,30),(195,0,-10)))
-    for hy in (-23,23):add(f'Ultrasonic_Body_Attachment_{hy}',box((26,6,6),(184,hy,-26)))
+        add(f'CAN_and_Power_Separated_Trunk_{side}',cylinder(3,164,(0,side*82,-39),(1,0,0)),mass=.012,material='purchased',color=(.85,.3,.12),status='route_envelope',notes='Central route only; motor branches and bend radii not released')
+    add('USB3_Camera_Cable_Service_Route',cylinder(3,52,(178,0,30),(1,0,0)),mass=.012,material='purchased',color=(.1,.12,.16),status='route_envelope')
+    ultrasonic=box((2,55,30),(195,0,-10))
+    for hy in (-27,27):
+        ultrasonic=fuse(ultrasonic,box((26,6,6),(184,hy,-26)))
+        ultrasonic=fuse(ultrasonic,box((6,6,17),(182,hy,-33.5)))
+    add('Ultrasonic_Integrated_Frame_Bracket',ultrasonic,notes='Integrated bracket reaches lower frame z-42; retention/strength pending')
+
+def exterior():
+    cover=rounded_plate((380,192,1.5),(0,0,54),18)
+    for x in (-130,-100,-70,-40,-10,20,50):
+        for y in (-48,48):cover=cut(cover,rounded_plate((18,4,5),(x,y,54),2))
+    cover=holes(cover,[(113,0,54),(100,-55,54)],16,6)
+    cover=holes(cover,[(x,y,54) for x in (-92,92) for y in (-85,85)],1.7,6)
+    add('Graphite_Vented_Service_Cover',cover,material='PETG',color=(.08,.13,.18),notes='Removable visual cover; fan vent and E-stop access, not weather sealed')
+    for x in (-92,92):
+        for y in (-85,85):
+            support=holes(cylinder(3,9.25,(x,y,48.625)),[(x,y,48.625)],1.25,12)
+            add(f'Cover_M3_Spacer_{x}_{y}',support,notes='Connects top frame z44 to cover underside z53.25')
+    for y in (-74,74):add(f'Teal_Cover_Accent_{y}',rounded_plate((126,5,1),(0,y,55.25),2),material='PETG',color=(.08,.67,.60),notes='Non-powered trim, touches cover top')
 
 def legs():
     for leg,front,side in LEGS:
@@ -186,7 +246,7 @@ def legs():
         # RS00 output-face plane is the abduction pivot, not its casing centre.
         m=C['motor_mounts']['RS00'];mc=(x-front*(m['length']/2+2),y,0)
         add(leg+'_RS00_Stator',cylinder(28.5,51,mc,(1,0,0)),mass=D['actuators']['RS00']['mass_kg'],material='purchased',color=(.09,.10,.13),status='official_envelope')
-        rearx=x-front*54
+        rearx=x-front*54.5
         rear=cylinder(34,3,(rearx,y,0),(1,0,0))
         rear=holes(rear,circle_points(38,4,(rearx,y,0),'x',math.pi/4),1.7,8,(1,0,0))
         rear=holes(rear,[(rearx,y,0)],17,8,(1,0,0))
@@ -199,9 +259,12 @@ def legs():
         add(leg+'_Abduction_Output_M3_PCD27',output,group,notes='6x M3 output bolts; <=5mm engagement; auxiliary support needed before impact motions')
         offset=side*D['hip_offset_m']*1000
         add(leg+'_Abduction_Axial_Adapter',cylinder(9,33,(front*18.5,0,0),(1,0,0)),group)
-        beam=box((8,abs(offset),18),(front*35,offset/2,0))
-        beam=cut(beam,box((4,abs(offset)-16,10),(front*35,offset/2,0)))
-        add(leg+'_Abduction_Yoke_55mm',beam,group)
+        beam=box((8,abs(offset),18),(front*35,offset/2,50))
+        beam=cut(beam,box((4,abs(offset)-16,10),(front*35,offset/2,50)))
+        beam=fuse(beam,box((8,18,50),(front*35,0,25)))
+        direction=np.array([-front*15.,0.,-15.]);length=float(np.linalg.norm(direction))
+        beam=fuse(beam,cylinder(4,length,(front*27.5,offset-side*1.5,42.5),direction/length))
+        add(leg+'_Abduction_Yoke_55mm',beam,group,notes='Raised yoke clears upper-link swept plane; stiffness and bearing load still require FEA')
         stator_motor(leg+'_Hip',group,(0,offset,0),side)
         # These link primitives share the kinematic pivot, but offset their material
         # away from the rotating motor face. The foot centre returns to pivot Y.
@@ -209,14 +272,46 @@ def legs():
         rotor(leg+'_Hip_Output_6M4_PCD24',uppergroup,(0,0,0),side,24,21.5,'M4')
         rail_tube(leg+'_Upper_Tube',uppergroup,140,-side*14,upper=True)
         stator_motor(leg+'_Knee',uppergroup,(0,0,-140),side)
-        add(leg+'_Knee_Stator_Ring_Tab',box((24,16,22),(0,-side*8,-105)),uppergroup)
+        add(leg+'_Knee_Stator_Ring_Tab',box((28,16,22),(24,-side*8,-105)),uppergroup,notes='Positive-X tab clears lower-link fold sweep')
         lowergroup=leg+'_lower_link'
         rotor(leg+'_Knee_Output_6M4_PCD24',lowergroup,(0,0,0),side,24,21.5,'M4')
-        rail_tube(leg+'_Lower_Tube',lowergroup,140,-side*19)
-        add(leg+'_Foot_Return_Bracket',box((25,26,7),(0,-side*10,-140)),lowergroup)
+        rail_tube(leg+'_Lower_Tube',lowergroup,140,-side*30)
+        add(leg+'_Foot_Return_Bracket',box((25,40,7),(0,-side*15,-140)),lowergroup)
+        add(leg+'_Foot_Load_Path_Neck',box((18,12,14),(0,-side*30,-133)),lowergroup,notes='Connects tube end adapter to foot return bracket; no floating foot carrier')
         add(leg+'_FSR_402_Contact_Disc',cylinder(7.3,1,(0,0,-146)),lowergroup,mass=.002,material='purchased',color=(.95,.48,.06),status='reservation_only',notes='Contact sensor only; force accuracy and overload bypass require bench calibration')
         add(leg+'_Elastomer_Foot',BRepPrimAPI_MakeSphere(gp_Pnt(0,0,-140),18).Shape(),lowergroup,mass=.033,material='purchased',color=(.12,.13,.15),status='custom_elastomer_foot',notes='FSR pad is inside foot; mechanical overload stop prevents full impact on film')
-        add(leg+'_Cable_Service_Loop',cylinder(2,72,(14,-side*26,-70)),lowergroup,mass=.008,material='purchased',color=(.8,.3,.13),status='route_envelope',notes='Route reservation; 30mm minimum bend radius and strain relief to be measured')
+        add(leg+'_Cable_Service_Loop',cylinder(2,72,(17,-side*26,-70)),lowergroup,mass=.008,material='purchased',color=(.8,.3,.13),status='route_envelope',notes='Route reservation; 30mm minimum bend radius and strain relief to be measured')
+
+def consolidate_structures():
+    # Former overlapping custom solids now represent one integrated load-bearing
+    # link, not separate machined parts occupying the same volume.
+    for leg,_,_ in LEGS:
+        for suffix in ('abduction_link','upper_link','lower_link'):
+            group=leg+'_'+suffix
+            records=[p for p in PARTS if p['group']==group and p['material']=='6061-T6']
+            shape=records[0]['shape']
+            for p in records[1:]:shape=fuse(shape,p['shape'])
+            exp=TopExp_Explorer(shape,TopAbs_SOLID);count=0
+            while exp.More():count+=1;exp.Next()
+            if count!=1:raise RuntimeError(group+' structure has a disconnected load path')
+            for p in records:PARTS.remove(p)
+            add(leg+'_'+suffix+'_Integrated_Structure',shape,group,notes='Integrated prototype geometry from '+', '.join(p['name'] for p in records)+'; machining process, retained fasteners and strength unverified')
+            if suffix=='lower_link':
+                foot=next(p for p in PARTS if p['name']==leg+'_Elastomer_Foot')
+                sensor=next(p for p in PARTS if p['name']==leg+'_FSR_402_Contact_Disc')
+                fitted=cut(cut(foot['shape'],shape),sensor['shape'])
+                PARTS.remove(foot)
+                add(foot['name'],fitted,group,foot['color'],foot['material'],foot['mass_kg'],foot['status'],
+                    'Rubber pocket clears integrated carrier and sensor; retention and force transfer require bench tests')
+        mount=next(p for p in PARTS if p['name']==leg+'_RS00_Rear_Bolt_Mount')
+        bridges=[p for p in PARTS if p['name'].startswith(leg+'_Body_Motor_Thermal_Bridge_')]
+        shape=mount['shape']
+        for p in bridges:shape=fuse(shape,p['shape']);PARTS.remove(p)
+        PARTS.remove(mount)
+        add(mount['name'],shape,notes=mount['notes']+'; thermal bridges integrated into bracket')
+        for wall in [p for p in PARTS if p['name'].startswith('Side_Web_')]:
+            fitted=cut(wall['shape'],shape);PARTS.remove(wall)
+            add(wall['name'],fitted,color=wall['color'],notes='Web relief matches integrated motor bracket; interface fasteners/strength pending')
 
 def stator_motor(name,group,origin,side):
     ox,oy,oz=origin
@@ -229,10 +324,11 @@ def stator_motor(name,group,origin,side):
     add(name+'_Stator_Ring_9M3_PCD73',ring,group,notes='9x M3 PCD73; <=8mm thread engagement; current vendor drawing required')
 
 def rail_tube(name,group,length,y,upper=False):
-    tube=box((26,12,length-30),(0,y,-length/2))
-    tube=cut(tube,box((23,9,length-28),(0,y,-length/2)))
+    span=length-40 if upper else length-20
+    tube=box((26,12,span),(0,y,-length/2))
+    tube=cut(tube,box((23,9,span+2),(0,y,-length/2)))
     add(name+'_26x12x1_5',tube,group)
-    for z in ((-14,) if upper else (-14,-length+14)):
+    for z in ((-20,) if upper else (-9,-length+14)):
         connector=box((26,abs(y)+4,8),(0,y/2,z))
         connector=holes(connector,[(-8,y,z),(8,y,z)],1.7,30,(0,1,0))
         add(name+'_End_Adapter_'+str(z),connector,group)
@@ -268,7 +364,9 @@ def mesh(shape):
             for i in range(1,tri.NbNodes()+1):
                 p=tri.Node(i).Transformed(loc.Transformation());vertices.extend((p.X(),p.Y(),p.Z()))
             for i in range(1,tri.NbTriangles()+1):
-                a,b,c=tri.Triangle(i).Get();indices.extend((start+a-1,start+b-1,start+c-1))
+                a,b,c=tri.Triangle(i).Get()
+                if face.Orientation()==TopAbs_REVERSED:b,c=c,b
+                indices.extend((start+a-1,start+b-1,start+c-1))
         exp.Next()
     return {'vertices':vertices,'indices':indices}
 
@@ -301,7 +399,7 @@ def validate_static_electronics():
 
 def main():
     OUT.mkdir(parents=True,exist_ok=True);(OUT/'groups').mkdir(exist_ok=True)
-    frame();electronics();legs()
+    frame();electronics();legs();consolidate_structures();exterior()
     collision=validate_static_electronics()
     stand=Gait(D).stand();ts=poses(stand)
     groups={}
@@ -309,7 +407,7 @@ def main():
     for g,pp in groups.items():step([p['shape'] for p in pp],OUT/'groups'/f'{g}.step')
     step([transformed(p['shape'],ts[p['group']]) for p in PARTS],OUT/'BigSpot_Pi4_assembly.step')
     inertia=inertials()
-    q=copy.deepcopy(D);q['name']='BigSpot Pi4 assembly R1';q['hardware_measured']=False;q['mechanical_revision']='pi4-r1';q['link_inertials']=inertia
+    q=copy.deepcopy(D);q['name']='BigSpot Pi4 assembly R2';q['hardware_measured']=False;q['mechanical_revision']=C['revision'];q['link_inertials']=inertia
     # Base excludes RS00 motor masses, which are already added by the dynamics model.
     q['base_without_actuators_kg']=inertia['base_link']['mass_kg']-4*D['actuators']['RS00']['mass_kg']
     ab=inertia['FL_abduction_link']['mass_kg']-D['actuators']['RS02']['mass_kg']
@@ -317,14 +415,17 @@ def main():
     low=inertia['FL_lower_link']['mass_kg']
     q.update(hip_bracket_kg=ab,upper_structure_kg=up,lower_structure_kg=low)
     q['battery'].update(chemistry='12S1P Molicel P42A Li-ion, supplier pack required',nominal_voltage_v=43.2,capacity_ah=4.2)
-    q['body_height_m']=.088
+    q['body_height_m']=.112
+    q['startup_joint_angles_rad']=C['startup_joint_angles_rad']
+    q['startup_base_height_m']=.002+max(.065,.14*(math.cos(C['startup_joint_angles_rad'][1])+math.cos(sum(C['startup_joint_angles_rad'][1:])))+.018)
+    q['joint_limits_rad']={'abad':[-.65,.65],'hip':[-2.1,1.25],'knee':[.1,C['knee_operating_max_rad']]}
     (ROOT/'config/pi4_design.json').write_text(json.dumps(q,indent=2)+'\n',encoding='utf-8')
     clean=[{k:v for k,v in p.items() if k!='shape'} for p in PARTS]
     joints=[]
     for i,(leg,front,side) in enumerate(LEGS):
         for j,(suffix,parent,child) in enumerate((('abad','base_link',leg+'_abduction_link'),('hip',leg+'_abduction_link',leg+'_upper_link'),('knee',leg+'_upper_link',leg+'_lower_link'))):
             child_t=ts[child];axis=ts[parent][:3,:3]@np.array([1,0,0] if j==0 else [0,1,0])
-            joints.append({'name':leg+'_'+suffix,'parent':parent,'child':child,'pivot_mm':child_t[:3,3].tolist(),'axis':axis.tolist(),'initial_rad':float(stand[i*3+j]),'range_rad':[-.65,.65] if j==0 else [-2.1,1.25] if j==1 else [.1,3.]})
+            joints.append({'name':leg+'_'+suffix,'parent':parent,'child':child,'pivot_mm':child_t[:3,3].tolist(),'axis':axis.tolist(),'initial_rad':float(stand[i*3+j]),'range_rad':q['joint_limits_rad'][suffix]})
     manifest={'revision':C['revision'],'units':'mm','parts':clean,'groups':{g:{'step':'groups/'+g+'.step','transform_mm':ts[g].tolist(),'parts':[p['name'] for p in pp]} for g,pp in groups.items()},'joints':joints,'link_inertials':inertia}
     (OUT/'assembly_manifest.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf-8')
     with (OUT/'bom.csv').open('w',encoding='utf-8-sig',newline='') as f:

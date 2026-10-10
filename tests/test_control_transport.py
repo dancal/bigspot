@@ -11,7 +11,7 @@ DESIGN = load_design(Path(__file__).resolve().parents[1]/'config/pi4_design.json
 class TransportTests(unittest.TestCase):
     def setUp(self):
         self.core = ControlCore(DESIGN)
-        self.q = np.tile([0.,-1.43,2.86],4)
+        self.q = np.tile(DESIGN.get('startup_joint_angles_rad',[0.,-1.43,2.86]),4)
 
     def sensors(self, t):
         self.core.joints(JOINT_NAMES,self.q,np.zeros(12),t)
@@ -79,6 +79,20 @@ class TransportTests(unittest.TestCase):
         self.assertFalse(watchdog.receive_target(JOINT_NAMES,[0]*12,[0]*12,1,1,10))
         self.assertFalse(watchdog.receive_target(JOINT_NAMES,self.q,[100]*12,1,1,10))
         self.assertFalse(watchdog.receive_target(JOINT_NAMES,self.q,[0]*12,1,1,float('nan')))
+
+    def test_profile_limit_enforced_at_motor_transport(self):
+        watchdog=EffortWatchdog(DESIGN);q=self.q.copy();q[2]=watchdog.upper[2]+.01
+        self.assertFalse(watchdog.receive_target(JOINT_NAMES,q,[0]*12,1,1,10))
+
+    def test_passive_joint_limit_slop_does_not_block_disable(self):
+        self.q[2]=self.core.upper[2]+.002
+        self.sensors(1)
+        output=self.core.step(.005,1)
+        watchdog=EffortWatchdog(DESIGN)
+        self.assertFalse(output.torque_enabled)
+        self.assertTrue(watchdog.receive_target(JOINT_NAMES,output.positions,[],1,1,10))
+        self.assertTrue(self.core.enable(True,1))
+        self.assertTrue(self.core.step(.005,1).torque_enabled)
 
     def test_camera_depth_and_stereo_baseline(self):
         _,left=camera_matrices(False);_,right=camera_matrices(True)
