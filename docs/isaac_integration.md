@@ -1,12 +1,12 @@
 # Pi 4 QDD: ROS 및 Isaac 연동 상태
 
-여기서 ROS5는 **Isaac ROS 5.0**을 뜻한다. ROS 배포판은 **ROS 2 Lyrical**이다. 현재 구현은 Pi 4 CAD 질량·관성 기준 9.468016kg, 12축 RS00/RS02 모델을 사용한다.
+여기서 ROS5는 **Isaac ROS 5.0**을 뜻한다. ROS 배포판은 **ROS 2 Lyrical**이다. 현재 구현은 Pi 4 SPORT CAD 질량·관성 기준 9.833952kg, 12축 RS00/RS02 모델을 사용한다.
 
 ## 검증 범위
 
 - `validation/control_loop.json`: 외부 ControlCore 목표 → 모터 로컬 PD → 자유 부유 MuJoCo 물리 모델. 11개 시험 통과. 낮은 자세에서 일어서기, 보행, 옆 이동, 회전, 질량 +15%/마찰 0.55, IMU·관절·제어기·명령 단절, 장애물 회피, 카메라 단절이다.
 - CPU 장애물 회피는 3m 목표에 약 0.152m까지 도달했고 장애물 접촉 충격량은 0이다. CPU 실험은 시뮬레이터 정답 odometry와 저해상도 raycast 깊이를 사용한다. 실제 VSLAM/Nav2 성능을 증명하지 않는다.
-- `tests/test_control_transport.py`와 기존 시험 총 24개 통과. 중복·지연·미래 timestamp, 센서 오류, 시계 역행, odometry 단절, 실제 시간 watchdog 및 원자적 출력 해제를 확인한다.
+- 제어·전송·CAD 내보내기·영상 서버 시험 총 29개 통과. 중복·지연·미래 timestamp, 센서 오류, 시계 역행, odometry 단절, 실제 시간 watchdog 및 원자적 출력 해제를 확인한다.
 - 실제 ROS DDS 실행, Isaac GPU 실행, 실물 모터 시험은 이번 환경에서 수행하지 않았다. 기존 브랜치의 ROS 결과는 새 제어기 전달 경로의 검증으로 사용할 수 없다.
 
 ## 현재 PC
@@ -80,7 +80,7 @@ ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose \
 ros2 service call /controller/enable std_srvs/srv/SetBool '{data: false}'
 ```
 
-PhysX self-collision은 꺼져 있고 충돌 형상은 해석용 proxy다. STEP 상세 간섭/강도 검증이 아니다. 실행 중 시뮬레이터 pose를 고정하거나 정답 위치를 navigation TF에 공급하지 않는다. `/sim/ground_truth/odom`은 진단 전용이다. 몸체 IMU 자세는 이상적인 시뮬레이션 측정이며 실제 IMU fusion 검증이 아니다. Stereo VSLAM 모드에서는 카메라 IMU를 요구하지 않는다.
+PhysX self-collision은 importer 설정에서 켜져 있고 충돌 형상은 해석용 proxy다. GPU에서 접촉 동작을 검증하지 않았으며 STEP 상세 강도 검증을 뜻하지 않는다. 실행 중 시뮬레이터 pose를 고정하거나 정답 위치를 navigation TF에 공급하지 않는다. `/sim/ground_truth/odom`은 진단 전용이다. 몸체 IMU 자세는 이상적인 시뮬레이션 측정이며 실제 IMU fusion 검증이 아니다. Stereo VSLAM 모드에서는 카메라 IMU를 요구하지 않는다.
 
 `camera_source:=realsense`는 실제 D435i stereo+IMU VIO 입력을 선택한다. `external`은 외부에서 같은 RealSense 토픽·TF를 제공하는 VIO 입력이다. 두 경우 simulation clock을 쓰지 않는다. 실제 로봇에는 별도 body IMU와 joint state, MCU 펌웨어, CAN 물리 인터페이스가 필요하다.
 
@@ -88,6 +88,8 @@ PhysX self-collision은 꺼져 있고 충돌 형상은 해석용 proxy다. STEP 
 
 Pi 4 보드와 GPU PC 사이 배치·ROS 배포판 호환성, 실제 CAN 응답과 발열, E-stop 전원 경로, 배터리 보호, 상세 CAD 간섭·체결·케이블·강도, 실제 camera 12° 장착 및 Fusion 네이티브 조립 실행은 미검증이다. [기구 설계 현황](pi4_design_status.md)을 함께 확인한다. 본 변경은 실물 제작 승인이나 완성품 인증이 아니다.
 
-## R2 CAD 동작 영상
+## R3 CAD 동작 영상
 
-상세 CAD 외형과 수정된 충돌 프록시를 사용하는 영상 11개와 CAD 회전 영상 1개는 generated/motion_videos/index.html에서 재생한다. 재생성 절차는 README에 있다. URDF 내 비접촉 외형은 collision에서 제외하고, 프레임·커버·모터 후면 지지·하부 어댑터 충돌 형상을 내보낸다. Isaac importer의 self collision은 활성화 설정했으며 실제 GPU 접촉 동작은 아직 검증하지 않았다.
+상세 CAD 외형과 수정된 충돌 프록시를 사용하는 영상 11개와 CAD 회전 영상 1개는 generated/motion_videos_pi4-r3/index.html에서 재생한다. 재생성 절차는 README에 있다. URDF 내 비접촉 외형은 collision에서 제외하고, 프레임·커버·모터 후면 지지·하부 어댑터 충돌 형상을 내보낸다. Isaac importer의 self collision은 활성화 설정했으며 실제 GPU 접촉 동작은 아직 검증하지 않았다.
+
+URDF visual은 SPORT CAD에서 추출한 70개 OBJ 묶음을 사용하며 mm를 m로 변환하고 각 링크의 로컬 좌표를 보존한다. ROS 설치에는 `package://bigspot_autonomy/design/pi4/visual_meshes/` 리소스를 포함한다. 오프라인 Isaac 실행 스크립트는 실제 파일 존재를 확인하고 URI를 절대 `file://` 경로로 바꾼 임시 URDF를 가져온다. [NVIDIA URDF importer 문서](https://docs.isaacsim.omniverse.nvidia.com/latest/importer_exporter/ext_isaacsim_asset_importer_urdf.html)는 ROS 패키지 경로 매핑을 설명한다. 내보낸 CAD/URDF 좌표·질량과 경로 해석은 CPU 단위 시험으로 확인했으며 실제 Isaac 가져오기는 미검증이다.

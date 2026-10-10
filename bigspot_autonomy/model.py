@@ -31,8 +31,23 @@ def make_mjcf(d, obstacles=()):
     if cad_profile:
         shell=base.find("geom[@name='body_shell']");shell.set('contype','0');shell.set('conaffinity','0')
         skid=base.find("geom[@name='belly_skid']");skid.set('pos','0 0 -0.0635');skid.set('size','0.15 0.08 0.0015')
-        for name,z,halfwidth,halfheight in [('lower_frame',-.043,.095,.001),('top_frame',.043,.095,.001),('service_cover',.054,.096,.00075)]:
+        industrial=d.get('mechanical_revision')=='pi4-r3'
+        roof=('service_cover',.055,.093,.001) if industrial else ('service_cover',.054,.096,.00075)
+        for name,z,halfwidth,halfheight in [('lower_frame',-.043,.095,.001),('top_frame',.043,.095,.001),roof]:
             ET.SubElement(base,'geom',name=name+'_collision',type='box',pos=vec([0,0,z]),size=vec([.190,halfwidth,halfheight]),mass='0',rgba='0.2 0.3 0.35 1')
+        if industrial:
+            for side in (-1,1):
+                ET.SubElement(base,'geom',name=f'side_panel_{side}',type='box',pos=vec((0,side*.1015,0)),size='.080 .001 .041',mass='0',margin='.001')
+                angle=side*math.atan2(10,12)
+                ET.SubElement(base,'geom',name=f'roof_side_{side}',type='box',pos=vec((0,side*.098,.050)),size=vec((.157,.0015,math.hypot(.010,.012)/2)),quat=vec((math.cos(angle/2),math.sin(angle/2),0,0)),mass='0',margin='.001')
+            for front in (-1,1):
+                angle=-front*math.atan2(7,12)
+                ET.SubElement(base,'geom',name=f'roof_end_{front}',type='box',pos=vec((front*.1985,0,.050)),size=vec((.0015,.055,math.hypot(.007,.012)/2)),quat=vec((math.cos(angle/2),0,math.sin(angle/2),0)),mass='0',margin='.001')
+                ET.SubElement(base,'geom',name=f'body_end_{front}',type='box',pos=vec((front*.216,0,0)),size='.001 .059 .028',mass='0',margin='.001')
+                for side in (-1,1):
+                    # The upper shoulder sweep is cut out in the CAD enclosure.
+                    angle=math.atan2(-side*29,front*30)
+                    ET.SubElement(base,'geom',name=f'body_end_side_{front}_{side}',type='box',pos=vec((front*.202,side*.0735,-.026)),size=vec((math.hypot(.030,.029)/2,.0015,.018)),quat=vec((math.cos(angle/2),0,0,math.sin(angle/2))),mass='0',margin='.001')
     # Camera local -Z points forward/down and +Y is optical up.
     pitch = math.radians(d["camera_downward_pitch_deg"])
     ET.SubElement(base, "camera", name="front_depth", pos=vec(d["camera_xyz_m"]), xyaxes=vec((0,-1,0,math.sin(pitch),0,math.cos(pitch))), fovy="58")
@@ -57,6 +72,7 @@ def make_mjcf(d, obstacles=()):
         pitch_motor = d["actuators"][motors[index*3+1]]
         motor_y=side*(d['hip_offset_m']+pitch_motor['length_m']/2+.002) if cad_profile else side*d['hip_offset_m']
         ET.SubElement(abduction, "geom", name=f"{leg}_pitch_motor", type="cylinder", pos=vec((0,motor_y,0)), quat="0.70710678 0.70710678 0 0", size=vec((pitch_motor["diameter_m"]/2,pitch_motor["length_m"]/2)), mass=str(pitch_motor["mass_kg"]), rgba="0.09 0.1 0.12 1")
+        if cad_profile and industrial:ET.SubElement(abduction,'geom',name=f'{leg}_hip_end_cover',type='cylinder',pos=vec((0,side*(d['hip_offset_m']+pitch_motor['length_m']+.003),0)),quat='0.70710678 0.70710678 0 0',size='.0395 .001',mass='0')
         upper = ET.SubElement(abduction, "body", name=f"{leg}_upper_link", pos=vec((0,side*d["hip_offset_m"],0)))
         ET.SubElement(upper, "joint", name=f"{leg}_hip", axis="0 1 0", range="-2.1 1.25")
         if cad_profile:
@@ -66,6 +82,7 @@ def make_mjcf(d, obstacles=()):
         knee_motor = d["actuators"][motors[index*3+2]]
         knee_y=side*(knee_motor['length_m']/2+.002) if cad_profile else 0.
         ET.SubElement(upper, "geom", name=f"{leg}_knee_motor", type="cylinder", pos=vec((0,knee_y,-d["upper_length_m"])), quat="0.70710678 0.70710678 0 0", size=vec((knee_motor["diameter_m"]/2,knee_motor["length_m"]/2)), mass=str(knee_motor["mass_kg"]), rgba="0.09 0.1 0.12 1")
+        if cad_profile and industrial:ET.SubElement(upper,'geom',name=f'{leg}_knee_end_cover',type='cylinder',pos=vec((0,side*(knee_motor['length_m']+.003),-d['upper_length_m'])),quat='0.70710678 0.70710678 0 0',size='.0395 .001',mass='0')
         lower = ET.SubElement(upper, "body", name=f"{leg}_lower_link", pos=vec((0,0,-d["upper_length_m"])))
         ET.SubElement(lower, "joint", name=f"{leg}_knee", axis="0 1 0", range=vec(d.get('joint_limits_rad',{}).get('knee',[.1,3.])))
         if cad_profile:

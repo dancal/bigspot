@@ -1,6 +1,6 @@
 ﻿name,quantity,group,mass_kg,material,confirmation,notes
-Lower_Frame_380x190_t2,1,base_link,0.33204,6061-T6,custom_geometry,"Laser/waterjet blank; deburr, keep reinforced motor posts"
-Removable_Top_Service_Frame,1,base_link,0.29042,6061-T6,custom_geometry,"22mm NC E-stop opening; top access to battery, Pi4 and MCU"
+Lower_Frame_380x190_t2,1,base_link,0.33165,6061-T6,custom_geometry,"Laser/waterjet blank; deburr, keep reinforced motor posts"
+Removable_Top_Service_Frame,1,base_link,0.29023,6061-T6,custom_geometry,"22mm NC E-stop opening; top access to battery, Pi4 and MCU"
 Frame_M3_Standoff_-178_-85,1,base_link,0.01029,6061-T6,custom_geometry,
 Frame_M3_Standoff_-178_85,1,base_link,0.01029,6061-T6,custom_geometry,
 Frame_M3_Standoff_-92_-85,1,base_link,0.01029,6061-T6,custom_geometry,
@@ -60,6 +60,8 @@ watchdog_Slotted_Mounting_Plinth,1,base_link,0.00721,6061-T6,custom_geometry,Sup
 watchdog_Frame_Support_0,1,base_link,0.00282,6061-T6,custom_geometry,Compression support rests on lower plate; strap/fastener details unverified
 watchdog_Frame_Support_1,1,base_link,0.00282,6061-T6,custom_geometry,Compression support rests on lower plate; strap/fastener details unverified
 Pi4_5V_Fan_30mm_and_Heatsink,1,base_link,0.015,purchased,standard_30mm_fan_24mm_pitch,
+Acoustic_Diaphragm_Reservation_-13,1,base_link,0,purchased,reservation_only,Schematic two-port module within original reserved envelope; actual vendor dimensions unverified
+Acoustic_Diaphragm_Reservation_13,1,base_link,0,purchased,reservation_only,Schematic two-port module within original reserved envelope; actual vendor dimensions unverified
 Front_Ultrasonic_HCSR04_COMPATIBILITY_REQUIRED,1,base_link,0.012,purchased,reservation_only,existing sensor SKU needed; HC-SR04 5V echo requires resistor divider/level shifter for 3.3V MCU
 Ultrasonic_3V3_Level_Shifter,1,base_link,0.003,purchased,reservation_only,
 MicroSD_64GB_A2,1,base_link,0.001,purchased,standard,
@@ -86,10 +88,12 @@ EStop_22mm_NC_Contact_Block,1,base_link,0.02,6061-T6,reservation_only,
 EStop_Panel_Stem_Reservation,1,base_link,0,6061-T6,reservation_only,
 EStop_Red_Mushroom,1,base_link,0.013,6061-T6,reservation_only,
 Brake_Resistor_47ohm_100W_PulseRating_REQUIRED,1,base_link,0.09,6061-T6,reservation_only,54V clamp gives ~62W; pulse-energy and cooling require selected resistor datasheet
-RealSense_D435i_90x25x25,1,base_link,0.072,purchased,official_envelope,
-D435i_Edge_Clamp_Cradle,1,base_link,0.02482,6061-T6,custom_geometry,CAD and optical mount both 12deg down; bottom rails and side lips support envelope; retention hardware pending
-Camera_Frame_Mount_-48,1,base_link,0.00453,6061-T6,custom_geometry,Base on top frame z44; sloped post face meets pitched cradle underside; M3 fastening/strength pending
-Camera_Frame_Mount_48,1,base_link,0.00453,6061-T6,custom_geometry,Base on top frame z44; sloped post face meets pitched cradle underside; M3 fastening/strength pending
+D435_Stereo_Optical_Marker_-25,1,base_link,0,purchased,visual_reference,"Stereo baseline reference, not supplier lens machining detail; mass included in camera estimate"
+D435_Stereo_Optical_Marker_25,1,base_link,0,purchased,visual_reference,"Stereo baseline reference, not supplier lens machining detail; mass included in camera estimate"
+RealSense_D435i_90x25x25,1,base_link,0.072,purchased,official_envelope,Outer dimensions retained; optical details are schematic
+D435i_Edge_Clamp_Cradle,1,base_link,0.02468,6061-T6,custom_geometry,CAD and optical mount both 12deg down; bottom rails and side lips support envelope; retention hardware pending
+Camera_Frame_Mount_-48,1,base_link,0.00367,6061-T6,custom_geometry,Base on top frame z44; sloped post face meets pitched cradle underside; M3 fastening/strength pending
+Camera_Frame_Mount_48,1,base_link,0.00367,6061-T6,custom_geometry,Base on top frame z44; sloped post face meets pitched cradle underside; M3 fastening/strength pending
 CAN_and_Power_Separated_Trunk_-1,1,base_link,0.012,purchased,route_envelope,Central route only; motor branches and bend radii not released
 CAN_and_Power_Separated_Trunk_1,1,base_link,0.012,purchased,route_envelope,Central route only; motor branches and bend radii not released
 USB3_Camera_Cable_Service_Route,1,base_link,0.012,purchased,route_envelope,
@@ -136,12 +140,28 @@ RR_Elastomer_Foot,1,RR_lower_link,0.033,purchased,custom_elastomer_foot,Rubber p
 RR_RS00_Rear_Bolt_Mount,1,base_link,0.05608,6061-T6,custom_geometry,4x M3 PCD38; engagement <=4mm in RS00; rear flange connected to both frame plates; thermal bridges integrated into bracket
 Side_Web_-1,1,base_link,0.04867,6061-T6,custom_geometry,Web relief matches integrated motor bracket; interface fasteners/strength pending
 Side_Web_1,1,base_link,0.04867,6061-T6,custom_geometry,Web relief matches integrated motor bracket; interface fasteners/strength pending
-Graphite_Vented_Service_Cover,1,base_link,0.13139,PETG,custom_geometry,"Removable visual cover; fan vent and E-stop access, not weather sealed"
-Cover_M3_Spacer_-92_-85,1,base_link,0.00058,6061-T6,custom_geometry,Connects top frame z44 to cover underside z53.25
-Cover_M3_Spacer_-92_85,1,base_link,0.00058,6061-T6,custom_geometry,Connects top frame z44 to cover underside z53.25
-Cover_M3_Spacer_92_-85,1,base_link,0.00058,6061-T6,custom_geometry,Connects top frame z44 to cover underside z53.25
-Cover_M3_Spacer_92_85,1,base_link,0.00058,6061-T6,custom_geometry,Connects top frame z44 to cover underside z53.25
-Teal_Cover_Accent_-74,1,base_link,0.00078,PETG,custom_geometry,"Non-powered trim, touches cover top"
-Teal_Cover_Accent_74,1,base_link,0.00078,PETG,custom_geometry,"Non-powered trim, touches cover top"
+Sport_Low_Profile_Service_Hood,1,base_link,0.20083,PETG,custom_geometry,2mm nonstructural shell; lower tapered roof; conservatively bounded shoulder sweep cutouts; retained fasteners and cooling unverified
+Sport_Centre_Spine,1,base_link,0.00286,PETG,custom_geometry,Attached nonstructural trim on roof
+Sport_Orange_Pinstripe_-14,1,base_link,0.0002,PETG,custom_geometry,Attached non-powered trim
+Sport_Orange_Pinstripe_14,1,base_link,0.0002,PETG,custom_geometry,Attached non-powered trim
+Hood_M3_Spacer_-92_-85,1,base_link,0.00063,6061-T6,custom_geometry,Top frame z44 to hood underside z54; retained screw design pending
+Hood_M3_Spacer_-92_85,1,base_link,0.00063,6061-T6,custom_geometry,Top frame z44 to hood underside z54; retained screw design pending
+Hood_M3_Spacer_92_-85,1,base_link,0.00063,6061-T6,custom_geometry,Top frame z44 to hood underside z54; retained screw design pending
+Hood_M3_Spacer_92_85,1,base_link,0.00063,6061-T6,custom_geometry,Top frame z44 to hood underside z54; retained screw design pending
+Removable_Side_Enclosure_-1,1,base_link,0.03497,PETG,custom_geometry,Ventilated centre panel; upper/lower M3 tabs touch frame surfaces; does not bridge shoulder sweep zones
+Orange_Side_Identity_-1,1,base_link,0.00047,PETG,custom_geometry,Attached trim on side panel
+Removable_Side_Enclosure_1,1,base_link,0.03497,PETG,custom_geometry,Ventilated centre panel; upper/lower M3 tabs touch frame surfaces; does not bridge shoulder sweep zones
+Orange_Side_Identity_1,1,base_link,0.00047,PETG,custom_geometry,Attached trim on side panel
+Integrated_Camera_Protective_Collar,1,base_link,0.02653,PETG,custom_geometry,Cradle and optical clearance; clips/retention require detailing
+Front_Tapered_End_Enclosure,1,base_link,0.05641,PETG,custom_geometry,Lower-frame M3 mounts; swept shoulder reliefs; tapered nonstructural fairing; port seals and fasteners unverified
+Rear_Tapered_End_Enclosure,1,base_link,0.05305,PETG,custom_geometry,Lower-frame M3 mounts; swept shoulder reliefs; tapered nonstructural fairing; port seals and fasteners unverified
+FL_Hip_Removable_End_Cover,1,FL_abduction_link,0.01128,PETG,custom_geometry,Removable cosmetic cap; supplier cable connector and retention unverified
+FL_Knee_Removable_End_Cover,1,FL_upper_link,0.01128,PETG,custom_geometry,Removable cosmetic cap; supplier cable connector and retention unverified
+FR_Hip_Removable_End_Cover,1,FR_abduction_link,0.01128,PETG,custom_geometry,Removable cosmetic cap; supplier cable connector and retention unverified
+FR_Knee_Removable_End_Cover,1,FR_upper_link,0.01128,PETG,custom_geometry,Removable cosmetic cap; supplier cable connector and retention unverified
+RL_Hip_Removable_End_Cover,1,RL_abduction_link,0.01128,PETG,custom_geometry,Removable cosmetic cap; supplier cable connector and retention unverified
+RL_Knee_Removable_End_Cover,1,RL_upper_link,0.01128,PETG,custom_geometry,Removable cosmetic cap; supplier cable connector and retention unverified
+RR_Hip_Removable_End_Cover,1,RR_abduction_link,0.01128,PETG,custom_geometry,Removable cosmetic cap; supplier cable connector and retention unverified
+RR_Knee_Removable_End_Cover,1,RR_upper_link,0.01128,PETG,custom_geometry,Removable cosmetic cap; supplier cable connector and retention unverified
 50.4V_2A_CC_CV_Charger_for_12S_NMC,1,external,0,purchased,supplier_required,Not carried on robot
 USB_Bluetooth_Joystick_existing,1,external,0,purchased,supplier_required,Not carried on robot

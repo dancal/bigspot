@@ -4,7 +4,7 @@
 
 ## 현재 연동 변경
 
-Pi 4 R2 9.468kg 모델에 외부 제어기 → 관절 목표 → 모터 로컬 PD → 물리 시뮬레이터 경로를 구현했다. 제어·전송 시험 **24개**, CPU 물리·오류 시나리오 **11개**가 통과했다. CPU 장애물 회피는 3m 목표에 약 0.152m까지 도달했다. [실행 절차와 검증 범위](docs/isaac_integration.md), [물리 검증 결과](validation/control_loop.json)를 참고한다.
+Pi 4 R3 SPORT 9.834kg 모델에 외부 제어기 → 관절 목표 → 모터 로컬 PD → 물리 시뮬레이터 경로를 구현했다. 제어·전송·CAD 내보내기·영상 서버 시험 **29개**, CPU 물리·오류 시나리오 **11개**가 통과했다. CPU 장애물 회피는 3m 목표에 약 0.155m까지 도달했다. [실행 절차와 검증 범위](docs/isaac_integration.md), [물리 검증 결과](validation/control_loop.json)를 참고한다.
 
 Isaac Sim 6.0.1 stereo/depth ROS bridge 및 Isaac ROS 5.0 Visual SLAM → nvblox → Nav2 연결 코드를 추가했다. **새 ROS DDS 경로와 Isaac GPU 런타임은 아직 실행하지 않았다.** 현재 PC는 RTX 5070 Laptop 8GB, Windows, 드라이버 573.22이며 [환경 검사 결과](validation/current_host.json)에 차단 조건을 기록했다. 이 변경의 기본 launch는 이전 7.48kg 모델 대신 Pi 4 모델을 사용한다.
 
@@ -14,7 +14,7 @@ Isaac Sim 6.0.1 stereo/depth ROS bridge 및 Isaac ROS 5.0 Visual SLAM → nvblox
 
 현재 사용자 보드는 **Raspberry Pi 4 Model B**다. 아래의 7.48kg 선정안과 자율 이동 결과는 이전 기준 모델이다. Pi 4 부품을 추가한 별도 설계는 `config/pi4_assembly.json`, `config/pi4_design.json`, `design/pi4/`에 보존했다. 이전 기준 모델을 덮어쓰지 않았다.
 
-Pi 4 설계는 144개 유효 입체, 13개 관절 그룹, 12개 회전 관절 정의를 포함한다. CAD 질량·관성을 사용한 추정 무게는 **9.468kg**이다. 서기 높이 245mm, 발 중심 전방 45mm로 조정했다. `validation/pi4_dynamics.json`의 일어서기·보행·무게 +15%/마찰 0.55 시험 세 가지는 통과했다. 이 시험의 충돌 형상은 단순화한 물리 모델이며, 상세 CAD의 전체 간섭 검증을 뜻하지 않는다.
+Pi 4 설계는 164개 유효 입체, 13개 관절 그룹, 12개 회전 관절 정의를 포함한다. CAD 질량·관성을 사용한 추정 무게는 **9.834kg**이다. 서기 높이 245mm, 발 중심 전방 45mm로 조정했다. 외부 ControlCore 시험 결과는 `validation/control_loop.json`에 있다. 기존 내부 제어기 비교 시험 `validation/pi4_dynamics.json`은 별도 경로다. 충돌 형상은 단순화한 물리 모델이며, 상세 CAD의 전체 간섭 검증을 뜻하지 않는다.
 
 `design/pi4/BigSpot_Pi4_assembly.step`는 Fusion에서 열 수 있는 조립 배치 모델이다. `fusion/BigSpotPi4`에는 관절을 만드는 Fusion 스크립트가 있지만 **Fusion 내부 실행과 F3D 저장은 아직 검증하지 않았다**. 실물 제작 도면이 아니다. [현재 구성과 남은 문제](docs/pi4_design_status.md)를 먼저 확인한다.
 
@@ -26,19 +26,21 @@ python tools/validate_pi4.py
 
 Pi 4에는 Ubuntu 22.04 arm64 / ROS 2 Humble CPU 구성을 계획한다. Isaac ROS 5.0 GPU 스택은 Pi 4에서 실행할 수 없다. 실물 모터 출력용 MCU 펌웨어와 전원 보호 회로는 아직 구현·검증하지 않았다.
 
-## R2 CAD와 동작 영상
+## R3 CAD와 동작 영상
 
-그라파이트 통풍 커버·청록색 트림, 연결된 전자부품 트레이, 아래 12° 카메라 크래들, 접힌 다리의 여유 공간과 발 지지 구조를 수정했다. 상세 결과는 [CAD 검사](design/pi4/interference_audit.json)에 있다. 검사는 표본 자세에서 수행하며 연속 운동 전체의 보증은 아니다.
+SPORT 외형은 낮은 펄 그레이 상부 외장, 가늘어지는 앞뒤 커버, 2mm 탈착 측면 패널, 짙은 모터 끝단 커버와 주황색 포인트를 사용한다. 벌림 요크의 ±0.65rad 회전 범위에서 계산한 보수적인 공간 경계로 어깨 개구부를 만들고, 측면 체결 탭과 지붕 사이에 실제 여유 공간을 반영했다. 전자부품 트레이, 아래 12° 카메라 크래들, 접힌 다리의 여유 공간과 발 지지 구조를 포함한다. 광학·초음파 상세 형상은 공급업체의 제작 상세가 아닌 참고·예약 형상이다. 상세 결과는 [CAD 검사](design/pi4/interference_audit.json)에 있다. 검사는 표본 자세에서 수행하며 연속 운동 전체의 보증은 아니다.
 
-`sh
+```sh
 python tools/validate_control_loop.py --render
 python tools/audit_pi4_cad.py --sweep --recorded
 python tools/render_cad_review.py
 python tools/make_motion_gallery.py
-python -m http.server 59355 --bind 127.0.0.1 --directory generated/motion_videos
-`
+python tools/serve_motion_gallery.py --port 59355 --directory generated/motion_videos_pi4-r3
+```
 
-http://127.0.0.1:59355/에서 CAD 회전 영상과 동작·고장 대응 영상 11개를 재생한다. 실제 CAD 외형을 사용하는 CPU 시뮬레이션이며 1배속이다. 영상은 재생성 가능한 로컬 산출물로 Git에 포함하지 않는다.
+http://127.0.0.1:59355/에서 CAD 회전 영상과 동작·고장 대응 영상 11개를 재생한다. 각 영상 선택 버튼이 하나의 플레이어를 바꾸며 서버는 HTTP 구간 요청과 탐색을 지원한다. H.264 Baseline / yuv420p / faststart로 모든 영상을 다시 인코딩했다. 실제 CAD 외형을 사용하는 CPU 시뮬레이션이며 1배속이다. 영상은 재생성 가능한 로컬 산출물로 Git에 포함하지 않는다.
+
+서버를 실행한 상태에서 다른 터미널의 `python tools/verify_motion_media.py`로 12개 영상의 전체 디코딩과 HTTP 탐색을 검사한다. 결과는 `validation/motion_media.json`에 저장한다.
 
 ## 이전 기준 모델의 선정안
 

@@ -19,12 +19,13 @@ def run(case,seconds=18.,render=False):
     visual=None
     if render:
         from bigspot_autonomy.cad_visual import CadVisuals
-        visual=CadVisuals(ROOT/'design/pi4/cad_meshes.json',ROOT/'generated/motion_videos/meshes')
+        from bigspot_autonomy.video import motion_folder
+        visual=CadVisuals(ROOT/'design/pi4/cad_meshes.json',motion_folder(ROOT)/'meshes')
     plant=CpuPlant(d,friction=.55 if holdout else .8,mass_scale=1.15 if holdout else 1.,obstacles=bool(nav),model_transform=visual.decorate if visual else None)
     recorder=None
     if render:
-        from bigspot_autonomy.video import VideoRecorder
-        recorder=VideoRecorder(plant,case,ROOT/'generated/motion_videos'/case)
+        from bigspot_autonomy.video import VideoRecorder,motion_folder
+        recorder=VideoRecorder(plant,case,motion_folder(ROOT)/case)
     core=ControlCore(d,autonomous=bool(nav))
     dt=plant.dt;armed=False;ready=False;fault_at=9.;fault_time=None
     tilt=[];torques=[];states=[];collision=0.;zero_after_fault=True;camera_stopped=False;cad_samples=[]

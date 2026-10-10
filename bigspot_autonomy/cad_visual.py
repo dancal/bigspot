@@ -11,6 +11,9 @@ class CadVisuals:
 
     def decorate(self,xml):
         root=ET.fromstring(xml);asset=ET.SubElement(root,'asset')
+        world=root.find('worldbody')
+        ET.SubElement(world,'light',pos='-1.5 -2 2.5',dir='0.4 0.5 -1',diffuse='0.55 0.6 0.65',castshadow='false')
+        ET.SubElement(world,'light',pos='1 2 3',dir='-0.2 -0.5 -1',diffuse='0.35 0.4 0.45',castshadow='false')
         bodies={b.get('name'):b for b in root.findall('.//body')}
         for i,p in enumerate(self.parts):
             vertices=np.asarray(p['vertices']).reshape(-1,3)/1000

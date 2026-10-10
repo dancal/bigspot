@@ -1,5 +1,5 @@
 {
-  "revision": "pi4-r2",
+  "revision": "pi4-r3",
   "units": "mm",
   "manufacturing_released": false,
   "computer": "Raspberry Pi 4 Model B",
@@ -416,5 +416,7 @@
     -2.0,
     2.5
   ],
-  "knee_operating_max_rad": 2.55
+  "knee_operating_max_rad": 2.55,
+  "enclosure_style": "sport",
+  "camera_height_mm": 70
 }

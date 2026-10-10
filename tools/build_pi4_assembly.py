@@ -13,7 +13,8 @@ if sys.platform == 'win32':
 import numpy as np
 from OCP.BRepPrimAPI import BRepPrimAPI_MakeBox, BRepPrimAPI_MakeCylinder, BRepPrimAPI_MakeSphere
 from OCP.BRepAlgoAPI import BRepAlgoAPI_Cut, BRepAlgoAPI_Fuse, BRepAlgoAPI_Common
-from OCP.BRepBuilderAPI import BRepBuilderAPI_Transform
+from OCP.BRepBuilderAPI import BRepBuilderAPI_Transform, BRepBuilderAPI_MakePolygon
+from OCP.BRepOffsetAPI import BRepOffsetAPI_ThruSections
 from OCP.BRepCheck import BRepCheck_Analyzer
 from OCP.BRepGProp import BRepGProp
 from OCP.GProp import GProp_GProps
@@ -27,16 +28,20 @@ from OCP.TopAbs import TopAbs_FACE, TopAbs_REVERSED, TopAbs_SOLID
 from OCP.TopoDS import TopoDS
 from OCP.BRep import BRep_Tool
 from OCP.TopLoc import TopLoc_Location
+from OCP.Bnd import Bnd_Box
+from OCP.BRepBndLib import BRepBndLib
 from bigspot_autonomy.design import load_design, LEGS
 from bigspot_autonomy.gait import Gait
 from bigspot_autonomy.kinematics import smoothstep
 
 OUT = ROOT/'design/pi4'
 PARTS = []
+YOKE_GUARDS=[]
 D = load_design(ROOT/'config/selected_design.json')
 C = json.loads((ROOT/'config/pi4_assembly.json').read_text(encoding='utf-8'))
 D['standing_leg_height_m']=C.get('standing_leg_height_mm',245)/1000
 D['neutral_foot_x_m']=C.get('neutral_foot_x_mm',45)/1000
+D['camera_xyz_m'][2]=C.get('camera_height_mm',75)/1000
 
 def box(size, xyz=(0,0,0)):
     p = np.asarray(xyz)-np.asarray(size)/2
@@ -62,6 +67,56 @@ def rounded_plate(size,xyz,radius):
     if width>2*r:shape=fuse(shape,box((length,width-2*r,t),xyz))
     for sx in (-1,1):
         for sy in (-1,1):shape=fuse(shape,cylinder(r,t,(x+sx*(length/2-r),y+sy*(width/2-r),z)))
+    return shape
+
+def chamfer_loft(sections):
+    loft=BRepOffsetAPI_ThruSections(True,True)
+    for length,width,z,corner in sections:
+        x,y=length/2,width/2;c=corner
+        points=[(-x+c,-y),(x-c,-y),(x,-y+c),(x,y-c),(x-c,y),(-x+c,y),(-x,y-c),(-x,-y+c)]
+        wire=BRepBuilderAPI_MakePolygon()
+        for px,py in points:wire.Add(gp_Pnt(px,py,z))
+        wire.Close();loft.AddWire(wire.Wire())
+    loft.Build()
+    if not loft.IsDone():raise RuntimeError('Industrial enclosure loft failed')
+    return loft.Shape()
+
+def end_loft(sections):
+    loft=BRepOffsetAPI_ThruSections(True,True)
+    for x,width,bottom,top,corner in sections:
+        y=width/2;c=corner
+        points=[(-y+c,bottom),(y-c,bottom),(y,bottom+c),(y,top-c),(y-c,top),(-y+c,top),(-y,top-c),(-y,bottom+c)]
+        wire=BRepBuilderAPI_MakePolygon()
+        for py,pz in points:wire.Add(gp_Pnt(x,py,pz))
+        wire.Close();loft.AddWire(wire.Wire())
+    loft.Build()
+    if not loft.IsDone():raise RuntimeError('End enclosure loft failed')
+    return loft.Shape()
+
+def aabb(shape):
+    b=Bnd_Box();BRepBndLib.Add_s(shape,b)
+    return np.asarray(b.Get()).reshape(2,3)
+
+def motion_clearance(shape):
+    # Bound the yoke's entire +/-0.65rad abduction sweep, including extrema
+    # between samples. Only the removable shell is trimmed, never the mechanism.
+    for front,side,yoke in YOKE_GUARDS:
+        low,high=aabb(yoke);points=[]
+        for x in (low[0],high[0]):
+            for y in (low[1],high[1]):
+                for z in (low[2],high[2]):
+                    phi=math.atan2(z,y);angles=[-.65,.65]
+                    for k in range(-2,3):
+                        for angle in (-phi+k*math.pi,math.pi/2-phi+k*math.pi):
+                            if -.65<=angle<=.65:angles.append(angle)
+                    for angle in angles:
+                        c,s=math.cos(angle),math.sin(angle)
+                        points.append((x,y*c-z*s,y*s+z*c))
+        lo,hi=np.min(points,axis=0),np.max(points,axis=0)
+        origin=np.array([front*D['hip_x_m']*1000,side*D['hip_y_m']*1000,0])
+        guard=box(hi-lo+2,origin+(lo+hi)/2)
+        bb,gg=aabb(shape),aabb(guard)
+        if np.all(np.minimum(bb[1],gg[1])-np.maximum(bb[0],gg[0])>.01):shape=cut(shape,guard)
     return shape
 
 def camera_rotation():
@@ -113,6 +168,8 @@ def frame():
     for x in (-150,-58,48,152):
         for y in (-58,58):bottom=cut(bottom,box((43,29,6),(x,y,f['bottom_z'])))
     bottom=holes(bottom,[(x,y,f['bottom_z']) for x,y,_ in mountpts],1.7,6)
+    bottom=holes(bottom,[(x,y,f['bottom_z']) for x in (-60,60) for y in (-92,92)],1.7,6)
+    bottom=holes(bottom,[(x,y,f['bottom_z']) for x in (-184,184) for y in (-62,62)],1.7,6)
     bx,by,_=C['battery']['position']
     bottom=holes(bottom,[(bx+x,by+y,f['bottom_z']) for x in (-60,60) for y in (-32,32)],1.7,6)
     # General slot grid, including battery straps and interchangeable power modules.
@@ -122,6 +179,7 @@ def frame():
     top=box((length,width,t),(0,0,f['top_z']))
     for x in (-120,-10,105):top=cut(top,box((100 if x==105 else 88,65,6),(x,0,f['top_z'])))
     top=holes(top,[(x,y,f['top_z']) for x,y,_ in mountpts],1.7,6)
+    top=holes(top,[(x,y,f['top_z']) for x in (-60,60) for y in (-92,92)],1.7,6)
     top=holes(top,[(100,-55,f['top_z'])],11.1,6)
     top=holes(top,[(182,y,f['top_z']) for y in (-48,48)],1.7,6)
     add('Removable_Top_Service_Frame',top,notes='22mm NC E-stop opening; top access to battery, Pi4 and MCU')
@@ -146,6 +204,13 @@ def frame():
 def electronics():
     for e in C['electronics']:
         shape=box(e['size'],e['xyz'])
+        if e['id']=='ultrasound':
+            cx,cy,cz=e['xyz'];shape=box((2,45,20),(cx-6.5,cy,cz))
+            for sy in (-13,13):
+                shell=cylinder(8,13,(cx+1,cy+sy,cz),(1,0,0))
+                shell=cut(shell,cylinder(6.2,1,(cx+7.5,cy+sy,cz),(1,0,0)))
+                shape=fuse(shape,shell)
+                add(f'Acoustic_Diaphragm_Reservation_{sy}',cylinder(6,.5,(cx+7.25,cy+sy,cz),(1,0,0)),mass=0,material='purchased',color=(.12,.16,.18),status='reservation_only',notes='Schematic two-port module within original reserved envelope; actual vendor dimensions unverified')
         if e['id']=='pi4':
             # Official board holes are 58 x 49, offset from the board centre.
             cx,cy,z=e['xyz'];px=cx-42.5+3.5
@@ -166,7 +231,8 @@ def electronics():
                 size=(18,15,15) if i else (21,17,13)
                 add(f'Pi4_USB_Ethernet_Port_{i}',box(size,(cx+37,y,z+8.5)),mass=0,status='connector_envelope',material='purchased',color=(.68,.70,.74))
             add('Pi4_40_Pin_Header',box((51,5,8),(cx-11,cy+24,z+4.8)),mass=0,material='purchased',color=(.1,.1,.1))
-        add(e['name'],shape,mass=e['mass_kg'],material='purchased',color=e['color'],status=e['footprint'],notes=e.get('requires',''))
+        color=(.52,.56,.60) if e['id']=='ultrasound' else e['color']
+        add(e['name'],shape,mass=e['mass_kg'],material='purchased',color=color,status=e['footprint'],notes=e.get('requires',''))
         if e['id'] in ('dcdc','mcu','bms','switch','fuses','regen','current','watchdog'):
             sx,sy,sz=e['size'];x,y,z=e['xyz']
             # Slotted strap-mount plinths do not invent an unverified supplier hole pattern.
@@ -201,18 +267,24 @@ def electronics():
     add('Pi4_CPU_Thermal_Interface_Reservation',box((20,20,2),(113,0,29.8)),mass=0,status='reservation_only',color=(.6,.63,.65))
     add('Pi4_Heatsink',box((20,20,8),(113,0,34.8)),mass=.012,color=(.6,.63,.65))
     add('EStop_22mm_NC_Contact_Block',cylinder(10,20,(100,-55,33)),mass=.020,color=(.25,.25,.28),status='reservation_only')
-    add('EStop_Panel_Stem_Reservation',cylinder(10,14.5,(100,-55,50.25)),mass=0,status='reservation_only',color=(.25,.25,.28))
-    add('EStop_Red_Mushroom',cylinder(15,11,(100,-55,63)),mass=.013,color=(.85,.1,.08),status='reservation_only')
+    add('EStop_Panel_Stem_Reservation',cylinder(10,13,(100,-55,49.5)),mass=0,status='reservation_only',color=(.25,.25,.28))
+    add('EStop_Red_Mushroom',cylinder(15,11,(100,-55,61.5)),mass=.013,color=(.85,.1,.08),status='reservation_only')
     add('Brake_Resistor_47ohm_100W_PulseRating_REQUIRED',box((100,20,20),(-119,55,2)),mass=.09,color=(.9,.57,.13),status='reservation_only',notes='54V clamp gives ~62W; pulse-energy and cooling require selected resistor datasheet')
     camera=np.asarray(D['camera_xyz_m'])*1000
     rotate=camera_rotation()
-    add('RealSense_D435i_90x25x25',transformed(box((25,90,25),camera),rotate),mass=.072,material='purchased',color=(.17,.18,.21),status='official_envelope')
+    housing=box((25,90,25),camera)
+    for sy in (-25,25):
+        housing=cut(housing,cylinder(5.2,1,(camera[0]+12.35,sy,camera[2]),(1,0,0)))
+        lens=cylinder(5,.5,(camera[0]+12.2,sy,camera[2]),(1,0,0))
+        add(f'D435_Stereo_Optical_Marker_{sy}',transformed(lens,rotate),mass=0,material='purchased',color=(.05,.14,.20),status='visual_reference',notes='Stereo baseline reference, not supplier lens machining detail; mass included in camera estimate')
+    add('RealSense_D435i_90x25x25',transformed(housing,rotate),mass=.072,material='purchased',color=(.52,.58,.60),status='official_envelope',notes='Outer dimensions retained; optical details are schematic')
     cradle=box((39,102,3),(camera[0],0,camera[2]-14))
     cradle=cut(cradle,box((27,92,6),(camera[0],0,camera[2]-14)))
     for dx in (-7,7):cradle=fuse(cradle,box((6,102,3),(camera[0]+dx,0,camera[2]-14)))
-    for sy in (-1,1):cradle=fuse(cradle,box((16,3,15),(camera[0],sy*46.5,69.5)))
+    for sy in (-1,1):cradle=fuse(cradle,box((16,3,15),(camera[0],sy*46.5,camera[2]-5.5)))
+    cradle=holes(cradle,[(camera[0],sy*46.5,camera[2]-2) for sy in (-1,1)],1.7,4,(0,1,0))
     add('D435i_Edge_Clamp_Cradle',transformed(cradle,rotate),notes='CAD and optical mount both 12deg down; bottom rails and side lips support envelope; retention hardware pending')
-    upper_halfspace=transformed(box((1000,1000,1000),(205,0,559.5)),rotate)
+    upper_halfspace=transformed(box((1000,1000,1000),(205,0,camera[2]+484.5)),rotate)
     for y in (-48,48):
         beam=box((30,8,4),(191,y,46));beam=holes(beam,[(182,y,46)],1.7,8)
         post=cut(box((8,8,25),(202,y,60.5)),upper_halfspace)
@@ -228,17 +300,86 @@ def electronics():
     add('Ultrasonic_Integrated_Frame_Bracket',ultrasonic,notes='Integrated bracket reaches lower frame z-42; retention/strength pending')
 
 def exterior():
-    cover=rounded_plate((380,192,1.5),(0,0,54),18)
-    for x in (-130,-100,-70,-40,-10,20,50):
-        for y in (-48,48):cover=cut(cover,rounded_plate((18,4,5),(x,y,54),2))
-    cover=holes(cover,[(113,0,54),(100,-55,54)],16,6)
-    cover=holes(cover,[(x,y,54) for x in (-92,92) for y in (-85,85)],1.7,6)
-    add('Graphite_Vented_Service_Cover',cover,material='PETG',color=(.08,.13,.18),notes='Removable visual cover; fan vent and E-stop access, not weather sealed')
+    # A tapered, hollow roof replaces the flat sheet; electronics stay accessible.
+    cover=chamfer_loft([(404,206,44,35),(390,186,56,38)])
+    cover=cut(cover,chamfer_loft([(400,202,43.8,35),(386,182,54,38)]))
+    for x in range(-145,-45,12):
+        for y in (-34,34):cover=cut(cover,rounded_plate((5,30,6),(x,y,55),2))
+    for y in range(-16,17,4):cover=cut(cover,rounded_plate((36,1.8,6),(113,y,55),.8))
+    cover=holes(cover,[(100,-55,55)],11,8)
+    cover=holes(cover,[(x,y,55) for x in (-92,92) for y in (-85,85)],1.7,8)
+    # Service-panel upper mounting tabs occupy z44..46; keep a real fitting gap.
+    for x in (-60,60):
+        for side in (-1,1):cover=cut(cover,box((12.8,14,5),(x,side*96,45)))
+    for p in PARTS:
+        if p['name'].startswith('Camera_Frame_Mount_'):
+            bounds=aabb(p['shape']);cover=cut(cover,box(bounds[1]-bounds[0]+.8,(bounds[1]+bounds[0])/2))
+    add('Sport_Low_Profile_Service_Hood',motion_clearance(cover),material='PETG',color=(.70,.74,.77),notes='2mm nonstructural shell; lower tapered roof; conservatively bounded shoulder sweep cutouts; retained fasteners and cooling unverified')
+    add('Sport_Centre_Spine',rounded_plate((176,22,.6),(0,0,56.3),8),material='PETG',color=(.13,.18,.21),notes='Attached nonstructural trim on roof')
+    for y in (-14,14):add(f'Sport_Orange_Pinstripe_{y}',rounded_plate((160,2,.5),(0,y,56.25),1),material='PETG',color=(.94,.34,.10),notes='Attached non-powered trim')
     for x in (-92,92):
         for y in (-85,85):
-            support=holes(cylinder(3,9.25,(x,y,48.625)),[(x,y,48.625)],1.25,12)
-            add(f'Cover_M3_Spacer_{x}_{y}',support,notes='Connects top frame z44 to cover underside z53.25')
-    for y in (-74,74):add(f'Teal_Cover_Accent_{y}',rounded_plate((126,5,1),(0,y,55.25),2),material='PETG',color=(.08,.67,.60),notes='Non-powered trim, touches cover top')
+            support=holes(cylinder(3,10,(x,y,49)),[(x,y,49)],1.25,14)
+            add(f'Hood_M3_Spacer_{x}_{y}',support,notes='Top frame z44 to hood underside z54; retained screw design pending')
+    for side in (-1,1):
+        panel=box((220,2,82),(0,side*101.5,0))
+        # Keep the folded lower link clear even as unpowered legs settle.
+        for x in (-140,140):panel=cut(panel,cylinder(60,8,(x,side*101.5,0),(0,1,0)))
+        for x in (-60,60):
+            for z in (-45,45):
+                tab=holes(box((12,12,2),(x,side*96,z)),[(x,side*92,z)],1.7,6)
+                panel=fuse(panel,tab)
+                panel=fuse(panel,box((12,2,6),(x,side*101,z/45*43)))
+        for x in (-65,-50,-35,-20,-5,10,25,40,55,70):
+            panel=cut(panel,box((3,8,22),(x,side*101.5,18)))
+        add(f'Removable_Side_Enclosure_{side}',panel,material='PETG',color=(.17,.22,.25),notes='Ventilated centre panel; upper/lower M3 tabs touch frame surfaces; does not bridge shoulder sweep zones')
+        add(f'Orange_Side_Identity_{side}',box((108,.7,5),(0,side*102.85,-10)),material='PETG',color=(.94,.34,.10),notes='Attached trim on side panel')
+    # Protective camera collar leaves the entire supplier envelope and optical face open.
+    camera=np.asarray(D['camera_xyz_m'])*1000;rotate=camera_rotation()
+    shroud=cut(box((42,110,42),camera),box((44,104,36),camera))
+    # Existing cradle has a wider floor, so the underside remains open.
+    shroud=cut(shroud,box((46,114,16),(camera[0],0,camera[2]-18)))
+    for sy in (-1,1):
+        clip=holes(box((8,4,6),(camera[0],sy*50,camera[2]-2)),[(camera[0],sy*50,camera[2]-2)],1.7,6,(0,1,0))
+        shroud=fuse(shroud,clip)
+    for p in PARTS:
+        if p['name'].startswith('Camera_Frame_Mount_'):shroud=cut(shroud,transformed(p['shape'],np.linalg.inv(rotate)))
+    add('Integrated_Camera_Protective_Collar',transformed(shroud,rotate),material='PETG',color=(.70,.74,.77),notes='Cradle and optical clearance; clips/retention require detailing')
+    for sign,label in [(1,'Front'),(-1,'Rear')]:
+        end=end_loft([(sign*187,176,-44,44,14),(sign*217,118,-28,28,18)])
+        end=cut(end,end_loft([(sign*186,172,-41.8,42,14),(sign*214.8,113.6,-25.8,25.8,18)]))
+        for sy in (-1,1):
+            mount=holes(box((26,10,2),(sign*193,sy*62,-45)),[(sign*184,sy*62,-45)],1.7,6)
+            end=fuse(end,mount)
+            # Tapered belly rises toward the nose; bridge each lower-frame tab
+            # to the shell so the tabs remain attached after shoulder reliefs.
+            end=fuse(end,box((12,2,16),(sign*193,sy*62,-37)))
+        if sign==1:
+            end=cut(end,box((12,54,24),(216,0,-10)))
+            grille=box((1.2,54,24),(216.4,0,-10))
+            grille=holes(grille,[(216.4,sy,-10) for sy in (-13,13)],9,5,(1,0,0))
+            end=fuse(end,grille)
+            neck=cut(box((22,110,30),(205,0,50)),box((24,104,32),(205,0,50)))
+            end=fuse(end,neck)
+        else:
+            for y in range(-48,49,12):end=cut(end,box((16,3,27),(-214,y,-2)))
+        # Actual stationary envelopes cut fitting reliefs; moving links are never cut away.
+        for p in PARTS:
+            if p['group']!='base_link':continue
+            bb,pp=aabb(end),aabb(p['shape'])
+            if np.all(np.minimum(bb[1],pp[1])-np.maximum(bb[0],pp[0])>.01):end=cut(end,p['shape'])
+        add(f'{label}_Tapered_End_Enclosure',motion_clearance(end),material='PETG',color=(.61,.66,.69),notes='Lower-frame M3 mounts; swept shoulder reliefs; tapered nonstructural fairing; port seals and fasteners unverified')
+    # Motor end covers are separate cosmetic parts, not altered supplier housings.
+    for leg,front,side in LEGS:
+        for joint,group,origin in [('Hip',leg+'_abduction_link',(0,side*D['hip_offset_m']*1000,0)),('Knee',leg+'_upper_link',(0,0,-140))]:
+            y=origin[1]+side*(C['motor_mounts']['RS02']['length']+3)
+            cap=cylinder(39.5,2,(0,y,origin[2]),(0,1,0))
+            cap=holes(cap,[(0,y,origin[2])],9,6,(0,1,0))
+            cap=holes(cap,circle_points(64,8,(0,y,origin[2]),'y'),1.7,6,(0,1,0))
+            cap=cut(cap,box((12,6,8),(0,y,origin[2]+38)))
+            add(f'{leg}_{joint}_Removable_End_Cover',cap,group,material='PETG',color=(.17,.22,.25),notes='Removable cosmetic cap; supplier cable connector and retention unverified')
+    for p in PARTS:
+        if p['name'].endswith('_Integrated_Structure'):p['color']=[.36,.43,.47]
 
 def legs():
     for leg,front,side in LEGS:
@@ -265,6 +406,7 @@ def legs():
         direction=np.array([-front*15.,0.,-15.]);length=float(np.linalg.norm(direction))
         beam=fuse(beam,cylinder(4,length,(front*27.5,offset-side*1.5,42.5),direction/length))
         add(leg+'_Abduction_Yoke_55mm',beam,group,notes='Raised yoke clears upper-link swept plane; stiffness and bearing load still require FEA')
+        YOKE_GUARDS.append((front,side,beam))
         stator_motor(leg+'_Hip',group,(0,offset,0),side)
         # These link primitives share the kinematic pivot, but offset their material
         # away from the rotating motor face. The foot centre returns to pivot Y.
@@ -355,7 +497,7 @@ def step(shapes,path):
     if w.Write(str(path))!=IFSelect_RetDone:raise RuntimeError('STEP export failed: '+str(path))
 
 def mesh(shape):
-    BRepMesh_IncrementalMesh(shape,.55,False,.3,True).Perform()
+    BRepMesh_IncrementalMesh(shape,.35,False,.2,True).Perform()
     vertices=[];indices=[];exp=TopExp_Explorer(shape,TopAbs_FACE)
     while exp.More():
         face=TopoDS.Face_s(exp.Current());loc=TopLoc_Location();tri=BRep_Tool.Triangulation_s(face,loc)
@@ -407,7 +549,8 @@ def main():
     for g,pp in groups.items():step([p['shape'] for p in pp],OUT/'groups'/f'{g}.step')
     step([transformed(p['shape'],ts[p['group']]) for p in PARTS],OUT/'BigSpot_Pi4_assembly.step')
     inertia=inertials()
-    q=copy.deepcopy(D);q['name']='BigSpot Pi4 assembly R2';q['hardware_measured']=False;q['mechanical_revision']=C['revision'];q['link_inertials']=inertia
+    q=copy.deepcopy(D);q['name']='BigSpot Pi4 assembly '+C['revision'];q['hardware_measured']=False;q['mechanical_revision']=C['revision'];q['link_inertials']=inertia
+    q['enclosure_style']=C.get('enclosure_style','industrial')
     # Base excludes RS00 motor masses, which are already added by the dynamics model.
     q['base_without_actuators_kg']=inertia['base_link']['mass_kg']-4*D['actuators']['RS00']['mass_kg']
     ab=inertia['FL_abduction_link']['mass_kg']-D['actuators']['RS02']['mass_kg']

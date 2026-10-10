@@ -1,7 +1,7 @@
 {
-  "revision": "pi4-r2",
-  "estimated_mass_kg": 9.468016207317424,
-  "unit_tests_passed": 24,
+  "revision": "pi4-r3",
+  "estimated_mass_kg": 9.833951591932166,
+  "unit_tests_passed": 29,
   "external_controller_cases_passed": 11,
   "cad_sampled_poses": 114,
   "cad_sampled_interference_passed": true,
@@ -14,83 +14,86 @@
   "ros_executed": false,
   "isaac_executed": false,
   "hardware_tested": false,
+  "full_video_decode_passed": true,
+  "http_range_delivery_passed": true,
+  "browser_playback_tested": true,
   "source_sha256": {
-    "design/pi4/BigSpot_Pi4_assembly.step": "a12332d1a14758033e6d5dae0a7231441b2f4c993001dbcb28ce7ad504cd42ef",
-    "config/pi4_design.json": "f690404792c3cba2e57c4c3d388d9c9fb551248ac4d2bafe1c0f53d716884bd7",
-    "design/pi4/bigspot.xml": "f10a9f0d4a7c801895d27d6699fbbe7a5bc530fa17169824d2ad73f5485f64cd"
+    "design/pi4/BigSpot_Pi4_assembly.step": "a5bb62e65f9b2c4850be52483877e39037c3caf6747f866c9afd50f0a0c4024f",
+    "config/pi4_design.json": "40b3d892be1541f000006435c5fec7eb467f50d3ea5938ba6efd130a21948ed3",
+    "design/pi4/bigspot.xml": "017a04a6e5664cf683f8b404b12715c84c37309b00e69cc6c8d69de25ce227de"
   },
   "videos": [
     {
       "file": "cad_orbit.mp4",
       "frames": 360,
       "duration_s": 12.0,
-      "sha256": "e3cf3b98ad01a4c8bf618aae475e1ac13c207b68d684c6f7cc080f8f0147c7d6"
+      "sha256": "44085364fa0d5b6adfb05de5012c8449e3b0accdb835dce6bbc4a7153932eeb8"
     },
     {
       "file": "camera_dropout.mp4",
       "frames": 541,
       "duration_s": 18.03,
-      "sha256": "dfe10a0d5d82ef6e7227d931baf9f916079fa565adcd2240f7c7128de3e6c1c9"
+      "sha256": "e505524e7066cab3b8bcfe3f6f617d25b7bfbc10fa4fdfd172c909294314f46e"
     },
     {
       "file": "command_dropout.mp4",
       "frames": 541,
       "duration_s": 18.03,
-      "sha256": "fb2c98e219b95c7f20c99c5591d08b84283fc826ce6d46d9d4aceca986227a3f"
+      "sha256": "4bc36760937c08b7f4d332d716965d6a9f39aa842a2ec4c6b91893cba82c7bc2"
     },
     {
       "file": "controller_dropout.mp4",
       "frames": 541,
       "duration_s": 18.03,
-      "sha256": "46ec119f52169c6d30d1d74d41689bc55dc66f73bff32c770c3119a6c4be4748"
+      "sha256": "7bd2b5944a5aa17d7262ce8ec49a371304c46e8ef21f56b8ddb3e1cdbb99fea4"
     },
     {
       "file": "holdout.mp4",
       "frames": 541,
       "duration_s": 18.03,
-      "sha256": "8c2adeee70498387a8d4ae7866c6564fe410690ef1a4763e7c78f8b3f517bdaa"
+      "sha256": "d50674571cfcc7de9f131f4c9a8ab7afee0e2065cecc6ff87a35f033bb711cdb"
     },
     {
       "file": "imu_dropout.mp4",
       "frames": 541,
       "duration_s": 18.03,
-      "sha256": "f7a739308a486810f078f7dd9943436eca6b6f082ef60602a0139c3e10cf2e54"
+      "sha256": "d603dfde7d0a4ca96daa1ddc8c8800914147f2d6fca88bfec73124ae540e8ca1"
     },
     {
       "file": "joint_dropout.mp4",
       "frames": 541,
       "duration_s": 18.03,
-      "sha256": "7474b7221bcbf9b723fb90b874205e6c8f219e9163b7704cdc3906b1b83bc847"
+      "sha256": "c3b93cfe91124a62755293ac1d83fd9768e85453a7f454601e26935b1d9ef948"
     },
     {
       "file": "lateral.mp4",
       "frames": 541,
       "duration_s": 18.03,
-      "sha256": "24f86fbf9af38c4f84ef461e988662b953011003a2af279c2977a0bd40238d9c"
+      "sha256": "757ac82a19267e84258563ce513f445a1ccc997972c9277888bed4174509e251"
     },
     {
       "file": "navigation.mp4",
       "frames": 1351,
       "duration_s": 45.03,
-      "sha256": "c8c817ace156f27b1bec6c40ab2963bbfa77d0352ec7cc8e9daf42a71583c282"
+      "sha256": "9d86aa40b06bfae081ec5165ae72d1d07f4853af015b98b56f787ed95ac70833"
     },
     {
       "file": "startup.mp4",
       "frames": 541,
       "duration_s": 18.03,
-      "sha256": "5a1653794e1f314a267aa599f539f5c0b972d1feb7a242f307e325effb0fcbaf"
+      "sha256": "f3a791b83733cdd939e8119d88782e2e024e6c883879f7c6f6128787b2237351"
     },
     {
       "file": "turn.mp4",
       "frames": 541,
       "duration_s": 18.03,
-      "sha256": "ab54efc29f777e9bd8958492b754e93ac53c1d995f0e1697174249f376c6e71d"
+      "sha256": "d721ea1846cdd1151f68a5e6f80089ed3e8eef1afda2b14ebb9cba2395bc8a99"
     },
     {
       "file": "walk.mp4",
       "frames": 541,
       "duration_s": 18.03,
-      "sha256": "4c115a5a57660cfcbc2bf2044322d7bfba17c801caed38073b06734bedad944c"
+      "sha256": "f513c97bad760cede641433ba3d77297c3290a7f649fdfea3db7a9480e5cf254"
     }
   ]
 }

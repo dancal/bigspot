@@ -5,6 +5,11 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 import imageio_ffmpeg
 
+def motion_folder(root):
+    import json
+    revision=json.loads((root/'config/pi4_assembly.json').read_text(encoding='utf-8'))['revision']
+    return root/'generated'/('motion_videos_'+revision)
+
 TITLES={'startup':'낮은 자세에서 일어서기','walk':'전진 보행','holdout':'무게 +15% · 낮은 마찰',
     'lateral':'옆으로 이동','turn':'제자리 회전',
     'navigation':'깊이 카메라 장애물 회피','imu_dropout':'IMU 단절 · 출력 차단',
@@ -20,7 +25,7 @@ class VideoRecorder:
         self.options.geomgroup[3]=1;self.options.sitegroup[:]=0
         self.options.flags[mj.mjtVisFlag.mjVIS_CONTACTPOINT]=False
         self.stream=imageio_ffmpeg.write_frames(str(self.output.with_suffix('.mp4')),(1280,720),
-            fps=fps,codec='libx264',quality=7,output_params=['-movflags','+faststart'])
+            fps=fps,codec='libx264',quality=7,pix_fmt_out='yuv420p',output_params=['-profile:v','baseline','-level:v','3.1','-movflags','+faststart'])
         self.stream.send(None);self.next_frame=0.;self.frames=0
         font=Path('C:/Windows/Fonts/malgun.ttf')
         self.font=ImageFont.truetype(str(font),23) if font.exists() else ImageFont.load_default(size=23)

@@ -16,24 +16,37 @@ def bounds(shape):
     box=Bnd_Box();BRepBndLib.Add_s(shape,box)
     return np.asarray(box.Get()).reshape(2,3)
 
-def overlaps(parts,pose):
+def overlaps(parts,pose,rigid_pairs=None):
+    if rigid_pairs is None:rigid_pairs={}
     solids=[cad.transformed(p['shape'],pose[p['group']]) for p in parts]
     boxes=[bounds(s) for s in solids];result=[]
     for i,a in enumerate(parts):
         for j in range(i+1,len(parts)):
             b=parts[j]
+            key=(i,j);rigid=a['group']==b['group']
+            if rigid and key in rigid_pairs:
+                if rigid_pairs[key] is not None:result.append(rigid_pairs[key])
+                continue
+            if rigid:rigid_pairs[key]=None
             if np.any(np.minimum(boxes[i][1],boxes[j][1])-np.maximum(boxes[i][0],boxes[j][0])<=.01):continue
             op=BRepAlgoAPI_Common(solids[i],solids[j]);op.Build()
             if not op.IsDone():raise RuntimeError('Intersection calculation failed')
             props=GProp_GProps();BRepGProp.VolumeProperties_s(op.Shape(),props)
             if props.Mass()>1:
-                result.append({'a':a['name'],'b':b['name'],'groups':[a['group'],b['group']],
-                    'overlap_mm3':round(props.Mass(),3),'status':'requires_review'})
+                row={'a':a['name'],'b':b['name'],'groups':[a['group'],b['group']],
+                    'overlap_mm3':round(props.Mass(),3),'status':'requires_review'}
+                result.append(row)
+                if rigid:rigid_pairs[key]=row
     return sorted(result,key=lambda x:-x['overlap_mm3'])
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser();parser.add_argument('--sweep',action='store_true');parser.add_argument('--recorded',action='store_true');args=parser.parse_args()
     cad.frame();cad.electronics();cad.legs();cad.consolidate_structures();cad.exterior()
+    disconnected=[]
+    for part in cad.PARTS:
+        exp=cad.TopExp_Explorer(part['shape'],cad.TopAbs_SOLID);count=0
+        while exp.More():count+=1;exp.Next()
+        if count!=1:disconnected.append({'part':part['name'],'solid_count':count})
     stand=cad.Gait(cad.D).stand();seed=np.tile(cad.C['startup_joint_angles_rad'],4)
     cases={'stand':stand}
     if args.sweep:
@@ -52,14 +65,15 @@ if __name__=='__main__':
                 seen.add(key)
                 cases[f'recorded_{report["case"]}_{sample["time_s"]:.3f}']=np.asarray(sample['joints_rad'])
         if not seen:raise RuntimeError('No recorded CAD poses. Run validate_control_loop.py --render first.')
-    reports=[]
+    reports=[];rigid_pairs={}
     for name,q in cases.items():
-        rows=overlaps(cad.PARTS,cad.poses(q))
+        rows=overlaps(cad.PARTS,cad.poses(q),rigid_pairs)
         reports.append({'pose':name,'joints_rad':q.tolist(),'overlaps':rows,'passed':not rows})
         print(json.dumps({'pose':name,'count':len(rows),'largest':rows[:4]}),flush=True)
     report={'revision':cad.C['revision'],'method':'Exact BRep intersections after AABB broad phase',
         'overlap_threshold_mm3':1,'sampled_poses_only':True,'continuous_sweep_certified':False,
-        'strength_verified':False,'manufacturing_released':False,'reports':reports,'passed':all(r['passed'] for r in reports)}
+        'strength_verified':False,'manufacturing_released':False,'disconnected_parts':disconnected,
+        'reports':reports,'passed':not disconnected and all(r['passed'] for r in reports)}
     out=ROOT/'generated/cad_audit';out.mkdir(parents=True,exist_ok=True)
     (out/'stand_overlaps.json').write_text(json.dumps(reports[0]['overlaps'],indent=2)+'\n')
     target=ROOT/'design/pi4/interference_audit.json'

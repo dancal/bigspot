@@ -16,6 +16,7 @@ ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
 from bigspot_autonomy.design import load_design
 from bigspot_autonomy.control_core import JOINT_NAMES
 from bigspot_autonomy.sim_backend import EffortWatchdog
+from bigspot_autonomy.asset_paths import resolve_meshes
 from bigspot_autonomy.camera_geometry import (WIDTH,HEIGHT,BASELINE_M,FOCAL_MM,
     HORIZONTAL_APERTURE_MM,camera_matrices,depth_points)
 
@@ -59,7 +60,8 @@ def main():
         from builtin_interfaces.msg import Time
 
         generated=ROOT/'generated/isaac';generated.mkdir(parents=True,exist_ok=True)
-        usd=URDFImporter(URDFImporterConfig(urdf_path=str(args.urdf),usd_path=str(generated/'usd'),
+        resolved=resolve_meshes(args.urdf,ROOT,generated/'resolved_robot.urdf')
+        usd=URDFImporter(URDFImporterConfig(urdf_path=str(resolved),usd_path=str(generated/'usd'),
             fix_base=False,merge_fixed_joints=False,merge_mesh=False,allow_self_collision=True,
             joint_drive_type='force',joint_target_type='position',override_joint_stiffness=0.,
             override_joint_damping=0.)).import_urdf()
